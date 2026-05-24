@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preventivo WordPress — La Compagnia del Gluten Free | EMC Digital Solutions</title>
+<style>
+  :root {
+    --c-bg: #faf7f1;
+    --c-text: #2d2a24;
+    --c-muted: #6b6259;
+    --c-primary: #7a9a5a;
+    --c-primary-dark: #5a7a3a;
+    --c-accent: #c9a96e;
+    --c-border: #e8e2d5;
+    --c-card: #ffffff;
+    --c-discount: #c7613e;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--c-text);
+    background: var(--c-bg);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+  .page { max-width: 920px; margin: 0 auto; padding: 50px 40px; background: var(--c-card); box-shadow: 0 2px 20px rgba(0,0,0,.05); }
+
+  /* HEADER */
+  .doc-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 22px; border-bottom: 3px solid var(--c-primary);
+    margin-bottom: 30px;
+  }
+  .doc-header .doc-meta { text-align: right; font-size: 13px; color: var(--c-muted); }
+  .doc-header .doc-meta strong { color: var(--c-text); font-size: 14px; }
+
+  /* HERO */
+  .doc-hero {
+    text-align: center;
+    padding: 26px 0 30px;
+  }
+  .doc-hero h1 { font-size: 30px; margin: 0 0 6px; color: var(--c-primary-dark); }
+  .doc-hero .sub { font-size: 16px; color: var(--c-muted); margin: 0; }
+  .doc-hero .badge {
+    display: inline-block; margin-top: 14px;
+    background: linear-gradient(135deg, var(--c-discount), #a85432);
+    color: #fff; padding: 8px 18px;
+    border-radius: 999px; font-size: 13px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+
+  /* CLIENT BLOCK */
+  .client-block {
+    background: #f9f4e8;
+    padding: 18px 22px;
+    border-left: 4px solid var(--c-accent);
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 30px;
+  }
+  .client-block strong { display: block; margin-bottom: 4px; color: var(--c-primary-dark); }
+
+  h2 {
+    font-size: 18px; color: var(--c-primary-dark);
+    margin: 30px 0 14px;
+    border-bottom: 1px solid var(--c-border);
+    padding-bottom: 8px;
+  }
+  h3 { font-size: 15px; color: var(--c-text); margin: 16px 0 6px; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; }
+  th, td { padding: 11px 12px; text-align: left; font-size: 14px; border-bottom: 1px solid var(--c-border); }
+  th { background: #f9f4e8; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--c-muted); }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.total-row td { font-weight: 700; font-size: 16px; color: var(--c-primary-dark); background: #f4f0e2; }
+  tr.discount td { color: var(--c-discount); }
+  tr.discount td .pct { background: var(--c-discount); color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-left: 6px; }
+
+  /* COMPARE BOX */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .compare > div {
+    padding: 18px;
+    border-radius: 8px;
+    border: 1px solid var(--c-border);
+  }
+  .compare .winner {
+    background: linear-gradient(135deg, #f9f4e8, #fff);
+    border-color: var(--c-primary);
+    border-width: 2px;
+    position: relative;
+  }
+  .compare .winner::before {
+    content: "Soluzione consigliata";
+    position: absolute;
+    top: -10px; left: 14px;
+    background: var(--c-primary);
+    color: #fff;
+    padding: 3px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .compare h3 { margin-top: 6px; }
+  .compare .price-line { font-size: 22px; font-weight: 700; color: var(--c-primary-dark); margin: 8px 0; }
+  .compare .price-line small { font-size: 13px; font-weight: 500; color: var(--c-muted); }
+  .compare ul { margin: 8px 0 0; padding-left: 20px; font-size: 13px; }
+  .compare ul li { margin: 4px 0; }
+
+  ul.feat { margin: 8px 0 16px; padding-left: 22px; }
+  ul.feat li { margin: 4px 0; font-size: 14px; }
+
+  .savings-callout {
+    background: linear-gradient(135deg, var(--c-primary), var(--c-primary-dark));
+    color: #fff;
+    padding: 24px 28px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 24px 0;
+  }
+  .savings-callout .big { font-size: 36px; font-weight: 800; line-height: 1; margin: 6px 0; }
+  .savings-callout .lbl { font-size: 13px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.85; }
+
+  /* FOOTER */
+  .doc-footer {
+    margin-top: 40px; padding-top: 24px;
+    border-top: 1px solid var(--c-border);
+    font-size: 12px; color: var(--c-muted);
+    text-align: center;
+  }
+  .emc-credit { display: inline-flex; align-items: center; gap: 8px; opacity: .6; color: var(--c-muted); }
+
+  @media print {
+    .page { box-shadow: none; padding: 30px; }
+    body { background: #fff; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="doc-header">
+    <div>
+      <svg width="120" height="34" viewBox="0 0 200 50">
+        <defs>
+          <linearGradient id="emcBars" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7a9a5a"/><stop offset="100%" stop-color="#c9a96e"/></linearGradient>
+          <linearGradient id="emcText" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#5a7a3a"/><stop offset="50%" stop-color="#8a9a5a"/><stop offset="100%" stop-color="#c9a96e"/></linearGradient>
+        </defs>
+        <rect x="5" y="10" width="30" height="6" rx="2" fill="url(#emcBars)"/>
+        <rect x="5" y="22" width="20" height="6" rx="2" fill="url(#emcBars)"/>
+        <rect x="5" y="34" width="30" height="6" rx="2" fill="url(#emcBars)"/>
+        <text x="48" y="34" font-family="Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="3" fill="url(#emcText)">EMC</text>
+      </svg>
+      <p style="font-size:11px;color:var(--c-muted);margin:6px 0 0">Digital Solutions · www.emcdigitalsolutions.it</p>
+    </div>
+    <div class="doc-meta">
+      <strong>Preventivo n° 2026-LCGF-02</strong><br>
+      Data: 24 maggio 2026<br>
+      Validità: 30 giorni
+    </div>
+  </header>
+
+  <section class="doc-hero">
+    <h1>Sito e-commerce gluten free</h1>
+    <p class="sub">Soluzione WordPress + WooCommerce per "Mangia con Gusto"</p>
+    <span class="badge">★ Offerta lancio · −20% ★</span>
+  </section>
+
+  <div class="client-block">
+    <strong>Cliente</strong>
+    La Compagnia del Gluten Free — "Mangia con Gusto"<br>
+    CEO: Carmelo Lo Porto · Gianluca · Gaetano<br>
+    Dominio: <code>lacompagniadelglutenfree.it</code>
+  </div>
+
+  <h2>Cosa è incluso</h2>
+  <ul class="feat">
+    <li><strong>WordPress 6.6 + WooCommerce</strong> — gestione prodotti, ordini, clienti, scorte da un pannello familiare</li>
+    <li><strong>Tema personalizzato</strong> con palette, logo e identità visiva del brand</li>
+    <li><strong>13 prodotti caricati</strong> con foto, descrizioni, varianti grammatura, badge senza-glutine/senza-lattosio</li>
+    <li><strong>Pagamenti</strong>: Stripe (carte) + PayPal + Klarna (3 rate) + Apple/Google Pay</li>
+    <li><strong>Multilingue</strong> IT (default) + EN + DE + FR via Polylang</li>
+    <li><strong>SEO</strong> base con Yoast: meta description, sitemap, schema.org</li>
+    <li><strong>GDPR + Cookie banner</strong> a norma</li>
+    <li><strong>Form contatti</strong> + invio email automatico</li>
+    <li><strong>WhatsApp diretto</strong> in fondo a ogni pagina (numero Carmelo)</li>
+    <li><strong>Responsive</strong> mobile + tablet + desktop</li>
+    <li><strong>Hosting Hetzner</strong> + SSL Let's Encrypt + backup giornalieri</li>
+    <li><strong>Formazione</strong> di 1h per gestire prodotti e ordini autonomamente</li>
+  </ul>
+
+  <h2>Investimento</h2>
+
+  <h3>Sviluppo (una tantum)</h3>
+  <table>
+    <thead><tr><th>Voce</th><th class="num">Importo</th></tr></thead>
+    <tbody>
+      <tr><td>Setup WordPress + WooCommerce + dominio + SSL</td><td class="num">€ 600,00</td></tr>
+      <tr><td>Tema custom (palette + logo + tipografia + 13 prodotti caricati con foto)</td><td class="num">€ 350,00</td></tr>
+      <tr><td>Configurazione multilingue Polylang (IT/EN/DE/FR)</td><td class="num">€ 150,00</td></tr>
+      <tr><td>Integrazione pagamenti Stripe + PayPal + Klarna</td><td class="num">€ 100,00</td></tr>
+      <tr><td>SEO + GDPR + Cookie + formazione cliente</td><td class="num">€ 100,00</td></tr>
+      <tr><td>Subtotale</td><td class="num">€ 1.300,00</td></tr>
+      <tr class="discount"><td>Sconto lancio cliente EMC <span class="pct">−20%</span></td><td class="num">−€ 260,00</td></tr>
+      <tr class="total-row"><td>Totale sviluppo (IVA esclusa)</td><td class="num">€ 1.040,00</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Canone mensile</h3>
+  <table>
+    <thead><tr><th>Voce</th><th class="num">Mensile</th></tr></thead>
+    <tbody>
+      <tr><td>Hosting Hetzner + SSL + backup automatici</td><td class="num">incluso</td></tr>
+      <tr><td>Aggiornamenti WP + WooCommerce + plugin di sicurezza</td><td class="num">incluso</td></tr>
+      <tr><td>Manutenzione + 1h/mese di modifiche/contenuti</td><td class="num">€ 70,00</td></tr>
+      <tr class="total-row"><td>Canone mensile (IVA esclusa)</td><td class="num">€ 70,00</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Confronto soluzioni</h2>
+  <div class="compare">
+    <div class="winner">
+      <h3>WordPress + WooCommerce</h3>
+      <p class="price-line">€ 1.040 <small>+ € 70/mese</small></p>
+      <ul>
+        <li>✓ Tempi consegna: <strong>1 settimana</strong></li>
+        <li>✓ Gestione autonoma prodotti/ordini</li>
+        <li>✓ Plugin maturi e affidabili</li>
+        <li>✓ Costo manutenzione contenuto</li>
+        <li>✓ Migliaia di siti simili nel mondo</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Sito sviluppato da zero</h3>
+      <p class="price-line">€ 4.452 <small>+ € 394/mese</small></p>
+      <ul>
+        <li>✗ Tempi consegna: 4-6 settimane</li>
+        <li>✗ Modifiche solo via sviluppatore</li>
+        <li>✗ Manutenzione più impegnativa</li>
+        <li>✓ Massima personalizzazione</li>
+        <li>✓ Performance top per &gt; 1.000 ordini/giorno</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="savings-callout">
+    <p class="lbl">Risparmio scegliendo WordPress</p>
+    <p class="big">€ 7.300</p>
+    <p style="margin:0;opacity:.85">nel primo anno (sviluppo + 12 mesi di canone)</p>
+  </div>
+
+  <h2>Servizi opzionali (preventivi separati)</h2>
+  <table>
+    <thead><tr><th>Servizio</th><th class="num">Importo</th></tr></thead>
+    <tbody>
+      <tr><td>Social Media Management (TikTok + Instagram + Facebook)</td><td class="num">€ 250–300/mese</td></tr>
+      <tr><td>Google Business Profile + posizionamento Maps</td><td class="num">€ 250 una tantum</td></tr>
+      <tr><td>Foto prodotto professionali in studio</td><td class="num">€ 300 una tantum</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Condizioni</h2>
+  <ul class="feat">
+    <li>50% all'accettazione del preventivo, 50% alla consegna del sito online</li>
+    <li>Canone mensile fatturato trimestralmente</li>
+    <li>Dominio <code>lacompagniadelglutenfree.it</code> registrato a nome del cliente</li>
+    <li>SSL gratuito Let's Encrypt (rinnovo automatico ogni 90 giorni)</li>
+    <li>Tempi di consegna: <strong>1 settimana</strong> dall'invio dei materiali finali (logo, listino prezzi confermati, dati fiscali)</li>
+    <li>Garanzia bug-fix: 60 giorni dalla consegna</li>
+  </ul>
+
+  <h2>Prossimi passi</h2>
+  <ol style="font-size:14px;padding-left:22px;line-height:1.9">
+    <li>Conferma del preventivo via email/WhatsApp</li>
+    <li>Invio listino prezzi definitivo + partita IVA + dati fiscali</li>
+    <li>Acquisto/trasferimento dominio (se non già fatto)</li>
+    <li>Sviluppo: 5-7 giorni lavorativi</li>
+    <li>Test + revisioni con il cliente: 1-2 giorni</li>
+    <li>Go-live + formazione: stesso giorno</li>
+  </ol>
+
+  <div class="doc-footer">
+    <a href="https://www.emcdigitalsolutions.it" class="emc-credit">
+      Progettato e Sviluppato da
+      <svg width="60" height="18" viewBox="0 0 200 50">
+        <rect x="5" y="10" width="30" height="6" rx="2" fill="url(#emcBars)"/>
+        <rect x="5" y="22" width="20" height="6" rx="2" fill="url(#emcBars)"/>
+        <rect x="5" y="34" width="30" height="6" rx="2" fill="url(#emcBars)"/>
+        <text x="48" y="34" font-family="Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="3" fill="url(#emcText)">EMC</text>
+      </svg>
+    </a>
+    <p style="margin-top:10px">EMC Digital Solutions · emcdigitalsolution@gmail.com · www.emcdigitalsolutions.it</p>
+  </div>
+
+</div>
+</body>
+</html>
