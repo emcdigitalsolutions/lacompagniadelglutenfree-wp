@@ -1,0 +1,120 @@
+/*
+Theme Name: La Compagnia del Gluten Free
+Theme URI: https://www.lacompagniadelglutenfree.it/
+Description: Child theme di Astra per La Compagnia del Gluten Free — Mangia con Gusto. Prodotti senza glutine e senza lattosio.
+Author: EMC Digital Solutions
+Author URI: https://www.emcdigitalsolutions.it/
+Template: astra
+Version: 0.1.0
+Text Domain: lcgf-child
+*/
+
+/* ---------- Design tokens (riusati dal prototipo Node.js) ---------- */
+:root {
+  --c-cream:        #FBF7EE;
+  --c-cream-2:      #F4EDDC;
+  --c-sand:         #E9DDC0;
+  --c-wheat:        #C9A96E;
+  --c-wheat-dark:   #A6864C;
+  --c-olive:        #6B8E4E;
+  --c-olive-dark:   #4F6E37;
+  --c-olive-deep:   #364E25;
+  --c-terracotta:   #C7613E;
+  --c-ink:          #1F1B14;
+  --c-muted:        #7A7160;
+  --c-line:         #E6DECB;
+}
+
+/* ---------- Font display per headings WooCommerce/Astra ---------- */
+.site-title, h1, h2, h3,
+.woocommerce-products-header__title,
+.product_title {
+  font-family: 'Fraunces', 'Playfair Display', Georgia, serif !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Brand mark Astra header (logo cliente) ---------- */
+.custom-logo-link img { max-height: 56px; width: auto; }
+
+/* ---------- Bottoni Woo override ---------- */
+.woocommerce .button,
+.woocommerce a.button,
+.woocommerce button.button,
+.woocommerce input.button {
+  background: var(--c-olive-deep) !important;
+  color: var(--c-cream) !important;
+  border-radius: 999px !important;
+  padding: 12px 24px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em;
+  transition: background .2s, transform .2s;
+}
+.woocommerce .button:hover,
+.woocommerce a.button:hover,
+.woocommerce button.button:hover {
+  background: var(--c-olive) !important;
+  transform: translateY(-2px);
+}
+.woocommerce .button.alt,
+.woocommerce a.button.alt,
+.woocommerce button.button.alt {
+  background: var(--c-wheat-dark) !important;
+}
+
+/* ---------- Prezzi ---------- */
+.woocommerce ul.products li.product .price,
+.woocommerce div.product p.price {
+  color: var(--c-olive-deep);
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+}
+
+/* ---------- Card prodotto: hover lift ---------- */
+.woocommerce ul.products li.product {
+  transition: transform .2s, box-shadow .2s;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+.woocommerce ul.products li.product:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(31, 27, 20, 0.08);
+}
+
+/* ---------- Badge AIC / lattosio ---------- */
+.lcgf-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-right: 6px;
+}
+.lcgf-badge.gf { background: var(--c-cream-2); color: var(--c-olive-deep); }
+.lcgf-badge.lf { background: rgba(199,97,62,0.12); color: var(--c-terracotta); }
+
+/* ---------- Footer custom ---------- */
+.site-footer-section { background: var(--c-ink); color: var(--c-cream); }
+.site-footer-section a { color: var(--c-cream); }
+.site-footer-section a:hover { color: var(--c-wheat); }
+
+/* ---------- Logo EMC nel footer (regola assoluta EMC) ---------- */
+.emc-credit {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.55;
+  font-size: 11px;
+  transition: opacity .2s;
+}
+.emc-credit:hover { opacity: 1; }
+
+/* ---------- Responsive utility ---------- */
+@media (max-width: 720px) {
+  .woocommerce ul.products[class*=columns-] li.product {
+    width: 48%;
+  }
+}
