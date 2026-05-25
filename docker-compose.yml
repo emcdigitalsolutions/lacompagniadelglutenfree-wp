@@ -125,9 +125,10 @@ services:
           fi
           # Pulisci cache
           su -s /bin/bash www-data -c "wp cache flush" 2>&1 | tail -1 || true
-          # disattiva plugin inutili
-          for plug in jetpack mailpoet pinterest-for-woocommerce reddit-for-woocommerce snapchat-for-woocommerce woocommerce-payments google-listings-and-ads connect-woocommerce-shipping packlink-pro-shipping akismet hello; do
+          # disattiva + elimina plugin inutili
+          for plug in jetpack mailpoet pinterest-for-woocommerce reddit-for-woocommerce snapchat-for-woocommerce woocommerce-payments google-listings-and-ads connect-woocommerce-shipping packlink-pro-shipping akismet hello-dolly hello lcgf-bootstrap; do
             su -s /bin/bash www-data -c "wp plugin deactivate $$plug" 2>&1 | tail -1 || true
+            su -s /bin/bash www-data -c "wp plugin delete $$plug" 2>&1 | tail -1 || true
           done
           echo "[lcgf-fixes] done"
         ) &
