@@ -88,6 +88,36 @@ services:
           for pid in $$POST_IDS; do
             su -s /bin/bash www-data -c "wp post delete $$pid --force" 2>&1 | tail -1 || true
           done
+          # Assicura immagine per ogni prodotto (idempotente)
+          for slug in box-family pinsa-romana pan-focaccia focaccia-rotonda base-pizza pane-filoncino pane-rosetta brioche crostate biscotti tiramisu cheesecake; do
+            PID=$$(su -s /bin/bash www-data -c "wp post list --post_type=product --name=$$slug --field=ID" 2>/dev/null)
+            if [ -n "$$PID" ]; then
+              HAS_IMG=$$(su -s /bin/bash www-data -c "wp post meta get $$PID _thumbnail_id" 2>/dev/null)
+              if [ -z "$$HAS_IMG" ]; then
+                IMGFILE="/var/www/html/wp-content/themes/lcgf-child/assets/products/$$slug.png"
+                if [ -f "$$IMGFILE" ]; then
+                  su -s /bin/bash www-data -c "wp media import $$IMGFILE --post_id=$$PID --featured_image" 2>&1 | tail -1 || true
+                fi
+              fi
+            fi
+          done
+          # Cornetto ha slug 'cornetto-vuoto' ma immagine 'cornetto.png'
+          PID=$$(su -s /bin/bash www-data -c "wp post list --post_type=product --name=cornetto-vuoto --field=ID" 2>/dev/null)
+          if [ -n "$$PID" ]; then
+            HAS_IMG=$$(su -s /bin/bash www-data -c "wp post meta get $$PID _thumbnail_id" 2>/dev/null)
+            if [ -z "$$HAS_IMG" ] && [ -f /var/www/html/wp-content/themes/lcgf-child/assets/products/cornetto.png ]; then
+              su -s /bin/bash www-data -c "wp media import /var/www/html/wp-content/themes/lcgf-child/assets/products/cornetto.png --post_id=$$PID --featured_image" 2>&1 | tail -1 || true
+            fi
+          fi
+          # Assegna template custom alle pagine
+          for slug_tpl in "chi-siamo:page-chi-siamo.php" "contatti:page-contatti.php"; do
+            slug=$${slug_tpl%:*}
+            tpl=$${slug_tpl#*:}
+            PID=$$(su -s /bin/bash www-data -c "wp post list --post_type=page --name=$$slug --field=ID" 2>/dev/null)
+            if [ -n "$$PID" ]; then
+              su -s /bin/bash www-data -c "wp post meta update $$PID _wp_page_template $$tpl" 2>&1 | tail -1 || true
+            fi
+          done
           # Pulisci cache
           su -s /bin/bash www-data -c "wp cache flush" 2>&1 | tail -1 || true
           # disattiva plugin inutili
