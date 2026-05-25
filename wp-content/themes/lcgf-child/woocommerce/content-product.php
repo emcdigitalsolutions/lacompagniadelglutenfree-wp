@@ -7,11 +7,6 @@ global $product;
 if (empty($product) || !$product->is_visible()) return;
 ?>
 <li <?php wc_product_class('', $product); ?>>
-  <div class="lcgf-card-badges">
-    <span class="lcgf-card-badge gf">Senza glutine</span>
-    <span class="lcgf-card-badge lf">Senza lattosio</span>
-  </div>
-
   <a href="<?php echo esc_url(get_the_permalink()); ?>" style="display:block">
     <?php
     if (has_post_thumbnail()) {

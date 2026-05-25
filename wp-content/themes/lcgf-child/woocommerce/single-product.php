@@ -30,10 +30,6 @@ get_header('shop');
       <!-- GALLERY -->
       <div class="lcgf-pdp-gallery" style="position:relative">
         <div style="background:var(--c-white);border-radius:var(--r-xl);padding:24px;box-shadow:var(--sh-1);position:relative;overflow:hidden;aspect-ratio:1/1;display:grid;place-items:center">
-          <div class="lcgf-card-badges" style="position:absolute;top:18px;left:18px;display:flex;flex-direction:column;gap:6px;z-index:2">
-            <span class="lcgf-card-badge gf">Senza glutine</span>
-            <span class="lcgf-card-badge lf">Senza lattosio</span>
-          </div>
           <?php
           $img_id = $product->get_image_id();
           if ($img_id) {
@@ -141,10 +137,6 @@ get_header('shop');
             <ul class="products">
               <?php while ($related->have_posts()) : $related->the_post(); $rp = wc_get_product(get_the_ID()); ?>
                 <li class="product">
-                  <div class="lcgf-card-badges">
-                    <span class="lcgf-card-badge gf">Senza glutine</span>
-                    <span class="lcgf-card-badge lf">Senza lattosio</span>
-                  </div>
                   <a href="<?php the_permalink(); ?>" style="display:block">
                     <?php echo get_the_post_thumbnail(get_the_ID(), 'woocommerce_thumbnail'); ?>
                     <h3 class="woocommerce-loop-product__title"><?php the_title(); ?></h3>

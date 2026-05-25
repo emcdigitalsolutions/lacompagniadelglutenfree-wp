@@ -6,7 +6,15 @@ get_header();
 
 // recupera featured (8 prodotti random pubblicati)
 $featured = wc_get_products(['status' => 'publish', 'limit' => 8, 'orderby' => 'rand']);
-$cats = get_terms(['taxonomy' => 'product_cat', 'hide_empty' => false]);
+$default_cat = (int) get_option('default_product_cat');
+$cats = get_terms([
+    'taxonomy'   => 'product_cat',
+    'hide_empty' => true,
+    'exclude'    => array_filter([$default_cat]),
+]);
+$cats = array_filter($cats, function($c) {
+    return strtolower($c->slug) !== 'uncategorized' && strtolower($c->name) !== 'senza categoria';
+});
 $logo = get_stylesheet_directory_uri() . '/assets/img/logo.webp';
 ?>
 
@@ -117,10 +125,6 @@ $logo = get_stylesheet_directory_uri() . '/assets/img/logo.webp';
             $img = wp_get_attachment_image_url($p->get_image_id(), 'medium_large') ?: wc_placeholder_img_src();
             ?>
             <li class="product">
-              <div class="lcgf-card-badges">
-                <span class="lcgf-card-badge gf">Senza glutine</span>
-                <span class="lcgf-card-badge lf">Senza lattosio</span>
-              </div>
               <a href="<?php echo esc_url($url); ?>">
                 <img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($p->get_name()); ?>" />
                 <h3 class="woocommerce-loop-product__title"><?php echo esc_html($p->get_name()); ?></h3>

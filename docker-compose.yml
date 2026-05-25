@@ -118,6 +118,11 @@ services:
               su -s /bin/bash www-data -c "wp post meta update $$PID _wp_page_template $$tpl" 2>&1 | tail -1 || true
             fi
           done
+          # Sposta tutti i prodotti orfani fuori da "Senza categoria"
+          UNCAT_ID=$$(su -s /bin/bash www-data -c "wp term list product_cat --slug=uncategorized --field=term_id" 2>/dev/null)
+          if [ -z "$$UNCAT_ID" ]; then
+            UNCAT_ID=$$(su -s /bin/bash www-data -c "wp term list product_cat --slug=senza-categoria --field=term_id" 2>/dev/null)
+          fi
           # Pulisci cache
           su -s /bin/bash www-data -c "wp cache flush" 2>&1 | tail -1 || true
           # disattiva plugin inutili

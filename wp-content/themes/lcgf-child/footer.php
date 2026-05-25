@@ -38,10 +38,18 @@
       <h4>Shop</h4>
       <ul>
         <li><a href="<?php echo esc_url(get_permalink(wc_get_page_id('shop'))); ?>">Catalogo completo</a></li>
-        <?php $cats = get_terms(['taxonomy' => 'product_cat', 'hide_empty' => false]);
+        <?php
+          $default_cat = (int) get_option('default_product_cat');
+          $cats = get_terms([
+            'taxonomy'   => 'product_cat',
+            'hide_empty' => true,
+            'exclude'    => array_filter([$default_cat]),
+          ]);
           foreach ($cats as $cat) {
+            if (strtolower($cat->slug) === 'uncategorized' || strtolower($cat->name) === 'senza categoria') continue;
             echo '<li><a href="' . esc_url(get_term_link($cat)) . '">' . esc_html($cat->name) . '</a></li>';
-          } ?>
+          }
+        ?>
       </ul>
     </div>
 

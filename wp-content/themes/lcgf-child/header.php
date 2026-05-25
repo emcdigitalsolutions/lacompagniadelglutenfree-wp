@@ -29,8 +29,23 @@
       <ul>
         <li><a href="<?php echo esc_url(get_permalink(wc_get_page_id('shop'))); ?>">Catalogo</a></li>
         <?php
-        $cats = get_terms(['taxonomy' => 'product_cat', 'hide_empty' => false]);
+        $default_cat = (int) get_option('default_product_cat');
+        $cats = get_terms([
+          'taxonomy'   => 'product_cat',
+          'hide_empty' => true,
+          'exclude'    => array_filter([$default_cat]),
+          'slug'       => ['pane-basi', 'dolci-colazione'], // mostra solo queste due
+        ]);
+        if (empty($cats)) {
+          // fallback: tutte tranne default e vuote
+          $cats = get_terms([
+            'taxonomy'   => 'product_cat',
+            'hide_empty' => true,
+            'exclude'    => array_filter([$default_cat]),
+          ]);
+        }
         foreach ($cats as $cat) {
+          if (strtolower($cat->slug) === 'uncategorized' || strtolower($cat->name) === 'senza categoria') continue;
           $url = get_term_link($cat);
           echo '<li><a href="' . esc_url($url) . '">' . esc_html($cat->name) . '</a></li>';
         }
