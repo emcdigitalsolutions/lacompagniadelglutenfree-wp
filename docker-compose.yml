@@ -46,6 +46,7 @@ services:
     volumes:
       - wp_data:/var/www/html
       - ./wp-content/themes/lcgf-child:/var/www/html/wp-content/themes/lcgf-child
+      - ./wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins
       - ./wp-content/uploads:/var/www/html/wp-content/uploads
       - ./php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
     networks:
