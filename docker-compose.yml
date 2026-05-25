@@ -27,6 +27,16 @@ services:
         condition: service_healthy
     expose:
       - "80"
+    # Fix permessi: WP scrive uploads come www-data, ma il volume potrebbe
+    # essere stato creato con owner diverso.
+    command:
+      - bash
+      - -c
+      - |
+        mkdir -p /var/www/html/wp-content/uploads
+        chown -R www-data:www-data /var/www/html/wp-content
+        chmod -R u+rwX,g+rwX /var/www/html/wp-content
+        exec docker-entrypoint.sh apache2-foreground
     environment:
       SERVICE_FQDN_WORDPRESS_80: /
       WORDPRESS_DB_HOST: db:3306
