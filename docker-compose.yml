@@ -52,12 +52,15 @@ services:
           cd /tmp
           wget -q https://github.com/emcdigitalsolutions/lacompagniadelglutenfree-wp/archive/refs/heads/master.tar.gz -O repo.tar.gz
           tar xzf repo.tar.gz
-          mkdir -p /var/www/html/wp-content/themes /var/www/html/wp-content/mu-plugins
+          mkdir -p /var/www/html/wp-content/themes
           rm -rf /var/www/html/wp-content/themes/lcgf-child
           cp -r lacompagniadelglutenfree-wp-master/wp-content/themes/lcgf-child /var/www/html/wp-content/themes/
-          cp -r lacompagniadelglutenfree-wp-master/wp-content/mu-plugins/. /var/www/html/wp-content/mu-plugins/ 2>/dev/null || true
+          # NON copiare mu-plugins: il bootstrap è già stato eseguito come plugin
+          # caricato manualmente dall'utente, copiarlo qui causa duplicate function declaration
           rm -rf /tmp/repo.tar.gz /tmp/lacompagniadelglutenfree-wp-master
         fi
+        # Rimuovi mu-plugin duplicato (se presente da deploy precedenti)
+        rm -f /var/www/html/wp-content/mu-plugins/lcgf-bootstrap.php
         # Permessi
         mkdir -p /var/www/html/wp-content/uploads
         chown -R www-data:www-data /var/www/html/wp-content
