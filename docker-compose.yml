@@ -27,18 +27,45 @@ services:
         condition: service_healthy
     expose:
       - "80"
-    # Fix permessi: WP scrive uploads come www-data, ma il volume potrebbe
-    # essere stato creato con owner diverso.
+    # Setup completo all'avvio (i bind ./wp-content nested non si propagano sotto Coolify):
+    # 1. Config PHP per upload grandi (128MB)
+    # 2. Scarica tema child + mu-plugins dal repo GitHub pubblico
+    # 3. Fix permessi www-data
     command:
       - bash
       - -c
       - |
+        set -e
+        # PHP config
+        cat > /usr/local/etc/php/conf.d/uploads.ini <<'PHPEOF'
+        file_uploads = On
+        memory_limit = 512M
+        upload_max_filesize = 128M
+        post_max_size = 128M
+        max_execution_time = 300
+        max_input_time = 300
+        max_input_vars = 5000
+        PHPEOF
+        # Scarica tema + mu-plugins dal repo GitHub al boot
+        if [ ! -f /var/www/html/wp-content/themes/lcgf-child/style.css ] || [ "${LCGF_FORCE_SYNC:-0}" = "1" ]; then
+          apt-get update -qq && apt-get install -y -qq wget
+          cd /tmp
+          wget -q https://github.com/emcdigitalsolutions/lacompagniadelglutenfree-wp/archive/refs/heads/master.tar.gz -O repo.tar.gz
+          tar xzf repo.tar.gz
+          mkdir -p /var/www/html/wp-content/themes /var/www/html/wp-content/mu-plugins
+          rm -rf /var/www/html/wp-content/themes/lcgf-child
+          cp -r lacompagniadelglutenfree-wp-master/wp-content/themes/lcgf-child /var/www/html/wp-content/themes/
+          cp -r lacompagniadelglutenfree-wp-master/wp-content/mu-plugins/. /var/www/html/wp-content/mu-plugins/ 2>/dev/null || true
+          rm -rf /tmp/repo.tar.gz /tmp/lacompagniadelglutenfree-wp-master
+        fi
+        # Permessi
         mkdir -p /var/www/html/wp-content/uploads
         chown -R www-data:www-data /var/www/html/wp-content
         chmod -R u+rwX,g+rwX /var/www/html/wp-content
         exec docker-entrypoint.sh apache2-foreground
     environment:
       SERVICE_FQDN_WORDPRESS_80: /
+      LCGF_FORCE_SYNC: "1"
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
@@ -55,11 +82,9 @@ services:
         define('AUTOMATIC_UPDATER_DISABLED', false);
     volumes:
       - wp_data:/var/www/html
-      - ./wp-content/themes/lcgf-child:/var/www/html/wp-content/themes/lcgf-child
-      - ./wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins
-      - ./php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
-    # uploads NON bind-mounted: vivono nel named volume wp_data così
-    # www-data nel container ha permessi corretti di scrittura.
+    # NOTA: i bind ./wp-content/* NON funzionano sotto Coolify perché collidono
+    # col named volume wp_data che monta /var/www/html. I file di tema e
+    # mu-plugins vengono scaricati dal repo GitHub all'avvio (vedi command).
     networks:
       - lcgf_net
 
