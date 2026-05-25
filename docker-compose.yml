@@ -55,6 +55,9 @@ services:
           mkdir -p /var/www/html/wp-content/themes
           rm -rf /var/www/html/wp-content/themes/lcgf-child
           cp -r lacompagniadelglutenfree-wp-master/wp-content/themes/lcgf-child /var/www/html/wp-content/themes/
+          ls -la /var/www/html/wp-content/themes/lcgf-child/ > /var/www/html/lcgf-files.txt
+          ls -la /var/www/html/wp-content/themes/lcgf-child/woocommerce/ >> /var/www/html/lcgf-files.txt 2>&1
+          chmod 644 /var/www/html/lcgf-files.txt
           # NON copiare mu-plugins: il bootstrap è già stato eseguito come plugin
           # caricato manualmente dall'utente, copiarlo qui causa duplicate function declaration
           rm -rf /tmp/repo.tar.gz /tmp/lacompagniadelglutenfree-wp-master
