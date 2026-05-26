@@ -29,3 +29,7 @@ db_data/
 
 # Materiali cliente non versionati
 imports/raw/
+
+# Preventivi: solo la versione finale viene tracciata.
+# Le versioni intermedie restano locali per storico, non in repo.
+Preventivo-LCGF-2026-0[0-5].pdf

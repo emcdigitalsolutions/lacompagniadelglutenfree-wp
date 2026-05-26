@@ -138,9 +138,75 @@
   }
   .emc-credit { display: inline-flex; align-items: center; gap: 8px; opacity: .6; color: var(--c-muted); }
 
+  /* Why-EMC cards */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin: 14px 0 6px;
+  }
+  .why-card {
+    background: var(--c-card);
+    border: 1px solid var(--c-border);
+    border-left: 3px solid var(--c-primary);
+    border-radius: 8px;
+    padding: 16px 18px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .why-card .why-icon {
+    font-size: 22px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .why-card strong {
+    display: block;
+    color: var(--c-primary-dark);
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  .why-card p {
+    margin: 0;
+    color: var(--c-text);
+  }
+  @media (max-width: 700px) {
+    .why-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Preview screenshots */
+  .preview-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin: 16px 0 28px;
+  }
+  .preview {
+    margin: 0;
+    border: 1px solid var(--c-border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .preview:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.08); }
+  .preview img { display: block; width: 100%; height: auto; border-bottom: 1px solid var(--c-border); }
+  .preview figcaption {
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--c-muted);
+    line-height: 1.4;
+  }
+  @media (max-width: 700px) {
+    .preview-grid { grid-template-columns: 1fr; }
+  }
+
   @media print {
     .page { box-shadow: none; padding: 30px; }
     body { background: #fff; }
+    .preview { break-inside: avoid; page-break-inside: avoid; }
+    .preview-grid { grid-template-columns: repeat(2, 1fr); }
+    .why-card { break-inside: avoid; page-break-inside: avoid; }
   }
 </style>
 </head>
@@ -162,8 +228,8 @@
       <p style="font-size:11px;color:var(--c-muted);margin:6px 0 0">Digital Solutions · www.emcdigitalsolutions.it</p>
     </div>
     <div class="doc-meta">
-      <strong>Preventivo n° 2026-LCGF-03</strong><br>
-      Data: 25 maggio 2026<br>
+      <strong>Preventivo n° 2026-LCGF-06</strong><br>
+      Data: 26 maggio 2026<br>
       Validità: 30 giorni
     </div>
   </header>
@@ -171,7 +237,7 @@
   <section class="doc-hero">
     <h1>Sito e-commerce gluten free</h1>
     <p class="sub">Soluzione WordPress + WooCommerce per "Mangia con Gusto"</p>
-    <span class="badge">★ Offerta lancio · −20% ★</span>
+    <span class="badge">★ Offerta lancio · −30% ★</span>
   </section>
 
   <div class="client-block">
@@ -183,7 +249,7 @@
 
   <h2>Cosa è incluso</h2>
   <ul class="feat">
-    <li><strong>WordPress 6.6 + WooCommerce</strong> — gestione prodotti, ordini, clienti, scorte da un pannello familiare</li>
+    <li><strong>WordPress 7.0 + WooCommerce</strong> — gestione prodotti, ordini, clienti, scorte da un pannello familiare</li>
     <li><strong>Tema personalizzato</strong> con palette, logo, tipografia e identità visiva del brand</li>
     <li><strong>13 prodotti caricati</strong> con foto, descrizioni, varianti grammatura, badge senza-glutine/senza-lattosio</li>
     <li><strong>Pagamenti</strong>: Stripe (carte) + PayPal + Klarna (3 rate) + Apple/Google Pay</li>
@@ -196,33 +262,109 @@
     <li><strong>Form contatti</strong> avanzato + invio email automatico a Carmelo</li>
     <li><strong>WhatsApp diretto</strong> in fondo a ogni pagina (numero Carmelo)</li>
     <li><strong>Responsive</strong> mobile + tablet + desktop, ottimizzato Core Web Vitals</li>
-    <li><strong>Hosting Hetzner</strong> + SSL Let's Encrypt + backup giornalieri automatici</li>
+    <li><strong>Installazione sul vostro hosting Keliweb attuale</strong> — manteniamo lo stesso spazio (~120 €/anno già a vostro carico), SSL preconfigurato, backup giornalieri</li>
     <li><strong>Test end-to-end</strong> prima del go-live: ordine reale di prova + verifica pagamenti + email</li>
     <li><strong>Formazione</strong> di 2h per gestire prodotti, ordini, contenuti autonomamente</li>
   </ul>
 
+  <h2>Anteprima del sito</h2>
+  <p style="font-size:14px;color:var(--c-muted);margin-bottom:20px">
+    Versione di sviluppo già online. Sotto le sezioni principali del sito che troverai live al go-live.
+  </p>
+  <div class="preview-grid">
+    <figure class="preview">
+      <img src="screenshots/home-fold.png" alt="Homepage" />
+      <figcaption>Homepage — hero + logo, badge senza glutine/lattosio, statistiche.</figcaption>
+    </figure>
+    <figure class="preview">
+      <img src="screenshots/shop-fold.png" alt="Catalogo" />
+      <figcaption>Catalogo — i 13 prodotti reali con foto e prezzi.</figcaption>
+    </figure>
+    <figure class="preview">
+      <img src="screenshots/prodotto-fold.png" alt="Scheda prodotto" />
+      <figcaption>Scheda Box Family — foto, prezzo, varianti, WhatsApp dedicato.</figcaption>
+    </figure>
+    <figure class="preview">
+      <img src="screenshots/categoria-fold.png" alt="Categoria Dolci" />
+      <figcaption>Categoria Dolci &amp; Colazione — filtro automatico per famiglia.</figcaption>
+    </figure>
+    <figure class="preview">
+      <img src="screenshots/chi-siamo-fold.png" alt="Chi siamo" />
+      <figcaption>Chi siamo — storia, valori, team (Carmelo · Gianluca · Gaetano).</figcaption>
+    </figure>
+    <figure class="preview">
+      <img src="screenshots/contatti-fold.png" alt="Contatti" />
+      <figcaption>Contatti — form messaggio + 3 numeri telefono + WhatsApp diretti.</figcaption>
+    </figure>
+  </div>
+
   <h2>Investimento</h2>
 
   <h3>Sviluppo (una tantum)</h3>
+  <p style="font-size:13px;color:var(--c-muted);margin:6px 0 12px">Sconto lancio del <strong style="color:var(--c-discount)">−30%</strong> applicato ad ogni voce. Prezzo di listino barrato, prezzo dedicato a fianco.</p>
   <table>
-    <thead><tr><th>Voce</th><th class="num">Importo</th></tr></thead>
+    <thead><tr><th>Voce</th><th class="num">Listino</th><th class="num">Prezzo dedicato</th></tr></thead>
     <tbody>
-      <tr><td>Setup WordPress + WooCommerce + dominio + SSL + tema parent</td><td class="num">€ 750,00</td></tr>
-      <tr><td>Tema child personalizzato (palette + logo + tipografia + identità brand)</td><td class="num">€ 480,00</td></tr>
-      <tr><td>Caricamento 13 prodotti con foto, varianti, descrizioni multilingue</td><td class="num">€ 220,00</td></tr>
-      <tr><td>Configurazione multilingue Polylang (IT + EN + DE + FR)</td><td class="num">€ 240,00</td></tr>
-      <tr><td>Integrazione pagamenti Stripe + PayPal + Klarna + Apple/Google Pay</td><td class="num">€ 200,00</td></tr>
-      <tr><td>Configurazione spedizioni (corrieri + tariffe + soglia gratis)</td><td class="num">€ 140,00</td></tr>
-      <tr><td>SEO Yoast + Google Analytics 4 + Search Console + sitemap + schema.org</td><td class="num">€ 200,00</td></tr>
-      <tr><td>Email transazionali (template brandizzato + SMTP)</td><td class="num">€ 110,00</td></tr>
-      <tr><td>Pagine legali personalizzate (privacy + cookie + recesso + condizioni)</td><td class="num">€ 130,00</td></tr>
-      <tr><td>GDPR + Cookie banner Complianz + gestione consensi</td><td class="num">€ 110,00</td></tr>
-      <tr><td>Test end-to-end + go-live + formazione 2h</td><td class="num">€ 120,00</td></tr>
-      <tr><td>Subtotale</td><td class="num">€ 2.700,00</td></tr>
-      <tr class="discount"><td>Sconto lancio cliente EMC <span class="pct">−20%</span></td><td class="num">−€ 540,00</td></tr>
-      <tr class="total-row"><td>Totale sviluppo (IVA esclusa)</td><td class="num">€ 2.160,00</td></tr>
-      <tr><td style="color:var(--c-muted);font-size:13px">IVA 22%</td><td class="num" style="color:var(--c-muted);font-size:13px">+ € 475,20</td></tr>
-      <tr class="total-row" style="background:#eee5cc"><td>Totale sviluppo (IVA inclusa)</td><td class="num">€ 2.635,20</td></tr>
+      <tr>
+        <td>Setup WordPress + WooCommerce sul vostro hosting Keliweb + tema parent</td>
+        <td class="num"><s style="color:var(--c-muted)">€ 750,00</s></td>
+        <td class="num"><strong>€ 525,00</strong></td>
+      </tr>
+      <tr>
+        <td>Tema child personalizzato (palette + logo + tipografia + identità brand)</td>
+        <td class="num"><s style="color:var(--c-muted)">€ 480,00</s></td>
+        <td class="num"><strong>€ 336,00</strong></td>
+      </tr>
+      <tr>
+        <td>Caricamento 13 prodotti con foto, varianti, descrizioni multilingue</td>
+        <td class="num"><s style="color:var(--c-muted)">€ 220,00</s></td>
+        <td class="num"><strong>€ 154,00</strong></td>
+      </tr>
+      <tr>
+        <td>Configurazione multilingue Polylang (IT + EN + DE + FR)</td>
+        <td class="num"><s style="color:var(--c-muted)">€ 240,00</s></td>
+        <td class="num"><strong>€ 168,00</strong></td>
+      </tr>
+      <tr>
+        <td>Integrazione pagamenti Stripe + PayPal + Klarna + Apple/Google Pay</td>
+        <td class="num"><s style="color:var(--c-muted)">€ 200,00</s></td>
+        <td class="num"><strong>€ 140,00</strong></td>
+      </tr>
+      <tr>
+        <td>Configurazione spedizioni (corrieri + tariffe + soglia gratis)</td>
+        <td class="num"><s style="color:var(--c-muted)">€ 140,00</s></td>
+        <td class="num"><strong>€ 98,00</strong></td>
+      </tr>
+      <tr>
+        <td>SEO Yoast + Google Analytics 4 + Search Console + sitemap + schema.org</td>
+        <td class="num"><s style="color:var(--c-muted)">€ 200,00</s></td>
+        <td class="num"><strong>€ 140,00</strong></td>
+      </tr>
+      <tr>
+        <td>Email transazionali (template brandizzato + SMTP)</td>
+        <td class="num"><s style="color:var(--c-muted)">€ 110,00</s></td>
+        <td class="num"><strong>€ 77,00</strong></td>
+      </tr>
+      <tr>
+        <td>Pagine legali personalizzate (privacy + cookie + recesso + condizioni)</td>
+        <td class="num"><s style="color:var(--c-muted)">€ 130,00</s></td>
+        <td class="num"><strong>€ 91,00</strong></td>
+      </tr>
+      <tr>
+        <td>GDPR + Cookie banner Complianz + gestione consensi</td>
+        <td class="num"><s style="color:var(--c-muted)">€ 110,00</s></td>
+        <td class="num"><strong>€ 77,00</strong></td>
+      </tr>
+      <tr>
+        <td>Test end-to-end + go-live + formazione 2h</td>
+        <td class="num"><s style="color:var(--c-muted)">€ 120,00</s></td>
+        <td class="num"><strong>€ 84,00</strong></td>
+      </tr>
+      <tr><td>Subtotale di listino</td><td class="num"><s style="color:var(--c-muted)">€ 2.700,00</s></td><td class="num">—</td></tr>
+      <tr class="discount"><td>Risparmio totale <span class="pct">−30%</span></td><td class="num">—</td><td class="num">−€ 810,00</td></tr>
+      <tr class="total-row"><td>Totale sviluppo (IVA esclusa)</td><td class="num">—</td><td class="num">€ 1.890,00</td></tr>
+      <tr><td style="color:var(--c-muted);font-size:13px">IVA 22%</td><td class="num">—</td><td class="num" style="color:var(--c-muted);font-size:13px">+ € 415,80</td></tr>
+      <tr class="total-row" style="background:#eee5cc"><td>Totale sviluppo (IVA inclusa)</td><td class="num">—</td><td class="num">€ 2.305,80</td></tr>
     </tbody>
   </table>
 
@@ -230,9 +372,10 @@
   <table>
     <thead><tr><th>Voce</th><th class="num">Mensile</th></tr></thead>
     <tbody>
-      <tr><td>Hosting Hetzner + SSL + backup giornalieri automatici</td><td class="num">incluso</td></tr>
+      <tr><td>Hosting Keliweb (rimane a vostro carico, ~120 €/anno)</td><td class="num">escluso</td></tr>
       <tr><td>Aggiornamenti WP + WooCommerce + plugin di sicurezza</td><td class="num">incluso</td></tr>
-      <tr><td>Monitoraggio uptime 24/7 + Wordfence Security</td><td class="num">incluso</td></tr>
+      <tr><td>Monitoraggio uptime + sicurezza Wordfence</td><td class="num">incluso</td></tr>
+      <tr><td>Backup settimanali automatici</td><td class="num">incluso</td></tr>
       <tr><td>Supporto via email/WhatsApp (giorni feriali)</td><td class="num">incluso</td></tr>
       <tr><td>Manutenzione + 2h/mese di modifiche/contenuti</td><td class="num">€ 110,00</td></tr>
       <tr class="total-row"><td>Canone mensile (IVA esclusa)</td><td class="num">€ 110,00</td></tr>
@@ -245,7 +388,7 @@
   <div class="compare">
     <div class="winner">
       <h3>WordPress + WooCommerce</h3>
-      <p class="price-line">€ 2.160 <small>+ € 110/mese · IVA escl.</small></p>
+      <p class="price-line">€ 1.890 <small>+ € 110/mese · IVA escl.</small></p>
       <ul>
         <li>✓ Tempi consegna: <strong>1 settimana</strong></li>
         <li>✓ Gestione autonoma prodotti/ordini</li>
@@ -269,7 +412,7 @@
 
   <div class="savings-callout">
     <p class="lbl">Risparmio scegliendo WordPress</p>
-    <p class="big">€ 5.700</p>
+    <p class="big">€ 5.970</p>
     <p style="margin:0;opacity:.85">nel primo anno (sviluppo + 12 mesi di canone, IVA esclusa)</p>
   </div>
 
@@ -279,19 +422,97 @@
     <tbody>
       <tr><td>Social Media Management (TikTok + Instagram + Facebook + Reels)</td><td class="num">€ 280–350/mese</td></tr>
       <tr><td>Google Business Profile + posizionamento Maps</td><td class="num">€ 300 una tantum</td></tr>
-      <tr><td>Foto prodotto professionali in studio (set completo)</td><td class="num">€ 380 una tantum</td></tr>
-      <tr><td>Campagne Google Ads / Meta Ads — gestione mensile</td><td class="num">€ 180/mese + budget</td></tr>
-      <tr><td>Newsletter mensile (template + invio + report)</td><td class="num">€ 90/mese</td></tr>
     </tbody>
   </table>
+
+  <h2>Perché questa scelta è vincente</h2>
+  <p style="font-size:14px;color:var(--c-muted);margin-bottom:18px">
+    Tra le tante opzioni che potete avere oggi (Shopify, Wix, agenzie tradizionali, piattaforme chiuse), ecco perché WooCommerce + EMC è la combinazione che vi fa risparmiare denaro <strong>e</strong> tempo, ora e nei prossimi anni.
+  </p>
+
+  <h3 style="color:var(--c-primary-dark);margin-top:18px">I vantaggi della soluzione WordPress + WooCommerce</h3>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">🔓</div>
+      <strong>Nessun lock-in.</strong>
+      <p>Il sito è 100% vostro. Niente abbonamenti obbligatori a piattaforme proprietarie (Shopify, Wix). Domani potete spostarlo dove volete senza perdere niente.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">💸</div>
+      <strong>Niente percentuale sulle vendite.</strong>
+      <p>Shopify trattiene fino al 2% di ogni transazione oltre alle fee del pagamento. WooCommerce no: paghi solo le commissioni standard di Stripe/PayPal.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🛠️</div>
+      <strong>Personalizzazione totale.</strong>
+      <p>Niente vincoli di tema standard. Brand identity, layout, sezioni, automazioni: tutto cucito su misura sulla vostra azienda.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🌐</div>
+      <strong>Multilingue nativo.</strong>
+      <p>4 lingue (IT/EN/DE/FR) con Polylang. Su Shopify costa fino a 30 €/mese in più, su Wix non è davvero supportato.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">📈</div>
+      <strong>SEO ai massimi livelli.</strong>
+      <p>WordPress + Yoast è la combinazione più SEO-friendly sul mercato. Vi posizionate su Google molto prima dei competitor su piattaforme chiuse.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🚀</div>
+      <strong>Si scala con voi.</strong>
+      <p>Se domani fatturate 10× e servono performance "enterprise", possiamo migrare lo stesso brand su soluzione custom Node.js — niente da rifare da zero.</p>
+    </div>
+  </div>
+
+  <h3 style="color:var(--c-primary-dark);margin-top:34px">Perché scegliere EMC Digital Solutions</h3>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">🤝</div>
+      <strong>Un solo interlocutore per tutto.</strong>
+      <p>Sito, social media, foto, SEO, Google Business, manutenzione: parlate sempre con noi, non con 4 fornitori diversi. Meno tempo perso, decisioni più veloci.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">⚡</div>
+      <strong>Consegna in 1 settimana.</strong>
+      <p>Le agenzie classiche impiegano 2–3 mesi. Noi siamo strutturati per consegnare in 5–7 giorni lavorativi. Voi siete online prima.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">💬</div>
+      <strong>Supporto su WhatsApp, risposta in 1h.</strong>
+      <p>Non ticket anonimi. Carmelo scrive direttamente al CEO di EMC e ottiene risposta in giornata. Anche sabato.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🇮🇹</div>
+      <strong>Made in Sicily, per la Sicilia.</strong>
+      <p>EMC è agrigentina come voi. Capiamo il contesto, parliamo la stessa lingua del business locale, le riunioni le facciamo anche di persona.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">📦</div>
+      <strong>Esperienza specifica nel food/retail.</strong>
+      <p>Clienti già attivi nel food e retail: Terre di Miele (apicoltura), KleinBaby (negozio), Grandi Firme di Fucà (outlet). Sappiamo cosa funziona nel vostro settore.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🎁</div>
+      <strong>Trasparenza totale sui prezzi.</strong>
+      <p>Sconto del 30% applicato voce per voce: vedete quanto pagate ogni componente. Niente costi nascosti, niente "rivedremo a fine progetto".</p>
+    </div>
+  </div>
+
+  <div class="savings-callout" style="background:linear-gradient(135deg,#1f4d2e,#0f2a1a)">
+    <p class="lbl">In sintesi</p>
+    <p style="font-size:18px;font-weight:600;margin:6px 0 0;line-height:1.5">
+      Lavorate con un team locale, agile e con esperienza nel food.<br/>
+      In una settimana siete online, con un sito vostro al 100%, niente royalty.
+    </p>
+  </div>
 
   <h2>Condizioni</h2>
   <ul class="feat">
     <li>Tutti gli importi sono espressi in <strong>Euro, IVA esclusa 22%</strong>, salvo dove diversamente indicato</li>
     <li>50% all'accettazione del preventivo, 50% alla consegna del sito online</li>
     <li>Canone mensile fatturato trimestralmente in via anticipata</li>
-    <li>Dominio <code>lacompagniadelglutenfree.it</code> registrato a nome del cliente</li>
-    <li>SSL gratuito Let's Encrypt (rinnovo automatico ogni 90 giorni)</li>
+    <li>Dominio <code>lacompagniadelglutenfree.it</code> e hosting <strong>Keliweb</strong> rimangono a vostro carico (come oggi, ~120 €/anno)</li>
+    <li>SSL preconfigurato dall'hosting Keliweb (rinnovo gestito dal provider)</li>
     <li>Tempi di consegna: <strong>1 settimana</strong> dall'invio dei materiali finali (logo, listino prezzi confermati, dati fiscali)</li>
     <li>Garanzia bug-fix: 60 giorni dalla consegna</li>
     <li>I prezzi sono validi 30 giorni dalla data del preventivo</li>
