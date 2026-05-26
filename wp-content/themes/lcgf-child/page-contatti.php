@@ -96,7 +96,7 @@ get_header();
               <a href="tel:+<?php echo esc_attr($c['tel']); ?>" style="display:block;color:var(--c-olive-deep);font-size:.88rem;font-weight:500;margin-top:2px;text-decoration:none"><?php echo esc_html($c['phone']); ?></a>
               <span style="font-size:.72rem;color:var(--c-muted);text-transform:uppercase;letter-spacing:.08em"><?php echo esc_html($c['role']); ?></span>
             </div>
-            <a href="https://wa.me/<?php echo esc_attr($c['tel']); ?>" target="_blank" rel="noopener" aria-label="WhatsApp <?php echo esc_attr($c['name']); ?>" style="width:38px;height:38px;border-radius:50%;background:#25D366;color:#fff;display:grid;place-items:center;flex-shrink:0;text-decoration:none">
+            <a href="https://wa.me/<?php echo esc_attr($c['tel']); ?>" target="_blank" rel="noopener" aria-label="WhatsApp <?php echo esc_attr($c['name']); ?>" style="width:38px;height:38px;border-radius:50%;background:var(--g-cta);color:var(--c-cream);display:grid;place-items:center;flex-shrink:0;text-decoration:none;box-shadow:0 4px 12px rgba(54,78,37,.25)">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.2-.7.2-.2.3-.8.9-1 1.1-.2.2-.4.2-.7.1-1.9-.8-3.2-1.8-4.4-3.7-.3-.5.3-.5.9-1.5.1-.2 0-.4-.1-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1.1 1.1-1.1 2.6 0 1.6 1.1 3.1 1.3 3.3.2.2 2.3 3.6 5.7 4.9 3.4 1.3 3.4.9 4 .8.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.2-.2-.5-.3ZM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.4 1.3 4.9L2 22l5.2-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2Z"/></svg>
             </a>
           </div>
