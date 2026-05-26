@@ -153,95 +153,98 @@ add_action('init', function () {
 
     $admin_email = get_option('admin_email');
 
+    // NB: WPForms richiede fields/notifications/confirmations come associative array
+    // con KEY STRING ('1','2',...). Le keys sequenziali int causerebbero JSON array
+    // (e WPForms non lo riconosce). Field id parte da 1, non 0.
     $form_data = [
         'id'       => 0,
-        'field_id' => 6,
+        'field_id' => 7,
         'fields'   => [
-            0 => [
-                'id'       => '0',
+            '1' => [
+                'id'       => '1',
                 'type'     => 'name',
                 'label'    => 'Nome e cognome',
                 'format'   => 'simple',
                 'required' => '1',
                 'size'     => 'medium',
             ],
-            1 => [
-                'id'       => '1',
+            '2' => [
+                'id'       => '2',
                 'type'     => 'email',
                 'label'    => 'Email',
                 'required' => '1',
                 'size'     => 'medium',
             ],
-            2 => [
-                'id'       => '2',
+            '3' => [
+                'id'       => '3',
                 'type'     => 'phone',
                 'label'    => 'Telefono (opzionale)',
                 'format'   => 'international',
                 'size'     => 'medium',
             ],
-            3 => [
-                'id'       => '3',
+            '4' => [
+                'id'       => '4',
                 'type'     => 'select',
                 'label'    => 'Oggetto',
                 'choices'  => [
-                    1 => ['label' => 'Domanda su un ordine', 'value' => ''],
-                    2 => ['label' => 'Informazioni su un prodotto', 'value' => ''],
-                    3 => ['label' => 'Spedizione e resi', 'value' => ''],
-                    4 => ['label' => 'Gift card e regali', 'value' => ''],
-                    5 => ['label' => 'Collaborazioni B2B', 'value' => ''],
-                    6 => ['label' => 'Altro', 'value' => ''],
+                    '1' => ['label' => 'Domanda su un ordine', 'value' => ''],
+                    '2' => ['label' => 'Informazioni su un prodotto', 'value' => ''],
+                    '3' => ['label' => 'Spedizione e resi', 'value' => ''],
+                    '4' => ['label' => 'Gift card e regali', 'value' => ''],
+                    '5' => ['label' => 'Collaborazioni B2B', 'value' => ''],
+                    '6' => ['label' => 'Altro', 'value' => ''],
                 ],
                 'required' => '1',
                 'size'     => 'medium',
             ],
-            4 => [
-                'id'       => '4',
+            '5' => [
+                'id'       => '5',
                 'type'     => 'textarea',
                 'label'    => 'Messaggio',
                 'required' => '1',
                 'size'     => 'medium',
             ],
-            5 => [
-                'id'        => '5',
+            '6' => [
+                'id'        => '6',
                 'type'      => 'gdpr-checkbox',
                 'label'     => 'Privacy',
                 'choices'   => [
-                    1 => ['label' => 'Acconsento al trattamento dei dati personali ai sensi della <a href="/privacy/">Privacy Policy</a> per essere ricontattato.', 'value' => ''],
+                    '1' => ['label' => 'Acconsento al trattamento dei dati personali ai sensi della <a href="/privacy/">Privacy Policy</a> per essere ricontattato.', 'value' => ''],
                 ],
                 'required'  => '1',
             ],
         ],
         'settings' => [
-            'form_title'         => 'Contatti LCGF',
-            'form_desc'          => '',
-            'submit_text'        => 'Invia messaggio',
+            'form_title'             => 'Contatti LCGF',
+            'form_desc'              => '',
+            'submit_text'            => 'Invia messaggio',
             'submit_text_processing' => 'Invio in corso...',
-            'honeypot'           => '1',
-            'antispam'           => '1',
-            'antispam_v3'        => '1',
-            'notification_enable' => '1',
-            'notifications'      => [
-                1 => [
+            'honeypot'               => '1',
+            'antispam_v3'            => '1',
+            'ajax_submit'            => '1',
+            'notification_enable'    => '1',
+            'notifications'          => [
+                '1' => [
                     'enable'            => '1',
                     'notification_name' => 'Notifica admin',
-                    'email'             => $admin_email,
-                    'subject'           => '[LCGF] Nuovo messaggio da {field_id="0"}',
+                    'email'             => '{admin_email}',
+                    'subject'           => '[LCGF] Nuovo messaggio da {field_id="1"}',
                     'sender_name'       => 'La Compagnia del Gluten Free',
-                    'sender_address'    => $admin_email,
-                    'replyto'           => '{field_id="1"}',
-                    'message'           => "Hai ricevuto un nuovo messaggio dal form contatti del sito.\n\n— DETTAGLI —\nNome: {field_id=\"0\"}\nEmail: {field_id=\"1\"}\nTelefono: {field_id=\"2\"}\nOggetto: {field_id=\"3\"}\n\n— MESSAGGIO —\n{field_id=\"4\"}\n\n---\nInviato da {site_name} il {date format=\"d/m/Y H:i\"}\nIP: {entry_ip}",
+                    'sender_address'    => '{admin_email}',
+                    'replyto'           => '{field_id="2"}',
+                    'message'           => "Hai ricevuto un nuovo messaggio dal form contatti.\n\n{all_fields}\n\n---\nInviato da {site_name} il {date format=\"d/m/Y H:i\"}",
                 ],
             ],
-            'confirmations'      => [
-                1 => [
-                    'type'    => 'message',
-                    'message' => '<div style="text-align:center;padding:30px 20px"><h2 style="color:#2f4823">Grazie! Messaggio inviato.</h2><p>Abbiamo ricevuto il tuo messaggio e ti risponderemo entro <strong>24 ore lavorative</strong>. Nel frattempo puoi anche scriverci su WhatsApp al <strong>+39 327 699 9897</strong>.</p></div>',
+            'confirmations'          => [
+                '1' => [
+                    'type'           => 'message',
+                    'message'        => '<div style="text-align:center;padding:30px 20px"><h2 style="color:#2f4823">Grazie! Messaggio inviato.</h2><p>Abbiamo ricevuto il tuo messaggio e ti risponderemo entro <strong>24 ore lavorative</strong>. Nel frattempo puoi anche scriverci su WhatsApp al <strong>+39 327 699 9897</strong>.</p></div>',
                     'message_scroll' => '1',
                 ],
             ],
         ],
         'meta'     => [
-            'template' => 'simple_contact_form',
+            'template' => 'simple-contact-form-template',
         ],
     ];
 
