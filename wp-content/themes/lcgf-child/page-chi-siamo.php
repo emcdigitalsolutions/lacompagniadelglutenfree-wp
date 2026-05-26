@@ -32,7 +32,7 @@ $logo = get_stylesheet_directory_uri() . '/assets/img/logo.webp';
         </p>
       </div>
       <div class="lcgf-split-visual">
-        <img src="<?php echo esc_url($logo); ?>" alt="Logo La Compagnia del Gluten Free" style="width:75%;height:auto;object-fit:contain;animation: spinSlow 60s linear infinite;filter:drop-shadow(0 16px 36px rgba(54,78,37,.3))" />
+        <img src="<?php echo esc_url($logo); ?>" alt="Logo La Compagnia del Gluten Free" style="width:75%;height:auto;object-fit:contain;filter:drop-shadow(0 16px 36px rgba(54,78,37,.3))" />
       </div>
     </div>
   </div>

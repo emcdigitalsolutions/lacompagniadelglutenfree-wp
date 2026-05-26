@@ -292,7 +292,6 @@ body { padding-top: var(--header-h); }
   filter: drop-shadow(0 22px 44px rgba(54, 78, 37, .28)) drop-shadow(0 6px 14px rgba(0,0,0,.12));
   position: relative;
   z-index: 1;
-  animation: spinSlow 60s linear infinite;
 }
 .lcgf-hero-glow {
   position: absolute;
@@ -318,9 +317,9 @@ body { padding-top: var(--header-h); }
   z-index: 2;
 }
 .lcgf-pillbadge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c-olive); }
-.lcgf-pillbadge.b1 { top: 12%; left: -10px; }
-.lcgf-pillbadge.b2 { bottom: 18%; right: -16px; }
-.lcgf-pillbadge.b3 { top: 50%; right: -34px; }
+.lcgf-pillbadge.b1 { top: 6%; left: -10px; }
+.lcgf-pillbadge.b2 { top: 6%; right: -16px; }
+.lcgf-pillbadge.b3 { top: -6%; left: 50%; transform: translateX(-50%); }
 
 /* ---------- MARQUEE ---------- */
 .lcgf-marquee {
