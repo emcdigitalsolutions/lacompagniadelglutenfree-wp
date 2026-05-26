@@ -704,7 +704,7 @@
 
   /* ============================ PRINT ============================ */
   @media print {
-    @page { size: A4; margin: 18mm 14mm 16mm 14mm; }
+    @page { size: A4; margin: 12mm 14mm 12mm 14mm; }
     @page :first { margin: 0; }
     html, body { background: #fff !important; }
     .page {
@@ -718,16 +718,18 @@
     }
     .cover-foot { position: relative; bottom: auto; left: auto; right: auto; margin-top: auto; padding-top: 18px; }
 
-    /* Titoli: extra respiro quando vanno a capo pagina + niente titoli isolati */
+    /* Titoli: respiro quando vanno a capo pagina + niente titoli isolati */
     .section-h {
       page-break-after: avoid;
       break-after: avoid;
       page-break-before: auto;
       break-before: auto;
-      margin-top: 14mm;
-      padding-top: 4mm;
+      margin-top: 9mm;
+      padding-top: 2mm;
+      margin-bottom: 4mm;
+      padding-bottom: 8px;
     }
-    .section-h:first-of-type { margin-top: 40px; padding-top: 0; }
+    .section-h:first-of-type { margin-top: 4mm; padding-top: 0; }
 
     h2, h3, h4 {
       page-break-after: avoid;
@@ -735,10 +737,10 @@
       orphans: 3;
       widows: 3;
     }
-    /* h3 con margine generoso sopra (es. "I vantaggi tecnici") */
+    /* h3 con margine sopra (es. "I vantaggi tecnici") */
     h3 {
-      margin-top: 10mm;
-      padding-top: 2mm;
+      margin-top: 6mm;
+      padding-top: 1mm;
     }
 
     /* Card e blocchi: evita split brutti tra pagine */
