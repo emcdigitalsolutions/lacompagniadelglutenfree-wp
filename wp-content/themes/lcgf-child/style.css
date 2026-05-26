@@ -663,6 +663,25 @@ body { padding-top: var(--header-h); }
 .lcgf-wa:hover { transform: scale(1.08); box-shadow: 0 12px 30px rgba(54, 78, 37, .55); }
 .lcgf-wa svg { width: 28px; height: 28px; fill: currentColor; }
 
+/* ---------- Astra "Torna su" — uniformato al brand olive ---------- */
+#ast-scroll-top.ast-scroll-top-icon {
+  background: var(--g-cta) !important;
+  color: var(--c-cream) !important;
+  border: none !important;
+  box-shadow: 0 8px 22px rgba(54, 78, 37, .35) !important;
+  transition: transform 300ms cubic-bezier(.34,1.56,.64,1), box-shadow 300ms ease !important;
+}
+#ast-scroll-top.ast-scroll-top-icon:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 12px 28px rgba(54, 78, 37, .5) !important;
+  background: var(--g-cta) !important;
+}
+#ast-scroll-top.ast-scroll-top-icon .ast-icon,
+#ast-scroll-top.ast-scroll-top-icon svg {
+  fill: var(--c-cream) !important;
+  color: var(--c-cream) !important;
+}
+
 /* ---------- Single product overrides ---------- */
 .woocommerce div.product { padding: 40px 0; }
 .woocommerce div.product .product_title { color: var(--c-ink) !important; margin-bottom: 14px !important; }
