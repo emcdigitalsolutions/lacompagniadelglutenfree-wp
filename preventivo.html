@@ -3,577 +3,1184 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Preventivo WordPress — La Compagnia del Gluten Free | EMC Digital Solutions</title>
+<title>Preventivo · La Compagnia del Gluten Free | EMC Digital Solutions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  /* ============================ DESIGN SYSTEM ============================ */
   :root {
-    --c-bg: #faf7f1;
-    --c-text: #2d2a24;
-    --c-muted: #6b6259;
-    --c-primary: #7a9a5a;
-    --c-primary-dark: #5a7a3a;
-    --c-accent: #c9a96e;
-    --c-border: #e8e2d5;
-    --c-card: #ffffff;
-    --c-discount: #c7613e;
+    --c-bg:          #faf7f1;
+    --c-ink:         #1f1b14;
+    --c-ink-soft:    #3a342a;
+    --c-muted:       #7a7065;
+    --c-line:        #e8e0cf;
+    --c-line-soft:   #f0e9d8;
+    --c-cream:       #fff8e7;
+    --c-cream-2:     #f4ecd9;
+    --c-card:        #ffffff;
+
+    --c-olive:       #6b8e4e;
+    --c-olive-dark:  #4f6e37;
+    --c-olive-deep:  #2f4823;
+
+    --c-wheat:       #c9a96e;
+    --c-wheat-dark:  #a6864c;
+    --c-wheat-light: #e2c58f;
+
+    --c-discount:    #c7613e;
+    --c-discount-dk: #a14c2e;
+
+    --f-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --f-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--c-bg); }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    color: var(--c-text);
-    background: var(--c-bg);
-    line-height: 1.6;
-    font-size: 15px;
-  }
-  .page { max-width: 920px; margin: 0 auto; padding: 50px 40px; background: var(--c-card); box-shadow: 0 2px 20px rgba(0,0,0,.05); }
-
-  /* HEADER */
-  .doc-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding-bottom: 22px; border-bottom: 3px solid var(--c-primary);
-    margin-bottom: 30px;
-  }
-  .doc-header .doc-meta { text-align: right; font-size: 13px; color: var(--c-muted); }
-  .doc-header .doc-meta strong { color: var(--c-text); font-size: 14px; }
-
-  /* HERO */
-  .doc-hero {
-    text-align: center;
-    padding: 26px 0 30px;
-  }
-  .doc-hero h1 { font-size: 30px; margin: 0 0 6px; color: var(--c-primary-dark); }
-  .doc-hero .sub { font-size: 16px; color: var(--c-muted); margin: 0; }
-  .doc-hero .badge {
-    display: inline-block; margin-top: 14px;
-    background: linear-gradient(135deg, var(--c-discount), #a85432);
-    color: #fff; padding: 8px 18px;
-    border-radius: 999px; font-size: 13px; font-weight: 700;
-    letter-spacing: 1px; text-transform: uppercase;
+    font-family: var(--f-body);
+    color: var(--c-ink-soft);
+    line-height: 1.65;
+    font-size: 14.5px;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
-  /* CLIENT BLOCK */
-  .client-block {
-    background: #f9f4e8;
-    padding: 18px 22px;
-    border-left: 4px solid var(--c-accent);
-    border-radius: 0 8px 8px 0;
-    margin-bottom: 30px;
+  .page {
+    max-width: 920px;
+    margin: 0 auto;
+    background: var(--c-card);
+    box-shadow: 0 4px 40px rgba(31,27,20,.06);
+    padding: 60px 64px;
   }
-  .client-block strong { display: block; margin-bottom: 4px; color: var(--c-primary-dark); }
 
-  h2 {
-    font-size: 18px; color: var(--c-primary-dark);
-    margin: 30px 0 14px;
-    border-bottom: 1px solid var(--c-border);
-    padding-bottom: 8px;
+  /* ============================ TYPOGRAPHY ============================ */
+  h1, h2, h3, h4, h5 { font-family: var(--f-display); font-weight: 600; color: var(--c-ink); line-height: 1.15; letter-spacing: -0.01em; }
+  h1 { font-size: 42px; }
+  h2 { font-size: 26px; }
+  h3 { font-size: 19px; }
+  h4 { font-size: 15px; font-family: var(--f-body); font-weight: 600; }
+
+  p { margin: 0 0 12px; }
+  strong { color: var(--c-ink); font-weight: 600; }
+  em { font-style: italic; font-family: var(--f-display); }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--c-wheat-dark);
+    margin-bottom: 8px;
   }
-  h3 { font-size: 15px; color: var(--c-text); margin: 16px 0 6px; }
+  .eyebrow::before { content: "✦"; margin-right: 8px; color: var(--c-wheat); }
 
-  /* TABLE */
-  table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; }
-  th, td { padding: 11px 12px; text-align: left; font-size: 14px; border-bottom: 1px solid var(--c-border); }
-  th { background: #f9f4e8; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--c-muted); }
-  td.num { text-align: right; font-variant-numeric: tabular-nums; }
-  tr.total-row td { font-weight: 700; font-size: 16px; color: var(--c-primary-dark); background: #f4f0e2; }
-  tr.discount td { color: var(--c-discount); }
-  tr.discount td .pct { background: var(--c-discount); color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-left: 6px; }
+  .section-h {
+    margin: 50px 0 24px;
+    border-bottom: 1px solid var(--c-line);
+    padding-bottom: 14px;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  .section-h .num {
+    font-family: var(--f-display);
+    font-style: italic;
+    font-size: 20px;
+    color: var(--c-wheat-dark);
+    font-weight: 500;
+  }
+  .section-h h2 { margin: 0; color: var(--c-olive-deep); }
 
-  /* COMPARE BOX */
-  .compare {
+  /* ============================ COVER ============================ */
+  .cover {
+    background: linear-gradient(135deg, #1c2e15 0%, #2f4823 55%, #4f6e37 100%);
+    color: var(--c-cream);
+    padding: 70px 64px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: "";
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,169,110,.22), transparent 70%);
+    pointer-events: none;
+  }
+  .cover::after {
+    content: "";
+    position: absolute;
+    bottom: -80px; left: -80px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,248,231,.08), transparent 70%);
+    pointer-events: none;
+  }
+  .cover-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 38px;
+    border-bottom: 1px solid rgba(255,248,231,.15);
+    margin-bottom: 50px;
+    position: relative;
+    z-index: 1;
+  }
+  .cover-top .emc-logo svg { display: block; }
+  .cover-top .meta-list {
+    text-align: right;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    line-height: 2;
+    color: rgba(255,248,231,.65);
+  }
+  .cover-top .meta-list strong { color: var(--c-wheat-light); font-weight: 600; }
+  .cover-body { position: relative; z-index: 1; }
+  .cover-body .eyebrow { color: var(--c-wheat); }
+  .cover-body .eyebrow::before { color: var(--c-wheat-light); }
+  .cover-body h1 {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 58px;
+    color: var(--c-cream);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    max-width: 600px;
+    margin: 8px 0 22px;
+  }
+  .cover-body h1 em {
+    font-style: italic;
+    color: var(--c-wheat);
+    font-weight: 500;
+  }
+  .cover-body .lead {
+    font-size: 17px;
+    color: rgba(255,248,231,.78);
+    max-width: 560px;
+    margin-bottom: 38px;
+    line-height: 1.55;
+  }
+
+  .price-banner {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 16px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(201,169,110,.35);
+    backdrop-filter: blur(20px);
+    padding: 18px 28px;
+    border-radius: 14px;
+  }
+  .price-banner .lbl {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--c-wheat-light);
+    font-weight: 600;
+  }
+  .price-banner .val {
+    font-family: var(--f-display);
+    font-size: 38px;
+    color: var(--c-cream);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .price-banner .val .currency { font-size: 22px; color: var(--c-wheat); }
+  .price-banner .extra {
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    color: rgba(255,248,231,.55);
+    margin-top: 2px;
+  }
+
+  .cover-foot {
+    position: absolute;
+    bottom: 32px;
+    left: 64px;
+    right: 64px;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: rgba(255,248,231,.55);
+    border-top: 1px solid rgba(255,248,231,.08);
+    padding-top: 18px;
+  }
+  .cover-foot strong { color: var(--c-wheat); font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; }
+
+  .client-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(201,169,110,.12);
+    border: 1px solid rgba(201,169,110,.3);
+    padding: 10px 18px;
+    border-radius: 999px;
+    margin-bottom: 28px;
+  }
+  .client-pill .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--c-wheat);
+    box-shadow: 0 0 12px var(--c-wheat);
+  }
+  .client-pill span {
+    font-size: 13px;
+    color: var(--c-cream);
+    font-weight: 500;
+  }
+
+  /* ============================ CLIENT BLOCK ============================ */
+  .client-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
-    margin: 16px 0;
+    margin: 30px 0;
   }
-  .compare > div {
-    padding: 18px;
-    border-radius: 8px;
-    border: 1px solid var(--c-border);
+  .client-card {
+    background: var(--c-card);
+    border: 1px solid var(--c-line);
+    border-left: 3px solid var(--c-olive);
+    border-radius: 4px;
+    padding: 16px 20px;
   }
-  .compare .winner {
-    background: linear-gradient(135deg, #f9f4e8, #fff);
-    border-color: var(--c-primary);
-    border-width: 2px;
-    position: relative;
-  }
-  .compare .winner::before {
-    content: "Soluzione consigliata";
-    position: absolute;
-    top: -10px; left: 14px;
-    background: var(--c-primary);
-    color: #fff;
-    padding: 3px 12px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 700;
+  .client-card .l {
+    font-size: 10px;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    color: var(--c-muted);
+    font-weight: 600;
+    margin-bottom: 6px;
   }
-  .compare h3 { margin-top: 6px; }
-  .compare .price-line { font-size: 22px; font-weight: 700; color: var(--c-primary-dark); margin: 8px 0; }
-  .compare .price-line small { font-size: 13px; font-weight: 500; color: var(--c-muted); }
-  .compare ul { margin: 8px 0 0; padding-left: 20px; font-size: 13px; }
-  .compare ul li { margin: 4px 0; }
+  .client-card .v { font-size: 14.5px; color: var(--c-ink); font-weight: 500; }
+  .client-card .v code { font-family: 'SFMono-Regular', Consolas, monospace; font-size: 13px; background: var(--c-cream-2); padding: 1px 6px; border-radius: 3px; }
 
-  ul.feat { margin: 8px 0 16px; padding-left: 22px; }
-  ul.feat li { margin: 4px 0; font-size: 14px; }
-
-  .savings-callout {
-    background: linear-gradient(135deg, var(--c-primary), var(--c-primary-dark));
-    color: #fff;
-    padding: 24px 28px;
-    border-radius: 12px;
-    text-align: center;
-    margin: 24px 0;
-  }
-  .savings-callout .big { font-size: 36px; font-weight: 800; line-height: 1; margin: 6px 0; }
-  .savings-callout .lbl { font-size: 13px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.85; }
-
-  /* FOOTER */
-  .doc-footer {
-    margin-top: 40px; padding-top: 24px;
-    border-top: 1px solid var(--c-border);
-    font-size: 12px; color: var(--c-muted);
-    text-align: center;
-  }
-  .emc-credit { display: inline-flex; align-items: center; gap: 8px; opacity: .6; color: var(--c-muted); }
-
-  /* Why-EMC cards */
-  .why-grid {
+  /* ============================ INCLUSI GRID ============================ */
+  .incl-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-    margin: 14px 0 6px;
+    gap: 14px 24px;
+    margin: 12px 0 8px;
   }
-  .why-card {
-    background: var(--c-card);
-    border: 1px solid var(--c-border);
-    border-left: 3px solid var(--c-primary);
-    border-radius: 8px;
-    padding: 16px 18px;
-    font-size: 13px;
+  .incl-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 4px 0;
+    font-size: 14px;
     line-height: 1.5;
   }
-  .why-card .why-icon {
-    font-size: 22px;
-    line-height: 1;
-    margin-bottom: 8px;
+  .incl-item .ico {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--c-cream-2), #ede2c4);
+    display: grid; place-items: center;
+    color: var(--c-olive-deep);
+    margin-top: 1px;
   }
-  .why-card strong {
-    display: block;
-    color: var(--c-primary-dark);
-    font-size: 14px;
-    margin-bottom: 4px;
-  }
-  .why-card p {
-    margin: 0;
-    color: var(--c-text);
-  }
-  @media (max-width: 700px) {
-    .why-grid { grid-template-columns: 1fr; }
-  }
+  .incl-item .ico svg { width: 14px; height: 14px; }
+  .incl-item strong { display: block; margin-bottom: 2px; color: var(--c-ink); font-weight: 600; font-size: 14px; }
+  .incl-item .desc { color: var(--c-muted); font-size: 13px; line-height: 1.5; }
 
-  /* Preview screenshots */
+  /* ============================ PREVIEW GRID ============================ */
   .preview-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
-    margin: 16px 0 28px;
+    gap: 20px;
+    margin: 12px 0;
   }
   .preview {
     margin: 0;
-    border: 1px solid var(--c-border);
-    border-radius: 12px;
+    background: var(--c-card);
+    border: 1px solid var(--c-line);
+    border-radius: 10px;
     overflow: hidden;
-    background: #fff;
-    box-shadow: 0 1px 3px rgba(0,0,0,.04);
-    transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 2px 8px rgba(31,27,20,.04);
   }
-  .preview:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.08); }
-  .preview img { display: block; width: 100%; height: auto; border-bottom: 1px solid var(--c-border); }
+  .preview img { display: block; width: 100%; height: auto; border-bottom: 1px solid var(--c-line); }
   .preview figcaption {
-    padding: 10px 14px;
-    font-size: 12px;
-    color: var(--c-muted);
-    line-height: 1.4;
+    padding: 12px 16px 14px;
+    font-size: 12.5px;
+    color: var(--c-ink-soft);
+    line-height: 1.45;
   }
-  @media (max-width: 700px) {
-    .preview-grid { grid-template-columns: 1fr; }
+  .preview figcaption strong { display: block; color: var(--c-olive-deep); font-size: 13px; margin-bottom: 2px; font-weight: 600; }
+
+  /* ============================ INVESTIMENTO ============================ */
+  .invest-box {
+    background: linear-gradient(135deg, #fffbef, #fcf3df);
+    border: 1px solid var(--c-line);
+    border-radius: 14px;
+    padding: 32px 36px;
+    margin: 20px 0 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .invest-box::before {
+    content: "";
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,169,110,.22), transparent 70%);
+  }
+  .invest-rows { position: relative; z-index: 1; }
+  .invest-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(31,27,20,.08);
+  }
+  .invest-row:last-child { border-bottom: none; }
+  .invest-row .label { font-size: 14px; color: var(--c-ink-soft); }
+  .invest-row .value { font-family: var(--f-display); font-size: 18px; color: var(--c-ink); font-variant-numeric: tabular-nums; font-weight: 500; }
+  .invest-row.discount .label { color: var(--c-discount); }
+  .invest-row.discount .value { color: var(--c-discount); font-weight: 600; }
+  .invest-row.discount .pct {
+    background: var(--c-discount);
+    color: #fff;
+    padding: 2px 9px;
+    border-radius: 4px;
+    font-size: 10.5px;
+    margin-left: 8px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    font-family: var(--f-body);
+    font-style: normal;
+  }
+  .invest-row.total {
+    padding-top: 18px;
+    margin-top: 6px;
+    border-top: 2px solid var(--c-olive-deep);
+    border-bottom: none;
+  }
+  .invest-row.total .label { font-size: 16px; font-weight: 600; color: var(--c-olive-deep); }
+  .invest-row.total .value { font-size: 30px; color: var(--c-olive-deep); font-weight: 600; }
+  .invest-row.total .iva { font-size: 11px; color: var(--c-muted); letter-spacing: 1.5px; text-transform: uppercase; margin-left: 8px; }
+  .invest-row strike { color: var(--c-muted); }
+
+  .invest-features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 22px 0 0;
+  }
+  .invest-feat {
+    text-align: center;
+    padding: 14px 12px;
+    background: rgba(255,255,255,.6);
+    border: 1px solid var(--c-line);
+    border-radius: 10px;
+  }
+  .invest-feat .ico-circle {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--c-olive), var(--c-olive-dark));
+    color: var(--c-cream);
+    display: grid; place-items: center;
+    margin: 0 auto 8px;
+  }
+  .invest-feat .ico-circle svg { width: 16px; height: 16px; }
+  .invest-feat strong { display: block; font-size: 13px; color: var(--c-ink); margin-bottom: 2px; }
+  .invest-feat span { font-size: 11.5px; color: var(--c-muted); }
+
+  /* ============================ TABLE GENERIC ============================ */
+  .data-table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; }
+  .data-table th, .data-table td {
+    padding: 11px 14px;
+    text-align: left;
+    font-size: 13.5px;
+    border-bottom: 1px solid var(--c-line);
+  }
+  .data-table th {
+    background: var(--c-cream-2);
+    font-family: var(--f-body);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+  .data-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .data-table .ok {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(107,142,78,.12);
+    color: var(--c-olive-dark);
+    padding: 3px 9px; border-radius: 999px;
+    font-size: 11.5px; font-weight: 600;
   }
 
+  /* ============================ COMPARE ============================ */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin: 14px 0;
+  }
+  .compare-card {
+    padding: 26px 24px;
+    border-radius: 14px;
+    border: 1px solid var(--c-line);
+    background: var(--c-card);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .compare-card.winner {
+    background: linear-gradient(160deg, #fcfaf2, #ffffff);
+    border: 2px solid var(--c-olive);
+    box-shadow: 0 8px 30px rgba(54,78,37,.1);
+  }
+  .compare-card.winner::before {
+    content: "Soluzione consigliata";
+    position: absolute;
+    top: -12px; left: 24px;
+    background: var(--c-olive-deep);
+    color: var(--c-cream);
+    padding: 4px 14px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+  }
+  .compare-card h3 {
+    font-size: 18px;
+    color: var(--c-olive-deep);
+    margin-bottom: 10px;
+  }
+  .compare-card .price {
+    font-family: var(--f-display);
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--c-olive-deep);
+    margin: 4px 0 4px;
+    letter-spacing: -0.02em;
+  }
+  .compare-card.winner .price { color: var(--c-olive-deep); }
+  .compare-card .price small {
+    display: block;
+    font-family: var(--f-body);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--c-muted);
+    margin-top: 4px;
+    letter-spacing: 0.2px;
+  }
+  .compare-card ul { list-style: none; margin: 18px 0 0; padding: 0; }
+  .compare-card li {
+    font-size: 13px;
+    padding: 5px 0 5px 26px;
+    position: relative;
+    color: var(--c-ink-soft);
+  }
+  .compare-card li.yes::before { content: "✓"; color: var(--c-olive); font-weight: 700; position: absolute; left: 4px; }
+  .compare-card li.no::before { content: "✗"; color: var(--c-discount); font-weight: 700; position: absolute; left: 4px; }
+
+  /* ============================ SAVINGS CALLOUT ============================ */
+  .savings {
+    background: linear-gradient(135deg, var(--c-olive-deep), var(--c-olive-dark));
+    color: var(--c-cream);
+    padding: 26px 32px;
+    border-radius: 14px;
+    margin: 22px 0 14px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .savings::after {
+    content: "";
+    position: absolute;
+    top: -60px; left: 50%; transform: translateX(-50%);
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,169,110,.25), transparent 70%);
+  }
+  .savings .lbl {
+    position: relative;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--c-wheat-light);
+    font-weight: 600;
+  }
+  .savings .big {
+    font-family: var(--f-display);
+    font-size: 42px;
+    font-weight: 600;
+    margin: 4px 0;
+    line-height: 1.1;
+    position: relative;
+    letter-spacing: -0.02em;
+  }
+  .savings em { color: var(--c-wheat); font-style: italic; }
+
+  /* ============================ SMM FLOW ============================ */
+  .smm-pkg {
+    background: linear-gradient(135deg, #fdf9eb, #faf2dc);
+    border-radius: 14px;
+    padding: 30px 32px;
+    margin: 18px 0;
+  }
+  .smm-pkg-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; gap: 24px; }
+  .smm-pkg-head .desc { flex: 1; font-size: 14px; color: var(--c-ink-soft); line-height: 1.6; }
+  .smm-pkg-price {
+    flex-shrink: 0;
+    background: var(--c-olive-deep);
+    color: var(--c-cream);
+    padding: 16px 22px;
+    border-radius: 12px;
+    text-align: center;
+    min-width: 160px;
+  }
+  .smm-pkg-price .lbl { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--c-wheat-light); font-weight: 600; }
+  .smm-pkg-price .val { font-family: var(--f-display); font-size: 24px; font-weight: 600; line-height: 1.1; margin-top: 2px; color: #fff; }
+  .smm-pkg-price .iva { font-size: 10px; color: var(--c-wheat-light); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
+
+  .smm-flow {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin: 12px 0 0;
+  }
+  .smm-step {
+    background: rgba(255,255,255,.6);
+    border-radius: 10px;
+    padding: 14px 12px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,.8);
+  }
+  .smm-step .day {
+    font-family: var(--f-display);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--c-olive-deep);
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+  .smm-step .day .x {
+    font-size: 11px;
+    color: var(--c-muted);
+    font-family: var(--f-body);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: block;
+    margin-top: 2px;
+    font-weight: 500;
+  }
+  .smm-step .label {
+    font-size: 11.5px;
+    color: var(--c-ink-soft);
+    line-height: 1.35;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+
+  /* ============================ WHY CARDS ============================ */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 14px 0 18px;
+  }
+  .why-card {
+    background: var(--c-card);
+    border: 1px solid var(--c-line);
+    border-top: 3px solid var(--c-olive);
+    border-radius: 10px;
+    padding: 20px 20px 22px;
+    position: relative;
+  }
+  .why-card .ico-circle {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--c-cream-2), #ede2c4);
+    color: var(--c-olive-deep);
+    display: grid; place-items: center;
+    margin-bottom: 12px;
+  }
+  .why-card .ico-circle svg { width: 18px; height: 18px; }
+  .why-card strong {
+    display: block;
+    font-family: var(--f-display);
+    font-size: 16px;
+    color: var(--c-olive-deep);
+    line-height: 1.2;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .why-card p {
+    font-size: 12.5px;
+    color: var(--c-ink-soft);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* ============================ STEPS ============================ */
+  .steps-list { list-style: none; padding: 0; margin: 8px 0; counter-reset: stp; }
+  .steps-list li {
+    counter-increment: stp;
+    padding: 14px 0 14px 56px;
+    position: relative;
+    border-bottom: 1px solid var(--c-line-soft);
+    font-size: 14px;
+    color: var(--c-ink-soft);
+  }
+  .steps-list li::before {
+    content: counter(stp);
+    position: absolute;
+    left: 0; top: 12px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--c-cream-2), var(--c-wheat-light));
+    color: var(--c-olive-deep);
+    display: grid; place-items: center;
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 16px;
+  }
+  .steps-list li:last-child { border-bottom: none; }
+  .steps-list li strong { color: var(--c-ink); }
+
+  /* ============================ CONDIZIONI ============================ */
+  .terms { background: var(--c-cream); border-radius: 10px; padding: 22px 26px; }
+  .terms ul { list-style: none; padding: 0; margin: 0; }
+  .terms li {
+    padding: 7px 0 7px 28px;
+    position: relative;
+    font-size: 13.5px;
+    color: var(--c-ink-soft);
+    line-height: 1.55;
+  }
+  .terms li::before {
+    content: "—";
+    position: absolute;
+    left: 0; top: 7px;
+    color: var(--c-wheat-dark);
+    font-weight: 700;
+  }
+  .terms li strong { color: var(--c-ink); }
+  .terms code { font-family: 'SFMono-Regular', Consolas, monospace; font-size: 12.5px; background: rgba(255,255,255,.8); padding: 1px 6px; border-radius: 3px; }
+
+  /* ============================ FOOTER DOC ============================ */
+  .doc-footer {
+    margin-top: 56px;
+    padding-top: 28px;
+    border-top: 1px solid var(--c-line);
+    text-align: center;
+  }
+  .doc-footer .signature {
+    font-family: var(--f-display);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--c-wheat-dark);
+    margin-bottom: 14px;
+  }
+  .emc-credit {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    opacity: .85;
+    color: var(--c-muted);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+  .doc-footer .contact-line {
+    font-size: 11.5px;
+    color: var(--c-muted);
+    letter-spacing: 0.4px;
+    margin-top: 10px;
+  }
+  .doc-footer .contact-line strong { color: var(--c-ink); }
+
+  /* ============================ PRINT ============================ */
   @media print {
-    .page { box-shadow: none; padding: 30px; }
-    body { background: #fff; }
-    .preview { break-inside: avoid; page-break-inside: avoid; }
-    .preview-grid { grid-template-columns: repeat(2, 1fr); }
-    .why-card { break-inside: avoid; page-break-inside: avoid; }
+    @page { size: A4; margin: 0; }
+    html, body { background: #fff !important; }
+    .page {
+      max-width: none; padding: 30px 36px; box-shadow: none;
+    }
+    .cover {
+      padding: 50px 36px 40px;
+      page-break-after: always;
+      min-height: 297mm;
+      display: flex; flex-direction: column;
+    }
+    .cover-foot { position: relative; bottom: auto; left: auto; right: auto; margin-top: auto; padding-top: 18px; }
+    .section-h { page-break-after: avoid; }
+    .preview, .why-card, .compare-card, .invest-box, .savings, .smm-pkg, .terms, .invest-feat, .smm-step, .incl-item {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    .preview-grid, .why-grid, .compare, .invest-features, .smm-flow, .incl-grid, .client-grid {
+      break-inside: auto;
+    }
+    h2 { page-break-after: avoid; }
+    h3 { page-break-after: avoid; }
   }
 </style>
 </head>
 <body>
-<div class="page">
 
-  <header class="doc-header">
-    <div>
-      <svg width="120" height="34" viewBox="0 0 200 50">
+<!-- ============================ COVER ============================ -->
+<section class="cover">
+
+  <div class="cover-top">
+    <div class="emc-logo">
+      <svg width="140" height="36" viewBox="0 0 200 50">
         <defs>
-          <linearGradient id="emcBars" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7a9a5a"/><stop offset="100%" stop-color="#c9a96e"/></linearGradient>
-          <linearGradient id="emcText" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#5a7a3a"/><stop offset="50%" stop-color="#8a9a5a"/><stop offset="100%" stop-color="#c9a96e"/></linearGradient>
+          <linearGradient id="emcBarsLight" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#c9a96e"/>
+            <stop offset="100%" stop-color="#fff8e7"/>
+          </linearGradient>
+          <linearGradient id="emcTextLight" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#fff8e7"/>
+            <stop offset="100%" stop-color="#c9a96e"/>
+          </linearGradient>
         </defs>
-        <rect x="5" y="10" width="30" height="6" rx="2" fill="url(#emcBars)"/>
-        <rect x="5" y="22" width="20" height="6" rx="2" fill="url(#emcBars)"/>
-        <rect x="5" y="34" width="30" height="6" rx="2" fill="url(#emcBars)"/>
-        <text x="48" y="34" font-family="Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="3" fill="url(#emcText)">EMC</text>
+        <rect x="5" y="10" width="30" height="6" rx="2" fill="url(#emcBarsLight)"/>
+        <rect x="5" y="22" width="20" height="6" rx="2" fill="url(#emcBarsLight)"/>
+        <rect x="5" y="34" width="30" height="6" rx="2" fill="url(#emcBarsLight)"/>
+        <text x="48" y="34" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="3" fill="url(#emcTextLight)">EMC</text>
       </svg>
-      <p style="font-size:11px;color:var(--c-muted);margin:6px 0 0">Digital Solutions · www.emcdigitalsolutions.it</p>
+      <div style="font-size:9.5px; letter-spacing:2.5px; text-transform:uppercase; color: rgba(255,248,231,.55); margin-top:4px; font-weight:500">Digital Solutions</div>
     </div>
-    <div class="doc-meta">
-      <strong>Preventivo n° 2026-LCGF-06</strong><br>
-      Data: 26 maggio 2026<br>
-      Validità: 30 giorni
+    <div class="meta-list">
+      <div><strong>Preventivo n°</strong> 2026-LCGF-10</div>
+      <div><strong>Data</strong> 26 maggio 2026</div>
+      <div><strong>Validità</strong> 30 giorni</div>
     </div>
-  </header>
-
-  <section class="doc-hero">
-    <h1>Sito e-commerce gluten free</h1>
-    <p class="sub">Soluzione WordPress + WooCommerce</p>
-    <span class="badge">★ Offerta lancio · −30% ★</span>
-  </section>
-
-  <div class="client-block">
-    <strong>Cliente</strong>
-    La Compagnia del Gluten Free — "Mangia con Gusto"<br>
-    CEO: Carmelo Lo Porto · Gianluca · Gaetano<br>
-    Dominio: <code>lacompagniadelglutenfree.it</code>
   </div>
 
-  <h2>Cosa è incluso</h2>
-  <ul class="feat">
-    <li><strong>WordPress 7.0 + WooCommerce</strong> — gestione prodotti, ordini, clienti</li>
-    <li><strong>Tema personalizzato</strong> con palette, logo, tipografia e identità visiva del brand</li>
-    <li><strong>20+ prodotti caricati</strong> con foto, descrizioni, varianti grammatura, badge senza-glutine/senza-lattosio</li>
-    <li><strong>Pagamenti</strong>: Stripe (carte) + PayPal + Klarna (3 rate) + Apple/Google Pay</li>
-    <li><strong>Multilingue</strong> IT (default) + EN + DE + FR, con traduzione automatica delle schede prodotto</li>
-    <li><strong>SEO avanzato</strong>: Yoast + sitemap XML + schema.org Product/Review + Google Analytics 4 + Search Console</li>
-    <li><strong>Spedizioni</strong>: configurazione corrieri (BRT/SDA/GLS), tariffe per zone, soglia spedizione gratuita</li>
-    <li><strong>Email transazionali</strong>: conferma ordine, reset password, notifiche admin — template brandizzato</li>
-    <li><strong>GDPR + Cookie banner</strong> a norma, gestione consensi e diritti utenti</li>
-    <li><strong>Pagine legali</strong> personalizzate: privacy, cookie, recesso, condizioni di vendita</li>
-    <li><strong>Form contatti</strong> avanzato + invio email automatico a mail aziendale</li>
-    <li><strong>WhatsApp diretto</strong> in fondo a ogni pagina (numero da impostare alla pubblicazione)</li>
-    <li><strong>Responsive</strong> mobile + tablet + desktop, ottimizzato Core Web Vitals</li>
-    <li><strong>Installazione sul vostro hosting Keliweb attuale</strong> — manteniamo lo stesso spazio (~120 €/anno già a vostro carico), SSL preconfigurato, backup giornalieri</li>
-    <li><strong>Test end-to-end</strong> prima del go-live: ordine reale di prova + verifica pagamenti + email</li>
-  </ul>
+  <div class="cover-body">
+    <div class="client-pill">
+      <span class="dot"></span>
+      <span>Cliente · <strong style="color:#fff;font-weight:600">La Compagnia del Gluten Free</strong></span>
+    </div>
 
-  <h2>Anteprima del sito</h2>
-  <p style="font-size:14px;color:var(--c-muted);margin-bottom:20px">
+    <div class="eyebrow">Proposta di collaborazione</div>
+    <h1>Sito e-commerce<br/><em>gluten free</em>.</h1>
+
+    <p class="lead">
+      Soluzione WordPress + WooCommerce su misura per "Mangia con Gusto". Catalogo, pagamenti, multilingue e SEO. <strong style="color:#fff">Online entro giugno 2026.</strong>
+    </p>
+
+    <div class="price-banner">
+      <div>
+        <div class="lbl">Investimento totale sviluppo</div>
+        <div class="val"><span class="currency">€</span> 1.800,00</div>
+        <div class="extra">IVA esclusa · Sconto Edizione Case Study −40% applicato</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-foot">
+    <span><strong>EMC Digital Solutions</strong> · Web · Social · E-commerce</span>
+    <span>emcdigitalsolutions.it · emcdigitalsolution@gmail.com</span>
+  </div>
+
+</section>
+
+<!-- ============================ PAGE CONTENT ============================ -->
+<div class="page">
+
+  <!-- ============================ CLIENTE ============================ -->
+  <div class="section-h"><span class="num">01</span><h2>Dati del cliente</h2></div>
+  <div class="client-grid">
+    <div class="client-card">
+      <div class="l">Ragione sociale</div>
+      <div class="v">La Compagnia del Gluten Free<br/>"Mangia con Gusto"</div>
+    </div>
+    <div class="client-card">
+      <div class="l">Referenti</div>
+      <div class="v">Carmelo Lo Porto (CEO)<br/>Gianluca · Gaetano</div>
+    </div>
+    <div class="client-card">
+      <div class="l">Dominio progetto</div>
+      <div class="v"><code>lacompagniadelglutenfree.it</code></div>
+    </div>
+    <div class="client-card">
+      <div class="l">Hosting attuale</div>
+      <div class="v">Keliweb (manteniamo) · ~120 €/anno a vostro carico</div>
+    </div>
+  </div>
+
+  <!-- ============================ COSA È INCLUSO ============================ -->
+  <div class="section-h"><span class="num">02</span><h2>Cosa realizziamo</h2></div>
+  <p style="font-size:14px; color: var(--c-ink-soft); margin-bottom: 20px;">
+    Pacchetto chiavi in mano per la realizzazione completa del vostro e-commerce, dal codice al posizionamento Google. <strong>Tempi di consegna: 4 settimane.</strong> <strong style="color: var(--c-olive-deep);">Online entro giugno 2026.</strong>
+  </p>
+
+  <div class="incl-grid">
+    <div class="incl-item">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+      <div><strong>WordPress + WooCommerce</strong><span class="desc">CMS robusto, gestione autonoma di prodotti, ordini, clienti e contenuti.</span></div>
+    </div>
+    <div class="incl-item">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg></div>
+      <div><strong>Tema personalizzato</strong><span class="desc">Palette, logo, tipografia e identità visiva del brand cucite su misura.</span></div>
+    </div>
+    <div class="incl-item">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+      <div><strong>20+ prodotti caricati</strong><span class="desc">Foto, descrizioni, varianti grammatura, badge gluten free / senza lattosio.</span></div>
+    </div>
+    <div class="incl-item">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+      <div><strong>Pagamenti completi</strong><span class="desc">Stripe (carte) + PayPal + Klarna 3 rate + Apple/Google Pay.</span></div>
+    </div>
+    <div class="incl-item">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2v20"/></svg></div>
+      <div><strong>Multilingue (IT/EN/DE/FR)</strong><span class="desc">Polylang con traduzione automatica delle schede prodotto.</span></div>
+    </div>
+    <div class="incl-item">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-4 4 4 5-5"/></svg></div>
+      <div><strong>SEO avanzato</strong><span class="desc">Yoast + sitemap + schema.org + Google Analytics 4 + Search Console.</span></div>
+    </div>
+    <div class="incl-item">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+      <div><strong>Spedizioni configurate</strong><span class="desc">BRT/SDA/GLS, tariffe per zone, soglia spedizione gratuita.</span></div>
+    </div>
+    <div class="incl-item">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></div>
+      <div><strong>Email transazionali</strong><span class="desc">Conferma ordine, reset password, notifiche admin con template brandizzato.</span></div>
+    </div>
+    <div class="incl-item">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div><strong>GDPR + Cookie</strong><span class="desc">Banner a norma con gestione consensi e diritti utenti.</span></div>
+    </div>
+    <div class="incl-item">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></div>
+      <div><strong>Pagine legali</strong><span class="desc">Privacy, cookie policy, recesso, condizioni di vendita personalizzate.</span></div>
+    </div>
+    <div class="incl-item">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg></div>
+      <div><strong>Test end-to-end + go-live</strong><span class="desc">Ordine di prova reale, verifica pagamenti, deploy finale su Keliweb.</span></div>
+    </div>
+    <div class="incl-item">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+      <div><strong>Google Business Profile</strong><span class="desc">Scheda + foto + categorie + recensioni + ottimizzazione posizionamento Maps.</span></div>
+    </div>
+  </div>
+
+  <!-- ============================ ANTEPRIMA ============================ -->
+  <div class="section-h"><span class="num">03</span><h2>Anteprima del sito</h2></div>
+  <p style="font-size:14px; color: var(--c-muted); margin-bottom: 20px;">
     Mockup. Sotto le sezioni principali del sito che troverai live al go-live.
   </p>
   <div class="preview-grid">
     <figure class="preview">
       <img src="screenshots/home-fold.png" alt="Homepage" />
-      <figcaption>Homepage — hero + logo, badge senza glutine/lattosio, statistiche.</figcaption>
+      <figcaption><strong>Homepage</strong>Hero + logo, badge senza glutine/lattosio, statistiche.</figcaption>
     </figure>
     <figure class="preview">
       <img src="screenshots/shop-fold.png" alt="Catalogo" />
-      <figcaption>Catalogo — i 13 prodotti reali con foto e prezzi.</figcaption>
+      <figcaption><strong>Catalogo</strong>20+ prodotti reali con foto e prezzi.</figcaption>
     </figure>
     <figure class="preview">
       <img src="screenshots/prodotto-fold.png" alt="Scheda prodotto" />
-      <figcaption>Scheda Box Family — foto, prezzo, varianti, WhatsApp dedicato.</figcaption>
+      <figcaption><strong>Scheda prodotto</strong>Foto, prezzo, varianti, WhatsApp dedicato.</figcaption>
     </figure>
     <figure class="preview">
       <img src="screenshots/categoria-fold.png" alt="Categoria Dolci" />
-      <figcaption>Categoria Dolci &amp; Colazione — filtro automatico per famiglia.</figcaption>
+      <figcaption><strong>Categoria</strong>Dolci &amp; Colazione — filtro automatico per famiglia.</figcaption>
     </figure>
     <figure class="preview">
       <img src="screenshots/chi-siamo-fold.png" alt="Chi siamo" />
-      <figcaption>Chi siamo — storia, valori, team (Carmelo · Gianluca · Gaetano).</figcaption>
+      <figcaption><strong>Chi siamo</strong>Storia, valori, team (Carmelo · Gianluca · Gaetano).</figcaption>
     </figure>
     <figure class="preview">
       <img src="screenshots/contatti-fold.png" alt="Contatti" />
-      <figcaption>Contatti — form messaggio + 3 numeri telefono + WhatsApp diretti.</figcaption>
+      <figcaption><strong>Contatti</strong>Form messaggio + 3 numeri telefono + WhatsApp diretti.</figcaption>
     </figure>
   </div>
 
-  <h2>Investimento</h2>
+  <!-- ============================ INVESTIMENTO ============================ -->
+  <div class="section-h"><span class="num">04</span><h2>Investimento</h2></div>
 
-  <h3>Sviluppo</h3>
-  <p style="font-size:13px;color:var(--c-muted);margin:6px 0 12px"><strong style="color:var(--c-discount)">Sconto Specifico per voi −40%</strong>. Sconto riservato come prima collaborazione di riferimento per il settore food gluten free.</p>
-  <table>
-    <thead><tr><th>Voce</th><th class="num">Listino</th><th class="num">Prezzo dedicato</th></tr></thead>
-    <tbody>
-      <tr>
-        <td>Setup WordPress + WooCommerce sul vostro hosting Keliweb</td>
-        <td class="num"><s style="color:var(--c-muted)">€ 750,00</s></td>
-        <td class="num"><strong>€ 450,00</strong></td>
-      </tr>
-      <tr>
-        <td>Tema child personalizzato (palette + logo + tipografia + identità brand)</td>
-        <td class="num"><s style="color:var(--c-muted)">€ 480,00</s></td>
-        <td class="num"><strong>€ 288,00</strong></td>
-      </tr>
-      <tr>
-        <td>Caricamento 20+ prodotti con foto, varianti, descrizioni multilingue</td>
-        <td class="num"><s style="color:var(--c-muted)">€ 220,00</s></td>
-        <td class="num"><strong>€ 132,00</strong></td>
-      </tr>
-      <tr>
-        <td>Configurazione multilingue (IT + EN + DE + FR)</td>
-        <td class="num"><s style="color:var(--c-muted)">€ 240,00</s></td>
-        <td class="num"><strong>€ 144,00</strong></td>
-      </tr>
-      <tr>
-        <td>Integrazione pagamenti Stripe + PayPal + Klarna + Apple/Google Pay</td>
-        <td class="num"><s style="color:var(--c-muted)">€ 200,00</s></td>
-        <td class="num"><strong>€ 120,00</strong></td>
-      </tr>
-      <tr>
-        <td>Configurazione spedizioni (corrieri + tariffe + soglia gratis)</td>
-        <td class="num"><s style="color:var(--c-muted)">€ 140,00</s></td>
-        <td class="num"><strong>€ 84,00</strong></td>
-      </tr>
-      <tr>
-        <td>SEO Yoast + Google Analytics 4 + Search Console + sitemap + schema.org</td>
-        <td class="num"><s style="color:var(--c-muted)">€ 200,00</s></td>
-        <td class="num"><strong>€ 120,00</strong></td>
-      </tr>
-      <tr>
-        <td>Email transazionali (template brandizzato + SMTP)</td>
-        <td class="num"><s style="color:var(--c-muted)">€ 110,00</s></td>
-        <td class="num"><strong>€ 66,00</strong></td>
-      </tr>
-      <tr>
-        <td>Pagine legali personalizzate (privacy + cookie + recesso + condizioni)</td>
-        <td class="num"><s style="color:var(--c-muted)">€ 130,00</s></td>
-        <td class="num"><strong>€ 78,00</strong></td>
-      </tr>
-      <tr>
-        <td>GDPR + Cookie banner Complianz + gestione consensi</td>
-        <td class="num"><s style="color:var(--c-muted)">€ 110,00</s></td>
-        <td class="num"><strong>€ 66,00</strong></td>
-      </tr>
-      <tr>
-        <td>Test end-to-end + go-live</td>
-        <td class="num"><s style="color:var(--c-muted)">€ 120,00</s></td>
-        <td class="num"><strong>€ 72,00</strong></td>
-      </tr>
-      <tr>
-        <td>Google Business Profile + posizionamento Maps (apertura scheda + foto + categorie + recensioni + ottimizzazione locale)</td>
-        <td class="num"><s style="color:var(--c-muted)">€ 500,00</s></td>
-        <td class="num"><strong>€ 300,00</strong></td>
-      </tr>
-      <tr><td>Subtotale di listino</td><td class="num"><s style="color:var(--c-muted)">€ 3.200,00</s></td><td class="num">—</td></tr>
-      <tr class="discount"><td>Risparmio totale <span class="pct">−40%</span></td><td class="num">—</td><td class="num">−€ 1.280,00</td></tr>
-      <tr class="total-row"><td>Totale sviluppo (IVA esclusa)</td><td class="num">—</td><td class="num">€ 1.920,00</td></tr>
-    </tbody>
-  </table>
-
-  <h3>Modifiche e manutenzione evolutiva</h3>
-  <p style="font-size:14px;margin:6px 0 18px">
-    Eventuali <strong>modifiche grafiche, nuove funzionalità, contenuti aggiuntivi</strong> o evoluzioni del sito al di fuori del perimetro di sviluppo iniziale vengono <strong>valutate caso per caso</strong> con preventivo dedicato in base all'effettivo lavoro richiesto. <strong>Nessun canone mensile fisso</strong>: pagate solo quando avete bisogno di un intervento concreto.
+  <h3 style="margin-top:6px;color:var(--c-olive-deep)">Sviluppo · una tantum</h3>
+  <p style="font-size:13.5px; color: var(--c-discount); font-weight:500; margin-bottom: 10px;">
+    Sconto Edizione Case Study −40% applicato — collaborazione di riferimento per il food gluten free.
   </p>
 
-  <h3>Manutenzione annuale</h3>
-  <p style="font-size:13px;color:var(--c-muted);margin:6px 0 12px">Una tantum a fine anno per le attività di sicurezza, aggiornamento e gestione tecnica.</p>
-  <table>
-    <thead><tr><th>Voce</th><th class="num">Annuale</th></tr></thead>
+  <div class="invest-box">
+    <div class="invest-rows">
+      <div class="invest-row">
+        <div class="label">Subtotale di listino · 12 voci incluse</div>
+        <div class="value"><strike>€ 3.000,00</strike></div>
+      </div>
+      <div class="invest-row discount">
+        <div class="label">Sconto Edizione Case Study <span class="pct">−40%</span></div>
+        <div class="value">−€ 1.200,00</div>
+      </div>
+      <div class="invest-row total">
+        <div class="label">Totale sviluppo <span class="iva">IVA escl.</span></div>
+        <div class="value">€ 1.800,00</div>
+      </div>
+    </div>
+
+    <div class="invest-features">
+      <div class="invest-feat">
+        <div class="ico-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <strong>4 settimane</strong><span>tempi di consegna</span>
+      </div>
+      <div class="invest-feat">
+        <div class="ico-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path d="M9 22V12h6v10"/></svg></div>
+        <strong>Online entro giugno 2026</strong><span>data go-live garantita</span>
+      </div>
+      <div class="invest-feat">
+        <div class="ico-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <strong>Tutto incluso</strong><span>nessun costo nascosto</span>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="color:var(--c-olive-deep)">Modifiche e manutenzione evolutiva</h3>
+  <p style="font-size:14px;margin-bottom:18px;color:var(--c-ink-soft)">
+    Eventuali <strong>modifiche grafiche, nuove funzionalità, contenuti aggiuntivi</strong> o evoluzioni del sito al di fuori del perimetro di sviluppo iniziale vengono <strong>valutate caso per caso</strong> con preventivo dedicato. <strong style="color:var(--c-olive-deep)">Nessun canone mensile fisso</strong>: pagate solo quando avete bisogno di un intervento concreto.
+  </p>
+
+  <h3 style="color:var(--c-olive-deep)">Manutenzione annuale · € 200/anno</h3>
+  <p style="font-size:13.5px;color:var(--c-muted);margin-bottom:12px">
+    Una tantum a fine anno per le attività di sicurezza, aggiornamento e gestione tecnica.
+  </p>
+  <table class="data-table">
     <tbody>
-      <tr><td>Aggiornamenti WordPress core + WooCommerce + plugin essenziali</td><td class="num">incluso</td></tr>
-      <tr><td>Rinnovo + verifica certificato SSL Keliweb</td><td class="num">incluso</td></tr>
-      <tr><td>Coordinamento tecnico con Keliweb (PHP, DB, ticket)</td><td class="num">incluso</td></tr>
-      <tr><td>Verifica compatibilità tema/plugin dopo aggiornamenti</td><td class="num">incluso</td></tr>
-      <tr class="total-row"><td>Manutenzione annuale (IVA esclusa)</td><td class="num">€ 200,00</td></tr>
+      <tr><td>Aggiornamenti WordPress core + WooCommerce + plugin essenziali</td><td class="num"><span class="ok">incluso</span></td></tr>
+      <tr><td>Rinnovo + verifica certificato SSL Keliweb</td><td class="num"><span class="ok">incluso</span></td></tr>
+      <tr><td>Coordinamento tecnico con Keliweb (PHP, DB, ticket)</td><td class="num"><span class="ok">incluso</span></td></tr>
+      <tr><td>Verifica compatibilità tema/plugin dopo aggiornamenti</td><td class="num"><span class="ok">incluso</span></td></tr>
     </tbody>
   </table>
 
-  <h3>Costi variabili sul venduto</h3>
-  <p style="font-size:13px;color:var(--c-muted);margin:6px 0 12px">Commissioni dei provider di pagamento e servizi terzi, addebitate solo quando avete ordini reali. <strong>Non sono costi EMC</strong>: pagate direttamente ai provider.</p>
-  <table>
+  <h3 style="color:var(--c-olive-deep)">Costi variabili sul venduto</h3>
+  <p style="font-size:13.5px;color:var(--c-muted);margin-bottom:12px">
+    Commissioni dei provider di pagamento e servizi terzi, addebitate solo quando avete ordini reali. <strong>Non sono costi EMC</strong>: pagate direttamente ai provider.
+  </p>
+  <table class="data-table">
     <thead><tr><th>Voce</th><th class="num">Costo</th></tr></thead>
     <tbody>
       <tr><td>Stripe (carte UE)</td><td class="num">1,4% + € 0,25 per transazione</td></tr>
       <tr><td>PayPal</td><td class="num">~3,4% + € 0,35 per transazione</td></tr>
-      <tr><td>Email transazionali</td><td class="num">0 € fino a 500/giorno (Gmail SMTP) Servizio fornito da EMC</td></tr>
+      <tr><td>Email transazionali</td><td class="num">0 € fino a 500/giorno (Gmail SMTP) — servizio fornito da EMC</td></tr>
     </tbody>
   </table>
 
-  <h2>Confronto soluzioni</h2>
+  <!-- ============================ CONFRONTO ============================ -->
+  <div class="section-h"><span class="num">05</span><h2>Confronto soluzioni</h2></div>
   <div class="compare">
-    <div class="winner">
+    <div class="compare-card winner">
       <h3>WordPress + WooCommerce</h3>
-      <p class="price-line">€ 1.920 <small>+ € 200/anno manutenzione · IVA escl.</small></p>
+      <div class="price">€ 1.800<small>+ € 200/anno manutenzione · IVA esclusa</small></div>
       <ul>
-        <li>✓ Tempi consegna: <strong>3 settimane</strong></li>
-        <li>✓ Gestione autonoma prodotti/ordini</li>
-        <li>✓ Plugin maturi e affidabili</li>
-        <li>✓ Nessun canone mensile fisso</li>
-        <li>✓ Migliaia di siti simili nel mondo</li>
+        <li class="yes"><strong>4 settimane</strong> · online entro giugno 2026</li>
+        <li class="yes">Gestione autonoma prodotti e ordini</li>
+        <li class="yes">Plugin maturi e affidabili</li>
+        <li class="yes"><strong>Nessun canone mensile fisso</strong></li>
+        <li class="yes">Migliaia di siti simili nel mondo</li>
       </ul>
     </div>
-    <div>
-      <h3>Sito sviluppato da zero</h3>
-      <p class="price-line">€ 4.452 <small>+ € 200/anno manutenzione · IVA escl.</small></p>
+    <div class="compare-card">
+      <h3>Sito sviluppato da zero (senza CMS)</h3>
+      <div class="price">€ 4.500<small>+ € 200/anno manutenzione · IVA esclusa</small></div>
       <ul>
-        <li>✗ Tempi consegna: 4-6 settimane</li>
-        <li>✗ Modifiche solo via sviluppatore</li>
-        <li>✗ Canone manutenzione mensile obbligatorio</li>
-        <li>✓ Massima personalizzazione</li>
-        <li>✓ Performance top per &gt; 1.000 ordini/giorno</li>
+        <li class="no">Tempi consegna: 6-8 settimane</li>
+        <li class="no">Modifiche solo via sviluppatore</li>
+        <li class="no">Canone manutenzione mensile obbligatorio</li>
+        <li class="yes">Massima personalizzazione</li>
+        <li class="yes">Performance top per &gt; 1.000 ordini/giorno</li>
       </ul>
     </div>
   </div>
 
-  <div class="savings-callout">
-    <p class="lbl">Risparmio effettivo scegliendo WordPress</p>
+  <div class="savings">
+    <div class="lbl">Risparmio scegliendo WordPress + WooCommerce</div>
+    <div class="big">Oltre <em>€ 2.700</em> in meno</div>
+    <p style="position:relative; margin: 6px 0 0; font-size:13px; opacity:.85;">
+      sul totale di sviluppo, a parità di funzionalità essenziali.
+    </p>
   </div>
 
-  <h2>Servizio opzionale · Social Media Management</h2>
-  <p style="font-size:14px;color:var(--c-text);margin:6px 0 14px">
-    Gestione professionale e continuativa dei vostri canali <strong>Instagram</strong> e <strong>Facebook</strong>, con un piano editoriale costruito su misura per il settore food gluten free.
-  </p>
+  <!-- ============================ SMM ============================ -->
+  <div class="section-h"><span class="num">06</span><h2>Servizio opzionale · Social Media</h2></div>
 
-  <h3 style="margin-top:14px">Cosa è incluso ogni mese</h3>
-  <ul class="feat">
-    <li><strong>Piano editoriale mensile personalizzato</strong> — calendario contenuti studiato sui vostri obiettivi (vendite, brand awareness, eventi, lanci prodotto, sagre)</li>
-    <li><strong>Approvazione cliente prima della pubblicazione</strong> — ogni mese il piano editoriale viene condiviso con voi e va in produzione solo dopo il vostro OK. Nessun contenuto pubblicato senza la vostra conferma</li>
-    <li><strong>8-12 contenuti/mese</strong> tra Reels video, caroselli editoriali e immagini singole, ottimizzati per i formati nativi di ogni piattaforma</li>
-    <li><strong>Copy + hashtag strategy</strong> mirata al pubblico gluten free, intolleranti, food enthusiast e mercato locale siciliano</li>
-    <li><strong>Pubblicazione automatica</strong> su Instagram + Facebook negli orari ad alto engagement (orari pasti, weekend, ricorrenze)</li>
-    <li><strong>Coordinamento con stagionalità e attualità</strong>: lanci prodotto, ricorrenze (Natale, Pasqua), sagre, eventi LCGF, novità del catalogo</li>
-    <li><strong>Report mensile sintetico</strong> con metriche di reach, engagement, crescita follower, contenuti top-performing e suggerimenti per il mese successivo</li>
-  </ul>
+  <div class="smm-pkg">
+    <div class="smm-pkg-head">
+      <div class="desc">
+        Gestione professionale e continuativa dei vostri canali <strong>Instagram</strong> e <strong>Facebook</strong>, con un piano editoriale costruito su misura per il settore food gluten free. <strong>Nessun contratto vincolante</strong>, disdetta possibile in qualsiasi momento con preavviso di un mese.
+      </div>
+      <div class="smm-pkg-price">
+        <div class="lbl">Pacchetto mensile</div>
+        <div class="val">€ 200<span style="font-family: var(--f-body); font-size:14px; font-weight:500; opacity:.7">/mese</span></div>
+        <div class="iva">IVA esclusa</div>
+      </div>
+    </div>
 
-  <h3 style="margin-top:18px">Come funziona il flusso mensile</h3>
-  <ol style="font-size:14px;padding-left:22px;line-height:1.8;color:var(--c-text)">
-    <li><strong>Brief mensile (entro il giorno 25)</strong>: condividiamo eventi, novità prodotto, promo o focus tematici da raccontare</li>
-    <li><strong>Proposta piano editoriale (entro il giorno 28)</strong>: vi inviamo il calendario completo con anteprima visiva di ogni post</li>
-    <li><strong>Vostra approvazione (entro il giorno 30)</strong>: revisione e modifiche illimitate fino al via libera definitivo</li>
-    <li><strong>Produzione e pubblicazione</strong>: contenuti realizzati e pubblicati nel mese successivo secondo calendario approvato</li>
-    <li><strong>Report a fine mese</strong>: analisi performance + proposte per il mese successivo</li>
-  </ol>
+    <h4 style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--c-olive-deep);margin:18px 0 10px;font-weight:600">Cosa è incluso ogni mese</h4>
+    <div class="incl-grid" style="margin: 0;">
+      <div class="incl-item">
+        <div class="ico" style="background:var(--c-card)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+        <div><strong>Piano editoriale</strong><span class="desc">Calendario contenuti studiato su vendite, eventi, lanci e sagre.</span></div>
+      </div>
+      <div class="incl-item">
+        <div class="ico" style="background:var(--c-card)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg></div>
+        <div><strong>Approvazione cliente</strong><span class="desc">Nessun contenuto pubblicato senza il vostro OK esplicito.</span></div>
+      </div>
+      <div class="incl-item">
+        <div class="ico" style="background:var(--c-card)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+        <div><strong>8-12 contenuti/mese</strong><span class="desc">Reels video, caroselli e immagini singole, formati nativi.</span></div>
+      </div>
+      <div class="incl-item">
+        <div class="ico" style="background:var(--c-card)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></div>
+        <div><strong>Copy + hashtag</strong><span class="desc">Strategy mirata al pubblico gluten free e intolleranti.</span></div>
+      </div>
+      <div class="incl-item">
+        <div class="ico" style="background:var(--c-card)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-4 4 4 5-5"/></svg></div>
+        <div><strong>Report mensile</strong><span class="desc">Reach, engagement, follower, contenuti top + proposte mese dopo.</span></div>
+      </div>
+      <div class="incl-item">
+        <div class="ico" style="background:var(--c-card)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+        <div><strong>Risposta community</strong><span class="desc">Gestione base commenti e messaggi diretti dei follower.</span></div>
+      </div>
+    </div>
 
-  <div style="background:#f9f4e8;border-left:4px solid var(--c-primary);padding:16px 22px;border-radius:0 8px 8px 0;margin:18px 0">
-    <p style="margin:0;font-size:14px"><strong style="color:var(--c-primary-dark);font-size:16px">€ 200/mese · IVA esclusa</strong><br>
-    <span style="font-size:13px;color:var(--c-muted)">Nessun contratto vincolante. Disdetta possibile in qualsiasi momento con preavviso di un mese. Fatturazione trimestrale anticipata.</span></p>
+    <h4 style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--c-olive-deep);margin:24px 0 12px;font-weight:600">Come funziona il flusso mensile</h4>
+    <div class="smm-flow">
+      <div class="smm-step">
+        <div class="day">25<span class="x">brief</span></div>
+        <div class="label">Condividiamo eventi e novità del mese</div>
+      </div>
+      <div class="smm-step">
+        <div class="day">28<span class="x">proposta</span></div>
+        <div class="label">Vi inviamo il calendario completo</div>
+      </div>
+      <div class="smm-step">
+        <div class="day">30<span class="x">OK cliente</span></div>
+        <div class="label">Revisioni illimitate fino al via libera</div>
+      </div>
+      <div class="smm-step">
+        <div class="day"><span style="font-size:13px;color:var(--c-olive-deep);font-family:var(--f-display);font-weight:600">1—31</span><span class="x">live</span></div>
+        <div class="label">Pubblicazione + risposta community</div>
+      </div>
+      <div class="smm-step">
+        <div class="day"><span style="font-size:11px;color:var(--c-olive-deep);font-family:var(--f-display);font-weight:600">fine mese</span><span class="x">report</span></div>
+        <div class="label">Performance + proposte successive</div>
+      </div>
+    </div>
   </div>
 
-  <h2>Perché questa scelta è vincente</h2>
-  <p style="font-size:14px;color:var(--c-muted);margin-bottom:18px">
-    Tra le tante opzioni che potete avere oggi (Shopify, Wix, agenzie tradizionali, piattaforme chiuse), ecco perché WooCommerce + EMC è la combinazione che vi fa risparmiare denaro <strong>e</strong> tempo, ora e nei prossimi anni.
+  <!-- ============================ WHY ============================ -->
+  <div class="section-h"><span class="num">07</span><h2>Perché questa scelta è vincente</h2></div>
+  <p style="font-size:14px; color: var(--c-ink-soft); margin-bottom: 16px;">
+    Tra le tante opzioni che potete avere oggi (Shopify, Wix, agenzie tradizionali, piattaforme chiuse), ecco perché <strong>WooCommerce + EMC</strong> è la combinazione che vi fa risparmiare denaro <strong>e</strong> tempo.
   </p>
 
-  <h3 style="color:var(--c-primary-dark);margin-top:18px">I vantaggi della soluzione WordPress + WooCommerce</h3>
+  <h3 style="margin-top:24px;color:var(--c-olive-deep)">I vantaggi tecnici</h3>
   <div class="why-grid">
     <div class="why-card">
-      <div class="why-icon">🔓</div>
+      <div class="ico-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
       <strong>Nessun lock-in.</strong>
-      <p>Il sito è 100% vostro. Niente abbonamenti obbligatori a piattaforme proprietarie (Shopify, Wix). Domani potete spostarlo dove volete senza perdere niente.</p>
+      <p>Il sito è 100% vostro. Niente abbonamenti obbligatori a piattaforme proprietarie. Domani potete spostarlo dove volete senza perdere niente.</p>
     </div>
     <div class="why-card">
-      <div class="why-icon">💸</div>
+      <div class="ico-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
       <strong>Niente percentuale sulle vendite.</strong>
-      <p>Shopify trattiene fino al 2% di ogni transazione oltre alle fee del pagamento. WooCommerce no: paghi solo le commissioni standard di Stripe/PayPal.</p>
+      <p>Shopify trattiene fino al 2% di ogni transazione oltre alle fee del pagamento. WooCommerce no: pagate solo le commissioni standard di Stripe/PayPal.</p>
     </div>
     <div class="why-card">
-      <div class="why-icon">🛠️</div>
+      <div class="ico-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
       <strong>Personalizzazione totale.</strong>
       <p>Niente vincoli di tema standard. Brand identity, layout, sezioni, automazioni: tutto cucito su misura sulla vostra azienda.</p>
     </div>
     <div class="why-card">
-      <div class="why-icon">🌐</div>
+      <div class="ico-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg></div>
       <strong>Multilingue nativo.</strong>
-      <p>4 lingue (IT/EN/DE/FR) con Polylang. Su Shopify costa fino a 30 €/mese in più, su Wix non è davvero supportato.</p>
+      <p>4 lingue (IT/EN/DE/FR). Su Shopify costa fino a 30 €/mese in più, su Wix non è davvero supportato.</p>
     </div>
     <div class="why-card">
-      <div class="why-icon">📈</div>
+      <div class="ico-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-4 4 4 5-5"/></svg></div>
       <strong>SEO ai massimi livelli.</strong>
-      <p>WordPress + Yoast è la combinazione più SEO-friendly sul mercato. Vi posizionate su Google molto prima dei competitor su piattaforme chiuse.</p>
+      <p>WordPress + Yoast è la combinazione più SEO-friendly sul mercato. Vi posizionate su Google prima dei competitor su piattaforme chiuse.</p>
     </div>
     <div class="why-card">
-      <div class="why-icon">🚀</div>
+      <div class="ico-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09zM12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2zM9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></div>
       <strong>Si scala con voi.</strong>
-      <p>Se domani fatturate 10× e servono performance "enterprise", possiamo migrare lo stesso brand su soluzione custom Node.js — niente da rifare da zero.</p>
+      <p>Se domani fatturate 10× e servono performance enterprise, possiamo migrare lo stesso brand su soluzione custom (Node.js) — niente da rifare da zero.</p>
     </div>
   </div>
 
-  <h3 style="color:var(--c-primary-dark);margin-top:34px">Perché scegliere EMC Digital Solutions</h3>
+  <h3 style="margin-top:34px;color:var(--c-olive-deep)">Perché scegliere EMC Digital Solutions</h3>
   <div class="why-grid">
     <div class="why-card">
-      <div class="why-icon">🤝</div>
-      <strong>Un solo interlocutore per tutto.</strong>
-      <p>Sito, social media, foto, SEO, Google Business, manutenzione: parlate sempre con noi, non con 4 fornitori diversi. Meno tempo perso, decisioni più veloci.</p>
+      <div class="ico-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+      <strong>Un solo interlocutore.</strong>
+      <p>Sito, social, foto, SEO, Google Business, manutenzione: parlate sempre con noi, non con 4 fornitori diversi.</p>
     </div>
     <div class="why-card">
-      <div class="why-icon">⚡</div>
-      <strong>Consegna in 3 settimane.</strong>
-      <p>Le agenzie classiche impiegano 2–3 mesi. Noi siamo strutturati per consegnare in 5–7 giorni lavorativi. Voi siete online prima.</p>
+      <div class="ico-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+      <strong>Consegna in 4 settimane.</strong>
+      <p>Le agenzie classiche impiegano 2–3 mesi. Noi consegnamo in 4 settimane lavorative: <strong>online entro giugno 2026</strong>.</p>
     </div>
     <div class="why-card">
-      <div class="why-icon">💬</div>
-      <strong>Supporto su WhatsApp, risposta in 1h.</strong>
-      <p>Non ticket anonimi. Carmelo scrive direttamente al CEO di EMC e ottiene risposta in giornata. Anche sabato.</p>
-    </div>
-    <div class="why-card">
-      <div class="why-icon">🇮🇹</div>
-      <strong>Made in Sicily, per la Sicilia.</strong>
-      <p>EMC è agrigentina come voi. Capiamo il contesto, parliamo la stessa lingua del business locale, le riunioni le facciamo anche di persona.</p>
-    </div>
-    <div class="why-card">
-      <div class="why-icon">📦</div>
-      <strong>Esperienza specifica nel food/retail.</strong>
-      <p>Clienti già attivi nel food e retail: Terre di Miele (apicoltura), KleinBaby (negozio), Grandi Firme di Fucà (outlet). Sappiamo cosa funziona nel vostro settore.</p>
-    </div>
-    <div class="why-card">
-      <div class="why-icon">🎁</div>
-      <strong>Trasparenza totale sui prezzi.</strong>
-      <p>Sconto del 30% applicato voce per voce: vedete quanto pagate ogni componente. Niente costi nascosti, niente "rivedremo a fine progetto".</p>
+      <div class="ico-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+      <strong>WhatsApp · risposta in 1h.</strong>
+      <p>Non ticket anonimi. Scrivete direttamente al CEO e ottenete risposta in giornata. Anche sabato.</p>
     </div>
   </div>
 
-  <div class="savings-callout" style="background:linear-gradient(135deg,#1f4d2e,#0f2a1a)">
-    <p class="lbl">In sintesi</p>
-    <p style="font-size:18px;font-weight:600;margin:6px 0 0;line-height:1.5">
-      Lavorate con un team locale, agile e con esperienza nel food.<br/>
-      In una settimana siete online, con un sito vostro al 100%, niente royalty.
-    </p>
+  <!-- ============================ CONDIZIONI ============================ -->
+  <div class="section-h"><span class="num">08</span><h2>Condizioni</h2></div>
+  <div class="terms">
+    <ul>
+      <li>Tutti gli importi sono espressi in <strong>Euro, IVA esclusa 22%</strong>, salvo dove diversamente indicato</li>
+      <li><strong>50%</strong> all'accettazione del preventivo, <strong>50%</strong> alla consegna del sito online (modulabile in base a vostre esigenze)</li>
+      <li>Manutenzione annuale fatturata in un'unica soluzione a fine anno</li>
+      <li><strong>Modifiche evolutive</strong>: preventivo dedicato per ogni intervento, pagamento ad attività conclusa</li>
+      <li>Dominio <code>lacompagniadelglutenfree.it</code> e hosting <strong>Keliweb</strong> restano a vostro carico (come oggi, ~120 €/anno)</li>
+      <li>SSL preconfigurato dall'hosting Keliweb (rinnovo gestito dal provider)</li>
+      <li>Tempi di consegna: <strong>4 settimane</strong> dall'invio dei materiali finali · online entro giugno 2026</li>
+      <li>I prezzi sono validi 30 giorni dalla data del preventivo</li>
+    </ul>
   </div>
 
-  <h2>Condizioni</h2>
-  <ul class="feat">
-    <li>Tutti gli importi sono espressi in <strong>Euro, IVA esclusa 22%</strong>, salvo dove diversamente indicato</li>
-    <li>50% all'accettazione del preventivo, 50% alla consegna del sito online</li>
-    <li>Manutenzione annuale fatturata in un'unica soluzione a fine anno</li>
-    <li>Modifiche evolutive: preventivo dedicato per ogni intervento richiesto, da pagare ad attività conclusa</li>
-    <li>Dominio <code>lacompagniadelglutenfree.it</code> e hosting <strong>Keliweb</strong> rimangono a vostro carico (come oggi, ~120 €/anno)</li>
-    <li>SSL preconfigurato dall'hosting Keliweb (rinnovo gestito dal provider)</li>
-    <li>Tempi di consegna: <strong>1 settimana</strong> dall'invio dei materiali finali (logo, listino prezzi confermati, dati fiscali)</li>
-    <li>Garanzia bug-fix: 60 giorni dalla consegna</li>
-    <li>I prezzi sono validi 30 giorni dalla data del preventivo</li>
-  </ul>
-
-  <h2>Prossimi passi</h2>
-  <ol style="font-size:14px;padding-left:22px;line-height:1.9">
-    <li>Conferma del preventivo via email/WhatsApp</li>
-    <li>Invio listino prezzi definitivo + partita IVA + dati fiscali</li>
-    <li>Acquisto/trasferimento dominio (se non già fatto)</li>
-    <li>Sviluppo: 5-7 giorni lavorativi</li>
-    <li>Test + revisioni con il cliente: 1-2 giorni</li>
-    <li>Go-live + formazione: stesso giorno</li>
+  <!-- ============================ PROSSIMI PASSI ============================ -->
+  <div class="section-h"><span class="num">09</span><h2>Prossimi passi</h2></div>
+  <ol class="steps-list">
+    <li><strong>Conferma del preventivo</strong> via email o WhatsApp</li>
+    <li><strong>Invio materiali</strong>: listino prezzi definitivo + partita IVA + dati fiscali + foto aggiuntive (proprietà, laboratorio…)</li>
+    <li><strong>Sviluppo del sito</strong> · 3 settimane</li>
+    <li><strong>Test + revisioni</strong> con il cliente · 1 settimana</li>
+    <li><strong>Trasferimento</strong> sull'hosting Keliweb del cliente</li>
+    <li><strong>Go-live</strong> · stesso giorno · <strong style="color:var(--c-olive-deep)">online entro giugno 2026</strong></li>
   </ol>
 
+  <!-- ============================ FOOTER DOC ============================ -->
   <div class="doc-footer">
+    <p class="signature">Grazie per la vostra fiducia.</p>
     <a href="https://www.emcdigitalsolutions.it" class="emc-credit">
       Progettato e Sviluppato da
       <svg width="60" height="18" viewBox="0 0 200 50">
-        <rect x="5" y="10" width="30" height="6" rx="2" fill="url(#emcBars)"/>
-        <rect x="5" y="22" width="20" height="6" rx="2" fill="url(#emcBars)"/>
-        <rect x="5" y="34" width="30" height="6" rx="2" fill="url(#emcBars)"/>
-        <text x="48" y="34" font-family="Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="3" fill="url(#emcText)">EMC</text>
+        <defs>
+          <linearGradient id="emcBarsFoot" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7a9a5a"/><stop offset="100%" stop-color="#c9a96e"/></linearGradient>
+          <linearGradient id="emcTextFoot" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#5a7a3a"/><stop offset="50%" stop-color="#8a9a5a"/><stop offset="100%" stop-color="#c9a96e"/></linearGradient>
+        </defs>
+        <rect x="5" y="10" width="30" height="6" rx="2" fill="url(#emcBarsFoot)"/>
+        <rect x="5" y="22" width="20" height="6" rx="2" fill="url(#emcBarsFoot)"/>
+        <rect x="5" y="34" width="30" height="6" rx="2" fill="url(#emcBarsFoot)"/>
+        <text x="48" y="34" font-family="Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="3" fill="url(#emcTextFoot)">EMC</text>
       </svg>
     </a>
-    <p style="margin-top:10px">EMC Digital Solutions · emcdigitalsolution@gmail.com · www.emcdigitalsolutions.it</p>
+    <p class="contact-line">
+      <strong>EMC Digital Solutions</strong> · emcdigitalsolution@gmail.com · www.emcdigitalsolutions.it
+    </p>
   </div>
 
 </div>
