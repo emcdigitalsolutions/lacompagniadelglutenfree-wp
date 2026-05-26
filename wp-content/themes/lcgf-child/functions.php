@@ -248,21 +248,28 @@ add_action('init', function () {
         ],
     ];
 
+    // 1) Crea il post (post_content vuoto, lo settiamo via $wpdb dopo per evitare
+    //    il doppio wp_unslash di wp_insert_post + wp_update_post che corrompe il JSON
+    //    quando contiene HTML con virgolette).
     $post_id = wp_insert_post([
         'post_type'    => 'wpforms',
         'post_status'  => 'publish',
         'post_title'   => 'Contatti LCGF',
         'post_excerpt' => 'Form contatti principale del sito',
-        'post_content' => wp_slash(wp_json_encode($form_data)),
+        'post_content' => '',
     ]);
 
     if ($post_id && !is_wp_error($post_id)) {
-        // riassegna l'id reale nel JSON e risalva
+        global $wpdb;
+        // Assegna l'id reale al form_data poi salva il JSON puro (senza wp_slash)
+        // direttamente nel DB. WPForms userà wpforms_decode() che fa json_decode().
         $form_data['id'] = (string)$post_id;
-        wp_update_post([
-            'ID'           => $post_id,
-            'post_content' => wp_slash(wp_json_encode($form_data)),
-        ]);
+        $wpdb->update(
+            $wpdb->posts,
+            ['post_content' => wp_json_encode($form_data)],
+            ['ID' => $post_id]
+        );
+        clean_post_cache($post_id);
         update_option('lcgf_contact_form_id', $post_id);
         set_transient('lcgf_wpforms_notice', $post_id, 30);
     }
