@@ -704,28 +704,54 @@
 
   /* ============================ PRINT ============================ */
   @media print {
-    @page { size: A4; margin: 0; }
+    @page { size: A4; margin: 18mm 14mm 16mm 14mm; }
     html, body { background: #fff !important; }
     .page {
-      max-width: none; padding: 30px 36px; box-shadow: none;
+      max-width: none; padding: 0; box-shadow: none;
     }
     .cover {
+      margin: -18mm -14mm 0 -14mm;
       padding: 50px 36px 40px;
       page-break-after: always;
-      min-height: 297mm;
+      min-height: calc(297mm - 0px);
       display: flex; flex-direction: column;
     }
     .cover-foot { position: relative; bottom: auto; left: auto; right: auto; margin-top: auto; padding-top: 18px; }
-    .section-h { page-break-after: avoid; }
-    .preview, .why-card, .compare-card, .invest-box, .savings, .smm-pkg, .terms, .invest-feat, .smm-step, .incl-item {
+
+    /* Titoli: extra respiro quando vanno a capo pagina + niente titoli isolati */
+    .section-h {
+      page-break-after: avoid;
+      break-after: avoid;
+      page-break-before: auto;
+      break-before: auto;
+      margin-top: 14mm;
+      padding-top: 4mm;
+    }
+    .section-h:first-of-type { margin-top: 40px; padding-top: 0; }
+
+    h2, h3, h4 {
+      page-break-after: avoid;
+      break-after: avoid;
+      orphans: 3;
+      widows: 3;
+    }
+    /* h3 con margine generoso sopra (es. "I vantaggi tecnici") */
+    h3 {
+      margin-top: 10mm;
+      padding-top: 2mm;
+    }
+
+    /* Card e blocchi: evita split brutti tra pagine */
+    .preview, .why-card, .compare-card, .invest-box, .savings, .smm-pkg, .terms, .invest-feat, .smm-step, .incl-item, .client-card, figure {
       break-inside: avoid;
       page-break-inside: avoid;
     }
+    /* Le griglie possono spezzare tra le righe ma non dentro le card */
     .preview-grid, .why-grid, .compare, .invest-features, .smm-flow, .incl-grid, .client-grid {
       break-inside: auto;
     }
-    h2 { page-break-after: avoid; }
-    h3 { page-break-after: avoid; }
+    /* Steps + terms: evita orfani */
+    .steps-list li, .terms li { break-inside: avoid; }
   }
 </style>
 </head>
