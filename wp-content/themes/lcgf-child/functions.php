@@ -131,6 +131,36 @@ add_action('admin_notices', function () {
 });
 
 /* ====================================================================== */
+/* ===========  Complianz — fix hook banner sul frontend  ============== */
+/* ====================================================================== */
+// Per qualche ragione (race condition al boot) i hook wp_footer/wp_head/
+// wp_enqueue_scripts del banner Complianz non vengono registrati sul
+// frontend. Li ri-registriamo manualmente quando le condizioni sono OK.
+add_action('init', function () {
+    if (is_admin() || defined('DOING_CRON') || (defined('WP_CLI') && WP_CLI)) return;
+    if (!class_exists('cmplz_banner_loader')) return;
+    $loader = cmplz_banner_loader::this();
+    if (!$loader) return;
+    if (!get_option('cmplz_wizard_completed_once')) return;
+    if (!method_exists($loader, 'site_needs_cookie_warning')) return;
+    if (!$loader->site_needs_cookie_warning()) return;
+
+    // Re-registra gli hook frontend del banner
+    if (!has_action('wp_enqueue_scripts', [$loader, 'enqueue_assets'])) {
+        add_action('wp_enqueue_scripts', [$loader, 'enqueue_assets'], PHP_INT_MAX - 50);
+    }
+    if (!has_action('wp_head', [$loader, 'cookiebanner_css'])) {
+        add_action('wp_head', [$loader, 'cookiebanner_css']);
+    }
+    if (!has_action('wp_footer', [$loader, 'cookiebanner_html'])) {
+        add_action('wp_footer', [$loader, 'cookiebanner_html']);
+    }
+    if (method_exists($loader, 'dynamic_gtm_enqueue')) {
+        $loader->dynamic_gtm_enqueue();
+    }
+}, 30);
+
+/* ====================================================================== */
 /* ===========  WPForms — Form contatti default LCGF  =================== */
 /* ====================================================================== */
 
