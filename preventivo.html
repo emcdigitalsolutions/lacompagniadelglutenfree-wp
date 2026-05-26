@@ -705,15 +705,15 @@
   /* ============================ PRINT ============================ */
   @media print {
     @page { size: A4; margin: 18mm 14mm 16mm 14mm; }
+    @page :first { margin: 0; }
     html, body { background: #fff !important; }
     .page {
       max-width: none; padding: 0; box-shadow: none;
     }
     .cover {
-      margin: -18mm -14mm 0 -14mm;
-      padding: 50px 36px 40px;
+      padding: 70px 64px 60px;
       page-break-after: always;
-      min-height: calc(297mm - 0px);
+      min-height: 297mm;
       display: flex; flex-direction: column;
     }
     .cover-foot { position: relative; bottom: auto; left: auto; right: auto; margin-top: auto; padding-top: 18px; }
