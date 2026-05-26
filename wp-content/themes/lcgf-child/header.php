@@ -57,6 +57,35 @@
     </nav>
 
     <div class="lcgf-actions">
+      <?php if (function_exists('pll_the_languages')) :
+        $langs = pll_the_languages([
+          'echo'             => 0,
+          'raw'              => 1,
+          'hide_if_empty'    => 0,
+          'hide_current'     => 0,
+        ]);
+        if (!empty($langs) && is_array($langs)) :
+          $current = null;
+          foreach ($langs as $l) { if (!empty($l['current_lang'])) { $current = $l; break; } }
+          if (!$current) $current = reset($langs);
+      ?>
+      <div class="lcgf-lang">
+        <button class="lcgf-icon-btn lcgf-lang-btn" type="button" aria-label="Lingua" aria-haspopup="true" aria-expanded="false">
+          <span class="lcgf-lang-flag"><?php echo esc_html(strtoupper($current['slug'])); ?></span>
+        </button>
+        <ul class="lcgf-lang-menu" role="menu">
+          <?php foreach ($langs as $l) : ?>
+            <li role="none">
+              <a role="menuitem" href="<?php echo esc_url($l['url']); ?>"<?php echo !empty($l['current_lang']) ? ' class="is-current"' : ''; ?>>
+                <span class="lcgf-lang-code"><?php echo esc_html(strtoupper($l['slug'])); ?></span>
+                <span class="lcgf-lang-name"><?php echo esc_html($l['name']); ?></span>
+              </a>
+            </li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+      <?php endif; endif; ?>
+
       <a href="<?php echo esc_url(home_url('/?s=&post_type=product')); ?>" class="lcgf-icon-btn" aria-label="Cerca">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
       </a>
