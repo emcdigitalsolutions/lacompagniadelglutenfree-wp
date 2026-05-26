@@ -50,6 +50,7 @@
           echo '<li><a href="' . esc_url($url) . '">' . esc_html($cat->name) . '</a></li>';
         }
         ?>
+        <li><a href="<?php echo esc_url(get_post_type_archive_link('lcgf_evento')); ?>">Fiere &amp; Eventi</a></li>
         <li><a href="<?php echo esc_url(home_url('/chi-siamo/')); ?>">Chi siamo</a></li>
         <li><a href="<?php echo esc_url(home_url('/contatti/')); ?>">Contatti</a></li>
       </ul>

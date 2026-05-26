@@ -129,3 +129,254 @@ add_action('admin_notices', function () {
     delete_transient('lcgf_images_notice');
     echo '<div class="notice notice-success is-dismissible"><p>🌾 LCGF: ' . (int)$imported . ' immagini prodotto importate automaticamente.</p></div>';
 });
+
+/* ====================================================================== */
+/* ===========  CPT "Evento" — Fiere ed Eventi  ========================== */
+/* ====================================================================== */
+
+/* Registra CPT */
+add_action('init', function () {
+    register_post_type('lcgf_evento', [
+        'labels' => [
+            'name'               => 'Fiere ed Eventi',
+            'singular_name'      => 'Evento',
+            'menu_name'          => 'Fiere ed Eventi',
+            'add_new'            => 'Aggiungi evento',
+            'add_new_item'       => 'Nuovo evento',
+            'edit_item'          => 'Modifica evento',
+            'new_item'           => 'Nuovo evento',
+            'view_item'          => 'Vedi evento',
+            'search_items'       => 'Cerca eventi',
+            'not_found'          => 'Nessun evento trovato',
+            'not_found_in_trash' => 'Nessun evento nel cestino',
+            'all_items'          => 'Tutti gli eventi',
+            'archives'           => 'Archivio eventi',
+        ],
+        'public'              => true,
+        'show_in_rest'        => true,
+        'has_archive'         => 'fiere-eventi',
+        'rewrite'             => ['slug' => 'evento', 'with_front' => false],
+        'supports'            => ['title', 'editor', 'thumbnail', 'excerpt'],
+        'menu_icon'           => 'dashicons-calendar-alt',
+        'menu_position'       => 22,
+        'hierarchical'        => false,
+        'taxonomies'          => [],
+    ]);
+});
+
+/* Flush rewrite rules una sola volta dopo il deploy del nuovo CPT */
+add_action('init', function () {
+    if (get_option('lcgf_evento_rewrite_flushed_v1') === 'done') return;
+    flush_rewrite_rules(false);
+    update_option('lcgf_evento_rewrite_flushed_v1', 'done');
+}, 99);
+
+/* Meta box dettagli evento */
+add_action('add_meta_boxes', function () {
+    add_meta_box(
+        'lcgf_evento_dettagli',
+        '📅 Dettagli evento',
+        'lcgf_evento_render_meta_box',
+        'lcgf_evento',
+        'normal',
+        'high'
+    );
+});
+
+function lcgf_evento_render_meta_box($post) {
+    wp_nonce_field('lcgf_evento_save', 'lcgf_evento_nonce');
+    $f = [
+        'data_inizio'    => get_post_meta($post->ID, '_lcgf_evento_data_inizio', true),
+        'data_fine'      => get_post_meta($post->ID, '_lcgf_evento_data_fine', true),
+        'ora_inizio'     => get_post_meta($post->ID, '_lcgf_evento_ora_inizio', true),
+        'luogo'          => get_post_meta($post->ID, '_lcgf_evento_luogo', true),
+        'indirizzo'      => get_post_meta($post->ID, '_lcgf_evento_indirizzo', true),
+        'citta'          => get_post_meta($post->ID, '_lcgf_evento_citta', true),
+        'prezzo'         => get_post_meta($post->ID, '_lcgf_evento_prezzo', true),
+        'link_esterno'   => get_post_meta($post->ID, '_lcgf_evento_link_esterno', true),
+    ];
+    ?>
+    <style>
+      .lcgf-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px}
+      .lcgf-meta-grid label{display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:#333}
+      .lcgf-meta-grid input[type=text],.lcgf-meta-grid input[type=date],.lcgf-meta-grid input[type=time],.lcgf-meta-grid input[type=url]{width:100%;padding:6px 8px;font-size:13px}
+      .lcgf-meta-grid .full{grid-column:1/-1}
+      .lcgf-meta-hint{color:#666;font-size:12px;font-style:italic;margin-top:2px}
+    </style>
+    <div class="lcgf-meta-grid">
+      <div>
+        <label>Data inizio *</label>
+        <input type="date" name="lcgf_evento[data_inizio]" value="<?php echo esc_attr($f['data_inizio']); ?>" required />
+        <p class="lcgf-meta-hint">Es. 2026-05-15</p>
+      </div>
+      <div>
+        <label>Data fine (opzionale)</label>
+        <input type="date" name="lcgf_evento[data_fine]" value="<?php echo esc_attr($f['data_fine']); ?>" />
+        <p class="lcgf-meta-hint">Lascia vuoto per eventi di una sola giornata</p>
+      </div>
+      <div>
+        <label>Ora inizio</label>
+        <input type="time" name="lcgf_evento[ora_inizio]" value="<?php echo esc_attr($f['ora_inizio']); ?>" />
+      </div>
+      <div>
+        <label>Prezzo / Ingresso</label>
+        <input type="text" name="lcgf_evento[prezzo]" value="<?php echo esc_attr($f['prezzo']); ?>" placeholder="Es. Ingresso libero" />
+      </div>
+      <div class="full">
+        <label>Luogo (nome) *</label>
+        <input type="text" name="lcgf_evento[luogo]" value="<?php echo esc_attr($f['luogo']); ?>" placeholder="Es. Piazza Garibaldi, Sagra del Pane" required />
+      </div>
+      <div>
+        <label>Indirizzo</label>
+        <input type="text" name="lcgf_evento[indirizzo]" value="<?php echo esc_attr($f['indirizzo']); ?>" placeholder="Es. Via Roma 1" />
+      </div>
+      <div>
+        <label>Città</label>
+        <input type="text" name="lcgf_evento[citta]" value="<?php echo esc_attr($f['citta']); ?>" placeholder="Es. Campobello di Licata (AG)" />
+      </div>
+      <div class="full">
+        <label>Link esterno (sito ufficiale evento)</label>
+        <input type="url" name="lcgf_evento[link_esterno]" value="<?php echo esc_attr($f['link_esterno']); ?>" placeholder="https://..." />
+      </div>
+    </div>
+    <?php
+}
+
+add_action('save_post_lcgf_evento', function ($post_id) {
+    if (!isset($_POST['lcgf_evento_nonce']) || !wp_verify_nonce($_POST['lcgf_evento_nonce'], 'lcgf_evento_save')) return;
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    if (!current_user_can('edit_post', $post_id)) return;
+
+    $data = $_POST['lcgf_evento'] ?? [];
+    $fields = ['data_inizio', 'data_fine', 'ora_inizio', 'luogo', 'indirizzo', 'citta', 'prezzo', 'link_esterno'];
+    foreach ($fields as $f) {
+        $val = isset($data[$f]) ? sanitize_text_field($data[$f]) : '';
+        if ($f === 'link_esterno') $val = esc_url_raw($val);
+        update_post_meta($post_id, '_lcgf_evento_' . $f, $val);
+    }
+});
+
+/* Colonne admin custom */
+add_filter('manage_lcgf_evento_posts_columns', function ($cols) {
+    $new = [];
+    foreach ($cols as $k => $v) {
+        $new[$k] = $v;
+        if ($k === 'title') {
+            $new['lcgf_data']  = 'Data';
+            $new['lcgf_luogo'] = 'Luogo';
+        }
+    }
+    return $new;
+});
+add_action('manage_lcgf_evento_posts_custom_column', function ($col, $post_id) {
+    if ($col === 'lcgf_data') {
+        $d = get_post_meta($post_id, '_lcgf_evento_data_inizio', true);
+        echo $d ? esc_html(date_i18n('d M Y', strtotime($d))) : '—';
+    }
+    if ($col === 'lcgf_luogo') {
+        $l = get_post_meta($post_id, '_lcgf_evento_luogo', true);
+        $c = get_post_meta($post_id, '_lcgf_evento_citta', true);
+        echo esc_html(trim($l . ($c ? ' · ' . $c : '')) ?: '—');
+    }
+}, 10, 2);
+
+/* Ordina archivio per data evento crescente */
+add_action('pre_get_posts', function ($q) {
+    if (is_admin() || !$q->is_main_query()) return;
+    if ($q->is_post_type_archive('lcgf_evento')) {
+        $q->set('meta_key', '_lcgf_evento_data_inizio');
+        $q->set('orderby', 'meta_value');
+        $q->set('order', 'ASC');
+        $q->set('posts_per_page', 24);
+    }
+});
+
+/* JSON-LD schema.org Event sulla single */
+add_action('wp_head', function () {
+    if (!is_singular('lcgf_evento')) return;
+    $post_id = get_queried_object_id();
+    $title   = get_the_title($post_id);
+    $desc    = wp_strip_all_tags(get_the_excerpt($post_id) ?: get_the_content(null, false, $post_id));
+    $img     = get_the_post_thumbnail_url($post_id, 'large');
+    $url     = get_permalink($post_id);
+
+    $start   = get_post_meta($post_id, '_lcgf_evento_data_inizio', true);
+    $end     = get_post_meta($post_id, '_lcgf_evento_data_fine', true);
+    $time    = get_post_meta($post_id, '_lcgf_evento_ora_inizio', true);
+    $luogo   = get_post_meta($post_id, '_lcgf_evento_luogo', true);
+    $indir   = get_post_meta($post_id, '_lcgf_evento_indirizzo', true);
+    $citta   = get_post_meta($post_id, '_lcgf_evento_citta', true);
+    $prezzo  = get_post_meta($post_id, '_lcgf_evento_prezzo', true);
+
+    if (!$start) return;
+    $start_iso = $start . ($time ? 'T' . $time . ':00' : '');
+    $end_iso   = $end ? ($end . ($time ? 'T' . $time . ':00' : '')) : $start_iso;
+
+    $schema = [
+        '@context'    => 'https://schema.org',
+        '@type'       => 'Event',
+        'name'        => $title,
+        'description' => mb_substr($desc, 0, 600),
+        'startDate'   => $start_iso,
+        'endDate'     => $end_iso,
+        'eventStatus' => 'https://schema.org/EventScheduled',
+        'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
+        'url'         => $url,
+    ];
+    if ($img) $schema['image'] = [$img];
+    if ($luogo) {
+        $schema['location'] = [
+            '@type' => 'Place',
+            'name'  => $luogo,
+            'address' => [
+                '@type'           => 'PostalAddress',
+                'streetAddress'   => $indir,
+                'addressLocality' => $citta,
+                'addressCountry'  => 'IT',
+            ],
+        ];
+    }
+    $schema['organizer'] = [
+        '@type' => 'Organization',
+        'name'  => 'La Compagnia del Gluten Free',
+        'url'   => home_url('/'),
+    ];
+    if ($prezzo) {
+        $schema['offers'] = [
+            '@type' => 'Offer',
+            'price' => preg_match('/[0-9]/', $prezzo) ? preg_replace('/[^0-9.]/', '', $prezzo) : '0',
+            'priceCurrency' => 'EUR',
+            'availability'  => 'https://schema.org/InStock',
+            'url'           => $url,
+            'description'   => $prezzo,
+        ];
+    }
+    echo "\n" . '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+});
+
+/* Seed primo evento al boot se nessuno presente */
+add_action('admin_init', function () {
+    if (get_option('lcgf_evento_seeded_v1') === 'done') return;
+    if (!current_user_can('manage_options')) return;
+    $count = wp_count_posts('lcgf_evento');
+    $total = $count ? (int)$count->publish + (int)$count->draft : 0;
+    if ($total > 0) {
+        update_option('lcgf_evento_seeded_v1', 'done');
+        return;
+    }
+    $post_id = wp_insert_post([
+        'post_type'    => 'lcgf_evento',
+        'post_status'  => 'draft',
+        'post_title'   => 'Sagra del Pane — Edizione 2026',
+        'post_content' => "Saremo presenti con il nostro stand alla Sagra del Pane, con assaggi gratuiti di pane, focacce, pinse e dolci senza glutine e senza lattosio. Vieni a scoprire i nostri prodotti e a parlare con il nostro team!",
+        'post_excerpt' => 'Stand La Compagnia del Gluten Free con assaggi e prodotti in vendita.',
+    ]);
+    if ($post_id && !is_wp_error($post_id)) {
+        update_post_meta($post_id, '_lcgf_evento_data_inizio', date('Y-m-d', strtotime('+45 days')));
+        update_post_meta($post_id, '_lcgf_evento_ora_inizio',  '10:00');
+        update_post_meta($post_id, '_lcgf_evento_luogo',       'Piazza centrale, Sagra del Pane');
+        update_post_meta($post_id, '_lcgf_evento_citta',       'Campobello di Licata (AG)');
+        update_post_meta($post_id, '_lcgf_evento_prezzo',      'Ingresso libero');
+    }
+    update_option('lcgf_evento_seeded_v1', 'done');
+});
