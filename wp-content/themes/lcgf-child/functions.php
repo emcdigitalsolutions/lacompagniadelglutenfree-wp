@@ -563,3 +563,41 @@ add_action('admin_init', function () {
     }
     update_option('lcgf_evento_seeded_v1', 'done');
 });
+
+/**
+ * Trigger manuale traduzione automatica IT -> EN/DE/FR via Gemini.
+ * Accessibile da admin loggato: /wp-admin/?lcgf_action=translate
+ * Streaming output (nessun timeout client). Idempotente.
+ */
+add_action('admin_init', function () {
+    if (!isset($_GET['lcgf_action']) || $_GET['lcgf_action'] !== 'translate') return;
+    if (!current_user_can('manage_options')) wp_die('Non autorizzato');
+
+    @set_time_limit(0);
+    @ignore_user_abort(true);
+    while (ob_get_level()) @ob_end_flush();
+    header('Content-Type: text/plain; charset=utf-8');
+    header('X-Accel-Buffering: no');
+    echo "Avvio traduzione LCGF (può richiedere 3-4 minuti)...\n\n";
+    @flush();
+
+    $script = WP_CONTENT_DIR . '/themes/lcgf-child/lib/translate-lcgf.php';
+    if (!file_exists($script)) {
+        $alt = '/var/www/html/lcgf-scripts/translate-lcgf.php';
+        if (file_exists($alt)) $script = $alt;
+    }
+    if (!file_exists($script)) {
+        echo "ERROR: script non trovato\n"; exit;
+    }
+
+    // Emula CLI per il check interno dello script
+    if (!defined('STDIN')) define('STDIN', fopen('php://memory', 'r'));
+    if (php_sapi_name() !== 'cli') {
+        // Force the script to run anche se non in CLI
+        $GLOBALS['lcgf_force_cli'] = true;
+    }
+
+    include $script;
+    echo "\nFatto.\n";
+    exit;
+});

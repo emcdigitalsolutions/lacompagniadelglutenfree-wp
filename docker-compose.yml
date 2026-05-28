@@ -126,19 +126,8 @@ services:
           if [ -z "$$UNCAT_ID" ]; then
             UNCAT_ID=$$(su -s /bin/bash www-data -c "wp term list product_cat --slug=senza-categoria --field=term_id" 2>/dev/null)
           fi
-          # Traduzione automatica IT->EN/DE/FR (idempotente, gira solo se non gia fatto)
-          TRANS_DONE=$$(su -s /bin/bash www-data -c "wp option get lcgf_translation_done" 2>/dev/null)
-          if [ -z "$$TRANS_DONE" ]; then
-            echo "[lcgf-trans] avvio traduzione Gemini..."
-            SCRIPT=/var/www/html/lcgf-scripts/translate-lcgf.php
-            if [ -f "$$SCRIPT" ]; then
-              su -s /bin/bash www-data -c "GEMINI_API_KEY=$${GEMINI_API_KEY:-AIzaSyB456HwouwfR4egvf8-iQloSf3ddxHWzv8} wp eval-file $$SCRIPT" 2>&1 | tail -150 || true
-            else
-              echo "[lcgf-trans] script non trovato in $$SCRIPT, skip"
-            fi
-          else
-            echo "[lcgf-trans] gia fatto (ts $$TRANS_DONE), skip"
-          fi
+          # Traduzione IT->EN/DE/FR: trigger manuale via /wp-admin/?lcgf_action=translate
+          # (vedi functions.php). NON girare al boot per evitare blocchi apache.
           # Pulisci cache
           su -s /bin/bash www-data -c "wp cache flush" 2>&1 | tail -1 || true
           # disattiva + elimina plugin inutili
