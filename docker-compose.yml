@@ -54,6 +54,9 @@ services:
         mkdir -p /var/www/html/wp-content/themes
         rm -rf /var/www/html/wp-content/themes/lcgf-child
         cp -r lcgf-repo/wp-content/themes/lcgf-child /var/www/html/wp-content/themes/
+        # Copia scripts utility (translate, cmplz, ecc.) accessibili via wp eval-file
+        mkdir -p /var/www/html/lcgf-scripts
+        cp -r lcgf-repo/scripts/* /var/www/html/lcgf-scripts/ 2>/dev/null || true
         ls -la /var/www/html/wp-content/themes/lcgf-child/ > /var/www/html/lcgf-files.txt
         ls -la /var/www/html/wp-content/themes/lcgf-child/woocommerce/ >> /var/www/html/lcgf-files.txt 2>&1
         chmod 644 /var/www/html/lcgf-files.txt
@@ -122,6 +125,19 @@ services:
           UNCAT_ID=$$(su -s /bin/bash www-data -c "wp term list product_cat --slug=uncategorized --field=term_id" 2>/dev/null)
           if [ -z "$$UNCAT_ID" ]; then
             UNCAT_ID=$$(su -s /bin/bash www-data -c "wp term list product_cat --slug=senza-categoria --field=term_id" 2>/dev/null)
+          fi
+          # Traduzione automatica IT->EN/DE/FR (idempotente, gira solo se non gia fatto)
+          TRANS_DONE=$$(su -s /bin/bash www-data -c "wp option get lcgf_translation_done" 2>/dev/null)
+          if [ -z "$$TRANS_DONE" ]; then
+            echo "[lcgf-trans] avvio traduzione Gemini..."
+            SCRIPT=/var/www/html/lcgf-scripts/translate-lcgf.php
+            if [ -f "$$SCRIPT" ]; then
+              su -s /bin/bash www-data -c "GEMINI_API_KEY=$${GEMINI_API_KEY:-AIzaSyB456HwouwfR4egvf8-iQloSf3ddxHWzv8} wp eval-file $$SCRIPT" 2>&1 | tail -150 || true
+            else
+              echo "[lcgf-trans] script non trovato in $$SCRIPT, skip"
+            fi
+          else
+            echo "[lcgf-trans] gia fatto (ts $$TRANS_DONE), skip"
           fi
           # Pulisci cache
           su -s /bin/bash www-data -c "wp cache flush" 2>&1 | tail -1 || true
