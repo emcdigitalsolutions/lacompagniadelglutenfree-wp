@@ -141,6 +141,8 @@ services:
     environment:
       SERVICE_FQDN_WORDPRESS_80: /
       LCGF_FORCE_SYNC: "1"
+      # Chiave Gemini per la traduzione multilingue — valore SOLO da env Coolify, mai in chiaro
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
