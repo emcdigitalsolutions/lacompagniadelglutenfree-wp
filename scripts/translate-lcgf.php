@@ -18,7 +18,11 @@ if (!function_exists('pll_save_post_translations')) {
     echo "[FATAL] Polylang non attivo o non caricato\n"; return;
 }
 
-$GEMINI_KEY = getenv('GEMINI_API_KEY') ?: 'AIzaSyB456HwouwfR4egvf8-iQloSf3ddxHWzv8';
+$GEMINI_KEY = getenv('GEMINI_API_KEY');
+if (!$GEMINI_KEY) {
+    echo "[FATAL] GEMINI_API_KEY non impostata. Configurala come env var (Coolify), mai nel codice.\n";
+    return;
+}
 $MODEL = 'gemini-2.5-flash';
 $TARGET_LANGS = ['en', 'de', 'fr'];
 $LANG_LABELS = [
@@ -273,7 +277,12 @@ foreach ($post_types as $pt) {
     }
 }
 
-update_option('lcgf_translation_done', time(), false);
+// Imposta il marker SOLO se non ci sono stati errori (o pochi)
+if ($total['errors'] === 0) {
+    update_option('lcgf_translation_done', time(), false);
+} else {
+    delete_option('lcgf_translation_done');
+}
 
 echo "\n========= RIEPILOGO =========\n";
 echo "Post tradotti:   {$total['post_done']}\n";
@@ -281,4 +290,4 @@ echo "Post skippati:   {$total['post_skip']}\n";
 echo "Term tradotti:   {$total['term_done']}\n";
 echo "Term skippati:   {$total['term_skip']}\n";
 echo "Errori:          {$total['errors']}\n";
-echo "Done. lcgf_translation_done = " . get_option('lcgf_translation_done') . "\n";
+echo "lcgf_translation_done = " . (get_option('lcgf_translation_done') ?: '(non settato per errori)') . "\n";
