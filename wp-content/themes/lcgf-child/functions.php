@@ -786,3 +786,25 @@ function lcgf_cert_logo($file, $alt) {
     }
     return '<span class="lcgf-cert-ph" title="Carica ' . esc_attr($file) . ' in assets/certs/">' . esc_html($alt) . '</span>';
 }
+
+/**
+ * Crea (una volta) la pagina "L'ABC della dieta senza glutine" e le assegna il
+ * template page-abc-celiachia.php. Guardia option lcgf_abc_v1.
+ */
+add_action('init', function () {
+    if (get_option('lcgf_abc_v1')) return;
+    $slug = 'abc-dieta-senza-glutine';
+    if (!get_page_by_path($slug)) {
+        $id = wp_insert_post([
+            'post_title'   => "L'ABC della dieta senza glutine",
+            'post_name'    => $slug,
+            'post_status'  => 'publish',
+            'post_type'    => 'page',
+            'post_content' => '',
+        ]);
+        if ($id && !is_wp_error($id)) {
+            update_post_meta($id, '_wp_page_template', 'page-abc-celiachia.php');
+        }
+    }
+    update_option('lcgf_abc_v1', current_time('mysql'));
+}, 103);

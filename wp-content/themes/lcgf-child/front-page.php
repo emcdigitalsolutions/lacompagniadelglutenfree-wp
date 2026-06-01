@@ -212,6 +212,12 @@ $logo = get_stylesheet_directory_uri() . '/assets/img/logo.webp';
       </div>
 
     </div>
+    <p style="text-align:center;margin-top:30px">
+      <a href="<?php echo esc_url(home_url('/abc-dieta-senza-glutine/')); ?>" class="btn-ghost" style="display:inline-flex;align-items:center;gap:8px">
+        Scopri l'ABC della dieta senza glutine
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </p>
   </div>
 </section>
 
