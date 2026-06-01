@@ -636,3 +636,41 @@ add_action('init', function () {
     echo get_option('lcgf_variants_result') ?: '(nessun risultato registrato)';
     exit;
 });
+
+/**
+ * Impostazioni account/checkout WooCommerce — applicate UNA volta (guardia option).
+ * Abilita registrazione self-service + guest checkout + login/registrazione dal
+ * checkout, e rinomina la pagina account in italiano. Pattern affidabile (init).
+ */
+add_action('init', function () {
+    if (get_option('lcgf_acct_v1')) return;
+    if (!function_exists('WC')) return; // WooCommerce non ancora pronto
+    update_option('woocommerce_enable_myaccount_registration', 'yes');     // registrazione da /my-account/
+    update_option('woocommerce_registration_generate_username', 'yes');    // username automatico dall'email
+    update_option('woocommerce_registration_generate_password', 'no');     // l'utente sceglie la password
+    update_option('woocommerce_enable_signup_and_login_from_checkout', 'yes'); // crea account al checkout
+    update_option('woocommerce_enable_checkout_login_reminder', 'yes');     // promemoria login al checkout
+    update_option('woocommerce_enable_guest_checkout', 'yes');             // consenti acquisto come ospite
+
+    // Rinomina la pagina "My account" -> "Il mio account" (slug invariato).
+    $acc_id = function_exists('wc_get_page_id') ? wc_get_page_id('myaccount') : 0;
+    if ($acc_id > 0) {
+        $p = get_post($acc_id);
+        if ($p && $p->post_title !== 'Il mio account') {
+            wp_update_post(['ID' => $acc_id, 'post_title' => 'Il mio account']);
+        }
+    }
+    update_option('lcgf_acct_v1', current_time('mysql'));
+}, 100);
+
+/**
+ * Messaggio di benvenuto brandizzato in cima alla dashboard "Il mio account".
+ */
+add_action('woocommerce_account_dashboard', function () {
+    $u = wp_get_current_user();
+    $nome = $u && $u->display_name ? esc_html($u->display_name) : 'benvenuto';
+    echo '<div style="background:var(--c-cream-2,#F4EDDC);border:1px solid var(--c-line,#E6DECB);border-radius:14px;padding:18px 22px;margin-bottom:22px">'
+       . '<strong style="font-family:var(--f-display,Georgia);font-size:1.15rem;color:var(--c-olive-deep,#364E25)">Ciao ' . $nome . '! 🌾</strong>'
+       . '<p style="margin:6px 0 0;color:var(--c-ink-soft,#3D362C);font-size:.95rem">Da qui gestisci i tuoi ordini, gli indirizzi di spedizione e i dati del tuo account. Per qualsiasi cosa scrivici su <a href="https://wa.me/393276999897" style="color:var(--c-olive-deep,#364E25);font-weight:600">WhatsApp</a>.</p>'
+       . '</div>';
+}, 5);

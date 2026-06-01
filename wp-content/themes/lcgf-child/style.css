@@ -772,3 +772,148 @@ body { padding-top: var(--header-h); }
   .lcgf-hero-stat strong { font-size: 1.5rem; }
   .lcgf-footer-grid { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   Area utente + Carrello/Checkout — branding LCGF
+   (cart/checkout = WooCommerce Blocks; my-account = classico)
+   ============================================================ */
+
+/* ---- Campi form condivisi (account/checkout classici) ---- */
+.woocommerce form .form-row input.input-text,
+.woocommerce form .form-row textarea,
+.woocommerce form .form-row select,
+.woocommerce-account input[type="text"],
+.woocommerce-account input[type="email"],
+.woocommerce-account input[type="password"],
+.woocommerce-account input[type="tel"] {
+  border: 1.5px solid var(--c-line) !important;
+  border-radius: var(--r-md) !important;
+  padding: 12px 14px !important;
+  background: var(--c-white) !important;
+  color: var(--c-ink) !important;
+  font-family: var(--f-sans) !important;
+  transition: border-color .18s ease, box-shadow .18s ease !important;
+}
+.woocommerce form .form-row input.input-text:focus,
+.woocommerce-account input:focus {
+  outline: none !important;
+  border-color: var(--c-olive) !important;
+  box-shadow: 0 0 0 3px rgba(107, 142, 78, .15) !important;
+}
+
+/* ---- My Account: layout + navigazione laterale brandizzata ---- */
+.woocommerce-account .woocommerce {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 40px;
+  align-items: start;
+  padding: 36px 0 90px;
+}
+.woocommerce-account .woocommerce-MyAccount-navigation {
+  background: var(--c-cream-2);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  padding: 14px;
+  box-shadow: var(--sh-1);
+}
+.woocommerce-account .woocommerce-MyAccount-navigation ul { list-style: none; margin: 0; padding: 0; }
+.woocommerce-account .woocommerce-MyAccount-navigation li { margin: 2px 0; }
+.woocommerce-account .woocommerce-MyAccount-navigation li a {
+  display: block;
+  padding: 11px 16px;
+  border-radius: var(--r-md);
+  color: var(--c-ink-soft);
+  font-weight: 600;
+  font-size: .92rem;
+  text-decoration: none;
+  transition: background .15s ease, color .15s ease;
+}
+.woocommerce-account .woocommerce-MyAccount-navigation li a:hover { background: var(--c-sand); color: var(--c-olive-deep); }
+.woocommerce-account .woocommerce-MyAccount-navigation li.is-active a {
+  background: var(--g-cta);
+  color: var(--c-cream);
+  box-shadow: 0 6px 16px rgba(54, 78, 37, .22);
+}
+.woocommerce-account .woocommerce-MyAccount-content {
+  background: var(--c-white);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  padding: 30px 32px;
+  box-shadow: var(--sh-1);
+}
+.woocommerce-account .woocommerce-MyAccount-content a:not(.button) { color: var(--c-olive-deep); }
+@media (max-width: 820px) {
+  .woocommerce-account .woocommerce { grid-template-columns: 1fr; gap: 20px; }
+}
+
+/* ---- Login / Registrazione: due card affiancate ---- */
+.woocommerce-account:not(.logged-in) .woocommerce > .u-columns,
+.woocommerce .col2-set { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.woocommerce form.login,
+.woocommerce form.register {
+  border: 1px solid var(--c-line) !important;
+  border-radius: var(--r-lg) !important;
+  padding: 28px 30px !important;
+  background: var(--c-white) !important;
+  box-shadow: var(--sh-1);
+}
+@media (max-width: 820px) {
+  .woocommerce .col2-set,
+  .woocommerce-account:not(.logged-in) .woocommerce > .u-columns { grid-template-columns: 1fr; }
+}
+
+/* ---- Bottoni WooCommerce Blocks (cart/checkout): stile brand ---- */
+.wp-block-woocommerce-cart .wc-block-cart__submit-button,
+.wc-block-components-button.contained,
+.wc-block-components-checkout-place-order-button,
+.wp-block-woocommerce-checkout .wc-block-components-button.contained {
+  background: var(--g-cta) !important;
+  color: var(--c-cream) !important;
+  border-radius: var(--r-pill) !important;
+  font-weight: 600 !important;
+  padding: 14px 28px !important;
+  box-shadow: 0 8px 22px rgba(54, 78, 37, .25) !important;
+  transition: transform .15s ease, box-shadow .2s ease !important;
+}
+.wc-block-components-button.contained:hover,
+.wc-block-components-checkout-place-order-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(54, 78, 37, .35) !important;
+}
+
+/* ---- Campi input WooCommerce Blocks ---- */
+.wc-block-components-text-input input,
+.wc-block-components-select .wc-block-components-select__container,
+.wc-block-components-text-input textarea {
+  border-radius: var(--r-md) !important;
+  border: 1.5px solid var(--c-line) !important;
+}
+.wc-block-components-text-input input:focus {
+  border-color: var(--c-olive) !important;
+  box-shadow: 0 0 0 3px rgba(107, 142, 78, .15) !important;
+}
+.wc-block-components-text-input.is-active label,
+.wc-block-components-checkout-step__title { color: var(--c-olive-deep) !important; }
+
+/* ---- Totali / riepilogo (cart + checkout blocks) ---- */
+.wc-block-components-totals-item__value,
+.wc-block-components-totals-footer-item .wc-block-components-totals-item__value,
+.wc-block-cart__totals-title,
+.wc-block-components-order-summary__title {
+  color: var(--c-olive-deep) !important;
+  font-family: var(--f-display) !important;
+}
+.wp-block-woocommerce-cart-order-summary-block,
+.wc-block-components-sidebar {
+  background: var(--c-cream-2) !important;
+  border: 1px solid var(--c-line) !important;
+  border-radius: var(--r-lg) !important;
+}
+
+/* ---- Notice / messaggi ---- */
+.woocommerce-message, .wc-block-components-notice-banner.is-success {
+  border-top-color: var(--c-olive) !important;
+}
+.woocommerce-info, .wc-block-components-notice-banner.is-info {
+  border-top-color: var(--c-wheat-dark) !important;
+}
