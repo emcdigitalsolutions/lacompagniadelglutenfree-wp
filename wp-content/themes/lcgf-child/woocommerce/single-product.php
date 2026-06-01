@@ -60,25 +60,34 @@ get_header('shop');
           <?php echo $product->get_price_html(); ?>
         </div>
 
-        <form class="cart" action="<?php echo esc_url(apply_filters('woocommerce_add_to_cart_form_action', $product->get_permalink())); ?>" method="post" enctype='multipart/form-data' style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:24px 0">
-          <?php do_action('woocommerce_before_add_to_cart_button'); ?>
-
+        <?php if ($product->is_type('variable')) : ?>
           <?php
-          if (!$product->is_sold_individually()) {
-              woocommerce_quantity_input([
-                  'min_value'   => apply_filters('woocommerce_quantity_input_min', $product->get_min_purchase_quantity(), $product),
-                  'max_value'   => apply_filters('woocommerce_quantity_input_max', $product->get_max_purchase_quantity(), $product),
-                  'input_value' => 1,
-              ]);
-          }
+          // Prodotto variabile: usa il template standard WooCommerce, che rende i
+          // selettori di variante + il JS variations_form (necessario per scegliere
+          // gusto/formato prima di aggiungere al carrello).
+          woocommerce_template_single_add_to_cart();
           ?>
-          <button type="submit" name="add-to-cart" value="<?php echo esc_attr($product->get_id()); ?>" class="single_add_to_cart_button button alt btn btn-lg">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Aggiungi al carrello
-          </button>
+        <?php else : ?>
+          <form class="cart" action="<?php echo esc_url(apply_filters('woocommerce_add_to_cart_form_action', $product->get_permalink())); ?>" method="post" enctype='multipart/form-data' style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:24px 0">
+            <?php do_action('woocommerce_before_add_to_cart_button'); ?>
 
-          <?php do_action('woocommerce_after_add_to_cart_button'); ?>
-        </form>
+            <?php
+            if (!$product->is_sold_individually()) {
+                woocommerce_quantity_input([
+                    'min_value'   => apply_filters('woocommerce_quantity_input_min', $product->get_min_purchase_quantity(), $product),
+                    'max_value'   => apply_filters('woocommerce_quantity_input_max', $product->get_max_purchase_quantity(), $product),
+                    'input_value' => 1,
+                ]);
+            }
+            ?>
+            <button type="submit" name="add-to-cart" value="<?php echo esc_attr($product->get_id()); ?>" class="single_add_to_cart_button button alt btn btn-lg">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Aggiungi al carrello
+            </button>
+
+            <?php do_action('woocommerce_after_add_to_cart_button'); ?>
+          </form>
+        <?php endif; ?>
 
         <ul style="list-style:none;padding:0;margin:28px 0 0;border-top:1px solid var(--c-line)">
           <?php
@@ -142,7 +151,11 @@ get_header('shop');
                     <h3 class="woocommerce-loop-product__title"><?php the_title(); ?></h3>
                   </a>
                   <span class="price"><?php echo $rp->get_price_html(); ?></span>
-                  <a href="<?php echo esc_url('?add-to-cart=' . get_the_ID()); ?>" class="button">Aggiungi al carrello</a>
+                  <?php if ($rp->is_type('simple') && $rp->is_purchasable() && $rp->is_in_stock()) : ?>
+                    <a href="<?php echo esc_url('?add-to-cart=' . get_the_ID()); ?>" class="button">Aggiungi al carrello</a>
+                  <?php else : ?>
+                    <a href="<?php the_permalink(); ?>" class="button">Seleziona opzioni</a>
+                  <?php endif; ?>
                 </li>
               <?php endwhile; wp_reset_postdata(); ?>
             </ul>
