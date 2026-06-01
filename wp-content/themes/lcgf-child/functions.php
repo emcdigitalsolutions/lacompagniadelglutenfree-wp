@@ -675,6 +675,102 @@ add_action('woocommerce_account_dashboard', function () {
        . '</div>';
 }, 5);
 
+/* ============================================================
+   SEO + scoperta da motori AI (GEO/AEO)
+   ============================================================ */
+
+// Keyword principali (riusate in meta + llms.txt)
+function lcgf_seo_keywords() {
+    return 'prodotti senza glutine, senza lattosio, celiachia, prodotti per celiaci, gluten free, '
+         . 'pane senza glutine, pizza senza glutine, pinsa senza glutine, focaccia senza glutine, '
+         . 'dolci senza glutine, cheesecake senza glutine, tiramisù senza glutine, AIC, '
+         . 'Associazione Italiana Celiachia, prodotti mutuabili celiachia, buono celiachia, '
+         . 'laboratorio senza glutine, surgelati senza glutine, Sicilia, Campobello di Licata, '
+         . 'Agrigento, spedizione in tutta Italia';
+}
+
+// 1) Titolo corretto per la pagina account (Yoast sovrascrive il post_title)
+add_filter('wpseo_title', function ($title) {
+    if (function_exists('is_account_page') && is_account_page()) {
+        return 'Il mio account — La Compagnia del Gluten Free';
+    }
+    return $title;
+});
+
+// 2) Meta description ricca di fallback (home + shop) se non impostata in Yoast
+add_filter('wpseo_metadesc', function ($desc) {
+    if ($desc) return $desc;
+    if (is_front_page()) {
+        return 'Prodotti artigianali senza glutine e senza lattosio: pane, pinsa, pizza, focacce, '
+             . 'cornetti, tiramisù e cheesecake da laboratorio esclusivamente gluten free. Accreditati AIC, '
+             . 'prodotti mutuabili dal Servizio Sanitario Nazionale. Spedizione in tutta Italia.';
+    }
+    if (function_exists('is_shop') && is_shop()) {
+        return 'Catalogo di prodotti senza glutine e senza lattosio: pane, basi pizza, focacce e dolci '
+             . 'artigianali. Laboratorio dedicato, accreditati AIC. Spedizione in tutta Italia.';
+    }
+    return $desc;
+});
+
+// 3) Meta keywords (richiesta cliente) — home + shop
+add_action('wp_head', function () {
+    if (is_front_page() || (function_exists('is_shop') && is_shop())) {
+        echo '<meta name="keywords" content="' . esc_attr(lcgf_seo_keywords()) . '">' . "\n";
+    }
+}, 1);
+
+// 4) Arricchisce lo schema Organization GIA' generato da Yoast (niente duplicati)
+add_filter('wpseo_schema_organization', function ($data) {
+    $data['description'] = 'Produzione e vendita online di prodotti artigianali senza glutine e senza lattosio '
+        . '(pane, basi pizza, focacce, dolci) in laboratorio esclusivamente gluten free. Accreditati AIC; '
+        . 'prodotti mutuabili dal Servizio Sanitario Nazionale.';
+    $data['knowsAbout'] = ['Celiachia', 'Alimentazione senza glutine', 'Prodotti senza lattosio', 'Prodotti mutuabili SSN'];
+    $data['slogan'] = 'Mangia senza glutine, ma con gusto!';
+    $data['areaServed'] = ['@type' => 'Country', 'name' => 'Italia'];
+    $data['address'] = [
+        '@type' => 'PostalAddress',
+        'addressLocality' => 'Campobello di Licata',
+        'addressRegion' => 'AG',
+        'addressCountry' => 'IT',
+    ];
+    $data['telephone'] = '+39 327 699 9897';
+    $data['sameAs'] = [
+        'https://www.instagram.com/',
+        'https://www.facebook.com/',
+        'https://www.tiktok.com/',
+    ];
+    return $data;
+});
+
+// 5) robots.txt: consenti i crawler AI (discoverability) + riferimento sitemap
+add_filter('robots_txt', function ($output, $public) {
+    if (!$public) return $output;
+    $bots = ['GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-Web', 'PerplexityBot', 'Google-Extended', 'Applebot-Extended', 'CCBot'];
+    $extra = "\n# Crawler AI — consentiti per la scoperta tramite assistenti AI\n";
+    foreach ($bots as $b) { $extra .= "User-agent: {$b}\nAllow: /\n"; }
+    $extra .= "\nSitemap: " . home_url('/sitemap_index.xml') . "\n";
+    return $output . $extra;
+}, 10, 2);
+
+// 6) /llms.txt — riepilogo strutturato del business per gli assistenti AI
+add_action('template_redirect', function () {
+    $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
+    if ($path !== 'llms.txt') return;
+    header('Content-Type: text/plain; charset=utf-8');
+    $home = home_url('/');
+    echo "# La Compagnia del Gluten Free — Mangia con Gusto\n\n";
+    echo "> E-commerce artigianale di prodotti SENZA GLUTINE e SENZA LATTOSIO, prodotti in un laboratorio esclusivamente gluten free (nessuna contaminazione crociata). Accreditati AIC (Associazione Italiana Celiachia); diversi prodotti sono mutuabili dal Servizio Sanitario Nazionale (spendibili col buono celiachia, anche in farmacia). Sede: Campobello di Licata (AG), Sicilia. Spedizione in tutta Italia.\n\n";
+    echo "## Per chi\nPersone celiache e con intolleranza al lattosio, famiglie e genitori di bambini celiaci, farmacie.\n\n";
+    echo "## Categorie e prodotti\n";
+    echo "- Pane & Basi: Pinsa Romana, Pan Focaccia, Focaccia Rotonda, Base Pizza, Pane Filoncino, Pane Rosetta, Box Family (assortimento)\n";
+    echo "- Dolci & Colazione: Brioche col Tuppo, Cornetto, Crostate (vari formati), Biscotti gocce di cioccolato, Tiramisù (mono/torta), Cheesecake (5 gusti)\n\n";
+    echo "## Certificazioni e garanzie\n";
+    echo "- Accreditati AIC — Associazione Italiana Celiachia\n- Prodotti mutuabili dal Servizio Sanitario Nazionale\n- Laboratorio 100% senza glutine, tutti i prodotti anche senza lattosio\n\n";
+    echo "## Contatti\n- Sito: {$home}\n- WhatsApp: +39 327 699 9897\n- Negozio: {$home}negozio/\n- Chi siamo: {$home}chi-siamo/\n\n";
+    echo "## Parole chiave\n" . lcgf_seo_keywords() . "\n";
+    exit;
+});
+
 /**
  * Restituisce il markup di un logo certificazione: l'immagine ufficiale se il
  * file è presente in /assets/certs/, altrimenti un placeholder pulito (così la
