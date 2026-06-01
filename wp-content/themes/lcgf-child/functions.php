@@ -808,3 +808,107 @@ add_action('init', function () {
     }
     update_option('lcgf_abc_v1', current_time('mysql'));
 }, 103);
+
+/* ============================================================
+   F3: recensioni · back-in-stock · pulizia plugin · filtri catalogo
+   ============================================================ */
+
+// (A) Once-run (lcgf_f3_v2): recensioni ON + apri commenti sui prodotti +
+//     tabella back-in-stock + disattiva Jetpack/POS.
+add_action('init', function () {
+    if (get_option('lcgf_f3_v2')) return;
+    if (!function_exists('WC')) return;
+    global $wpdb;
+    update_option('woocommerce_enable_reviews', 'yes');
+    update_option('woocommerce_enable_review_rating', 'yes');
+    update_option('woocommerce_review_rating_required', 'yes');
+    $wpdb->query("UPDATE {$wpdb->posts} SET comment_status='open' WHERE post_type='product'");
+
+    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+    $t = $wpdb->prefix . 'lcgf_bis';
+    dbDelta("CREATE TABLE {$t} (
+      id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+      product_id BIGINT UNSIGNED NOT NULL,
+      email VARCHAR(190) NOT NULL,
+      created_at DATETIME NOT NULL,
+      notified_at DATETIME NULL,
+      PRIMARY KEY  (id),
+      UNIQUE KEY prod_email (product_id,email)
+    ) " . $wpdb->get_charset_collate() . ";");
+
+    if (!function_exists('deactivate_plugins')) require_once ABSPATH . 'wp-admin/includes/plugin.php';
+    foreach ((array) get_option('active_plugins', []) as $p) {
+        $lp = strtolower($p);
+        if (strpos($lp, 'jetpack') !== false || strpos($lp, 'point-of-sale') !== false
+            || strpos($lp, 'woocommerce-pos') !== false || strpos($lp, 'wc-pos') !== false) {
+            deactivate_plugins($p, true);
+        }
+    }
+    update_option('lcgf_f3_v2', current_time('mysql'));
+}, 104);
+
+// (B) Back-in-stock: salva iscrizione (AJAX, anche non loggati)
+function lcgf_bis_save() {
+    check_ajax_referer('lcgf_bis', 'nonce');
+    $pid = absint($_POST['product_id'] ?? 0);
+    $email = sanitize_email($_POST['email'] ?? '');
+    if (!$pid || !is_email($email)) wp_send_json_error(['msg' => 'Inserisci un indirizzo email valido.'], 400);
+    global $wpdb; $t = $wpdb->prefix . 'lcgf_bis';
+    $wpdb->query($wpdb->prepare("INSERT IGNORE INTO {$t} (product_id,email,created_at) VALUES (%d,%s,%s)", $pid, $email, current_time('mysql')));
+    wp_send_json_success(['msg' => 'Perfetto! Ti avviseremo via email appena torna disponibile.']);
+}
+add_action('wp_ajax_lcgf_bis', 'lcgf_bis_save');
+add_action('wp_ajax_nopriv_lcgf_bis', 'lcgf_bis_save');
+
+// (C) Restock: avvisa gli iscritti quando il prodotto torna disponibile
+add_action('woocommerce_product_set_stock_status', function ($product_id, $status) {
+    if ($status !== 'instock') return;
+    global $wpdb; $t = $wpdb->prefix . 'lcgf_bis';
+    $rows = $wpdb->get_results($wpdb->prepare("SELECT id,email FROM {$t} WHERE product_id=%d AND notified_at IS NULL", $product_id));
+    if (!$rows) return;
+    $p = wc_get_product($product_id); if (!$p) return;
+    $nm = $p->get_name(); $url = get_permalink($product_id);
+    foreach ($rows as $r) {
+        wp_mail($r->email, '🌾 ' . $nm . ' è di nuovo disponibile!',
+            "Buone notizie!\n\n\"{$nm}\" è di nuovo disponibile su La Compagnia del Gluten Free.\n\nAcquistalo qui: {$url}\n\nA presto!");
+        $wpdb->update($t, ['notified_at' => current_time('mysql')], ['id' => $r->id]);
+    }
+}, 10, 2);
+
+// Form back-in-stock (usato nel template prodotto quando esaurito)
+function lcgf_bis_form($product) {
+    $pid = (int) $product->get_id();
+    $nonce = wp_create_nonce('lcgf_bis');
+    $ajax = admin_url('admin-ajax.php');
+    ob_start(); ?>
+    <div class="lcgf-bis" style="margin:24px 0;max-width:440px">
+      <p style="font-weight:700;color:var(--c-terracotta);margin-bottom:6px">Momentaneamente esaurito</p>
+      <p style="color:var(--c-ink-soft);font-size:.95rem;margin-bottom:12px">Lasciaci la tua email: ti avvisiamo appena torna disponibile.</p>
+      <form class="lcgf-bis-form" onsubmit="return lcgfBis(event,<?php echo $pid; ?>)" style="display:flex;gap:10px;flex-wrap:wrap">
+        <input type="email" required placeholder="La tua email" class="lcgf-bis-email" style="flex:1;min-width:200px">
+        <button type="submit" class="btn">Avvisami</button>
+      </form>
+      <p class="lcgf-bis-msg" style="margin-top:10px;font-size:.9rem"></p>
+    </div>
+    <script>
+    function lcgfBis(e,pid){e.preventDefault();var f=e.target,em=f.querySelector('.lcgf-bis-email').value,m=f.parentNode.querySelector('.lcgf-bis-msg');var d=new FormData();d.append('action','lcgf_bis');d.append('nonce','<?php echo esc_js($nonce); ?>');d.append('product_id',pid);d.append('email',em);fetch('<?php echo esc_url($ajax); ?>',{method:'POST',body:d}).then(r=>r.json()).then(j=>{m.textContent=(j.data&&j.data.msg)||'Fatto';m.style.color=j.success?'#4D8B5A':'#B14545';if(j.success)f.reset();}).catch(function(){m.textContent='Errore, riprova.';m.style.color='#B14545';});return false;}
+    </script>
+    <?php
+    return ob_get_clean();
+}
+
+// (D) Catalogo: barra filtri per categoria sopra la griglia shop
+add_action('woocommerce_before_shop_loop', function () {
+    if (!function_exists('is_shop')) return;
+    if (!is_shop() && !is_product_category()) return;
+    $cats = get_terms(['taxonomy' => 'product_cat', 'hide_empty' => true]);
+    if (is_wp_error($cats) || !$cats) return;
+    $cur = is_product_category() ? get_queried_object_id() : 0;
+    $shop = get_permalink(wc_get_page_id('shop'));
+    echo '<nav class="lcgf-shop-filters"><a class="lcgf-chip' . ($cur ? '' : ' is-active') . '" href="' . esc_url($shop) . '">Tutti</a>';
+    foreach ($cats as $c) {
+        if (in_array(strtolower($c->slug), ['uncategorized', 'senza-categoria'], true)) continue;
+        echo '<a class="lcgf-chip' . ($c->term_id === $cur ? ' is-active' : '') . '" href="' . esc_url(get_term_link($c)) . '">' . esc_html($c->name) . '</a>';
+    }
+    echo '</nav>';
+}, 5);

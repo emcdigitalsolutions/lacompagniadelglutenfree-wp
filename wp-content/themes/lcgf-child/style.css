@@ -977,3 +977,14 @@ body { padding-top: var(--header-h); }
 }
 .lcgf-footer-trust-seal svg { flex-shrink: 0; }
 @media (max-width: 600px) { .lcgf-footer-trust { gap: 22px; } }
+
+/* ---- Catalogo: chip filtri categoria ---- */
+.lcgf-shop-filters { display:flex; flex-wrap:wrap; gap:10px; margin:0 0 26px; }
+.lcgf-chip {
+  display:inline-flex; align-items:center; padding:8px 18px;
+  border-radius:var(--r-pill); border:1.5px solid var(--c-line);
+  background:var(--c-white); color:var(--c-ink-soft);
+  font-weight:600; font-size:.88rem; text-decoration:none; transition:all .15s ease;
+}
+.lcgf-chip:hover { border-color:var(--c-olive); color:var(--c-olive-deep); }
+.lcgf-chip.is-active { background:var(--g-cta); color:var(--c-cream); border-color:transparent; }

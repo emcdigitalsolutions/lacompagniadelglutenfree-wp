@@ -51,16 +51,20 @@ get_header('shop');
 
         <p style="color:var(--c-ink-soft);font-size:1.05rem;line-height:1.6;margin-bottom:18px"><?php echo wp_kses_post($product->get_short_description() ?: ''); ?></p>
 
+        <?php if ((int) $product->get_review_count() > 0) : ?>
         <div style="display:flex;align-items:center;gap:10px;margin:18px 0">
-          <span style="color:var(--c-wheat-dark);font-size:1.1rem;letter-spacing:2px">★★★★★</span>
-          <span style="font-size:.85rem;color:var(--c-muted)">4.9 · 47 recensioni</span>
+          <?php echo wc_get_rating_html($product->get_average_rating()); ?>
+          <a href="#recensioni" style="font-size:.85rem;color:var(--c-muted);text-decoration:none"><?php echo esc_html($product->get_average_rating()); ?> · <?php echo (int) $product->get_review_count(); ?> recensioni</a>
         </div>
+        <?php endif; ?>
 
         <div style="font-family:var(--f-display);font-size:2.4rem;color:var(--c-olive-deep);font-weight:600;margin:18px 0 26px">
           <?php echo $product->get_price_html(); ?>
         </div>
 
-        <?php if ($product->is_type('variable')) : ?>
+        <?php if (!$product->is_in_stock()) : ?>
+          <?php echo lcgf_bis_form($product); // esaurito: form "avvisami quando disponibile" ?>
+        <?php elseif ($product->is_type('variable')) : ?>
           <?php
           // Prodotto variabile: usa il template standard WooCommerce, che rende i
           // selettori di variante + il JS variations_form (necessario per scegliere
@@ -120,6 +124,14 @@ get_header('shop');
       <div style="max-width:760px;font-size:1.02rem;line-height:1.75;color:var(--c-ink-soft)">
         <?php echo wp_kses_post(wpautop($product->get_description())); ?>
       </div>
+    </section>
+    <?php endif; ?>
+
+    <!-- RECENSIONI -->
+    <?php if (comments_open() || (int) $product->get_review_count() > 0) : ?>
+    <section style="margin-top:70px" id="recensioni">
+      <h2 style="font-size:1.5rem !important;margin-bottom:18px">Recensioni</h2>
+      <?php comments_template(); ?>
     </section>
     <?php endif; ?>
 
