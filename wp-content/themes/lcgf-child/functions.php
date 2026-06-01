@@ -601,3 +601,38 @@ add_action('admin_init', function () {
     echo "\nFatto.\n";
     exit;
 });
+
+/**
+ * Conversione prodotti -> variabili (cheesecake/tiramisu/crostate).
+ * Auto-run UNA volta, in modo affidabile: functions.php è sempre caricato e
+ * sincronizzato col tema, a differenza del blocco background del docker-compose
+ * (il cui stdout non è catturato dai log Coolify). Guardia su option v2 +
+ * self-healing nello script (setta l'option solo se restano prodotti variabili).
+ * L'output viene catturato in un'option leggibile via ?lcgf_action=variants_status.
+ */
+add_action('init', function () {
+    if (get_option('lcgf_variants_v2')) return;
+    if (!class_exists('WC_Product_Variable')) return; // WooCommerce non ancora pronto
+    $script = get_stylesheet_directory() . '/lib/lcgf-variants.php';
+    if (!file_exists($script)) {
+        $alt = '/var/www/html/lcgf-scripts/lcgf-variants.php';
+        if (file_exists($alt)) $script = $alt; else return;
+    }
+    @set_time_limit(120);
+    ob_start();
+    try { include $script; } catch (Throwable $e) { echo "\n[FATAL] " . $e->getMessage() . "\n"; }
+    $out = ob_get_clean();
+    update_option('lcgf_variants_result', current_time('mysql') . "\n" . $out);
+}, 99);
+
+/**
+ * Lettura sola dell'esito dell'ultima conversione varianti (no auth: read-only,
+ * nessun dato sensibile). /?lcgf_action=variants_status
+ */
+add_action('init', function () {
+    if (($_GET['lcgf_action'] ?? '') !== 'variants_status') return;
+    header('Content-Type: text/plain; charset=utf-8');
+    echo "lcgf_variants_v2 = " . (get_option('lcgf_variants_v2') ?: '(non settata)') . "\n\n";
+    echo get_option('lcgf_variants_result') ?: '(nessun risultato registrato)';
+    exit;
+});

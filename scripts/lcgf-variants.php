@@ -130,7 +130,8 @@ function lcgf_make_variable($post_id, $config) {
     return "[$lang] id $post_id → variabile con $created varianti (attr: $attr_label)";
 }
 
-echo "== LCGF: conversione prodotti in variabili ==\n";
+echo "== LCGF: conversione prodotti in variabili (" . current_time('mysql') . ") ==\n";
+$lcgf_converted = 0;
 foreach ($LCGF_VARIANTS as $slug => $config) {
     $base = get_page_by_path($slug, OBJECT, 'product');
     if (!$base) {
@@ -141,11 +142,22 @@ foreach ($LCGF_VARIANTS as $slug => $config) {
     echo "- '$slug': " . count($ids) . " versioni-lingua (" . implode(',', $ids) . ")\n";
     foreach ($ids as $pid) {
         try {
-            echo "    " . lcgf_make_variable($pid, $config) . "\n";
+            $msg = lcgf_make_variable($pid, $config);
+            if (strpos($msg, '→ variabile') !== false) $lcgf_converted++;
+            echo "    " . $msg . "\n";
         } catch (Throwable $e) {
             echo "    [ERR] id $pid: " . $e->getMessage() . "\n";
         }
     }
 }
-echo "== fatto ==\n";
-update_option('lcgf_variants_v1', current_time('mysql'));
+// Conta i variabili effettivi a posteriori (verifica reale, non solo l'option)
+$lcgf_var_total = (int) (new WP_Query([
+    'post_type' => 'product', 'posts_per_page' => -1, 'fields' => 'ids',
+    'tax_query' => [['taxonomy' => 'product_type', 'field' => 'slug', 'terms' => 'variable']],
+]))->found_posts;
+echo "== fatto: $lcgf_converted convertiti in questa run · $lcgf_var_total prodotti variabili totali ==\n";
+// Marca come completato SOLO se ci sono davvero prodotti variabili (self-healing:
+// se la run fallisce e ne restano 0, l'option non viene settata e si riprova).
+if ($lcgf_var_total > 0) {
+    update_option('lcgf_variants_v2', current_time('mysql'));
+}

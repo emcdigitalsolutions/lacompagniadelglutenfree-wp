@@ -130,7 +130,7 @@ services:
           # (vedi functions.php). NON girare al boot per evitare blocchi apache.
           # Converti cheesecake/tiramisu/crostate in prodotti VARIABILI (gusti/formati).
           # Idempotente + guardia su option lcgf_variants_v1 (lo script la setta a fine run).
-          VAR_DONE=$$(su -s /bin/bash www-data -c "wp option get lcgf_variants_v1" 2>/dev/null)
+          VAR_DONE=$$(su -s /bin/bash www-data -c "wp option get lcgf_variants_v2" 2>/dev/null)
           if [ -z "$$VAR_DONE" ] && [ -f /var/www/html/lcgf-scripts/lcgf-variants.php ]; then
             su -s /bin/bash www-data -c "wp eval-file /var/www/html/lcgf-scripts/lcgf-variants.php" 2>&1 | tail -30 || true
           fi
