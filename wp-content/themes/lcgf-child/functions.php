@@ -674,3 +674,19 @@ add_action('woocommerce_account_dashboard', function () {
        . '<p style="margin:6px 0 0;color:var(--c-ink-soft,#3D362C);font-size:.95rem">Da qui gestisci i tuoi ordini, gli indirizzi di spedizione e i dati del tuo account. Per qualsiasi cosa scrivici su <a href="https://wa.me/393276999897" style="color:var(--c-olive-deep,#364E25);font-weight:600">WhatsApp</a>.</p>'
        . '</div>';
 }, 5);
+
+/**
+ * Restituisce il markup di un logo certificazione: l'immagine ufficiale se il
+ * file è presente in /assets/certs/, altrimenti un placeholder pulito (così la
+ * sezione resta presentabile finché il cliente non carica il file ufficiale).
+ * I loghi ufficiali AIC e Ministero della Salute sono marchi protetti: vanno
+ * forniti dal cliente, non ricreati.
+ */
+function lcgf_cert_logo($file, $alt) {
+    $dir = get_stylesheet_directory() . '/assets/certs/' . $file;
+    $uri = get_stylesheet_directory_uri() . '/assets/certs/' . $file;
+    if (file_exists($dir)) {
+        return '<img src="' . esc_url($uri) . '" alt="' . esc_attr($alt) . '" loading="lazy">';
+    }
+    return '<span class="lcgf-cert-ph" title="Carica ' . esc_attr($file) . ' in assets/certs/">' . esc_html($alt) . '</span>';
+}

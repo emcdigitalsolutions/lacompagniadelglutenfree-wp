@@ -78,6 +78,17 @@
     </div>
   </div>
 
+  <div class="container">
+    <div class="lcgf-footer-trust">
+      <span class="lcgf-footer-trust-item"><?php echo lcgf_cert_logo('aic.png', 'AIC'); ?><small>Accreditati AIC</small></span>
+      <span class="lcgf-footer-trust-item"><?php echo lcgf_cert_logo('ministero-salute.png', 'Ministero della Salute'); ?><small>Prodotti mutuabili SSN</small></span>
+      <span class="lcgf-footer-trust-item lcgf-footer-trust-seal">
+        <svg width="34" height="34" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="none" stroke="rgba(251,247,238,.5)" stroke-width="3"/><path d="M50 30c-4 6-4 12 0 18 4-6 4-12 0-18z" fill="rgba(251,247,238,.85)"/><path d="M40 58l7 7 14-15" stroke="rgba(251,247,238,.95)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        <small>Laboratorio 100% senza glutine</small>
+      </span>
+    </div>
+  </div>
+
   <div class="container lcgf-footer-bottom">
     <p>&copy; <?php echo date('Y'); ?> La Compagnia del Gluten Free. Tutti i diritti riservati.</p>
     <a href="https://www.emcdigitalsolutions.it" target="_blank" rel="noopener noreferrer" class="emc-credit">

@@ -172,6 +172,49 @@ $logo = get_stylesheet_directory_uri() . '/assets/img/logo.webp';
   </div>
 </section>
 
+<!-- CERTIFICAZIONI & GARANZIE CELIACHIA -->
+<section class="section lcgf-certs">
+  <div class="container">
+    <div class="lcgf-section-head">
+      <span class="eyebrow">Sicurezza &amp; certificazioni</span>
+      <h2>Di fiducia per chi vive la celiachia</h2>
+      <p class="lcgf-certs-sub">Un laboratorio <strong>esclusivamente senza glutine</strong>, accreditati <strong>AIC</strong> e con prodotti <strong>mutuabili dal Servizio Sanitario Nazionale</strong>: la serenità che cercano le persone celiache e i genitori dei bambini celiaci.</p>
+    </div>
+    <div class="lcgf-certs-grid">
+
+      <div class="lcgf-cert-card">
+        <div class="lcgf-cert-logo"><?php echo lcgf_cert_logo('aic.png', 'AIC · Associazione Italiana Celiachia'); ?></div>
+        <strong>Accreditati AIC</strong>
+        <span>Associazione Italiana Celiachia: la garanzia riconosciuta dalla community dei celiaci e dalle famiglie.</span>
+      </div>
+
+      <div class="lcgf-cert-card">
+        <div class="lcgf-cert-logo"><?php echo lcgf_cert_logo('ministero-salute.png', 'Ministero della Salute'); ?></div>
+        <strong>Prodotti mutuabili</strong>
+        <span>Erogabili dal Servizio Sanitario Nazionale: puoi spendere il buono celiachia, anche in farmacia.</span>
+      </div>
+
+      <div class="lcgf-cert-card">
+        <div class="lcgf-cert-logo lcgf-cert-logo--seal">
+          <!-- Sigillo brand-safe (disegnato da noi, NON un marchio registrato) -->
+          <svg width="86" height="86" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+            <circle cx="50" cy="50" r="47" fill="#F4EDDC" stroke="#6B8E4E" stroke-width="2.5"/>
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#C9A96E" stroke-width="1" stroke-dasharray="2 3"/>
+            <path d="M50 30c-4 6-4 12 0 18 4-6 4-12 0-18z" fill="#6B8E4E"/>
+            <path d="M50 38c-5 3-7 8-6 14 5-2 8-7 6-14z" fill="#8AA86A"/>
+            <path d="M50 38c5 3 7 8 6 14-5-2-8-7-6-14z" fill="#8AA86A"/>
+            <path d="M40 58l7 7 14-15" stroke="#364E25" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="50" y="84" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" letter-spacing="1" fill="#364E25">GLUTEN FREE</text>
+          </svg>
+        </div>
+        <strong>Laboratorio 100% senza glutine</strong>
+        <span>Produzione <em>esclusivamente</em> gluten free: nessun rischio di contaminazione crociata.</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- USP STRIP -->
 <section class="section-tight">
   <div class="container">
