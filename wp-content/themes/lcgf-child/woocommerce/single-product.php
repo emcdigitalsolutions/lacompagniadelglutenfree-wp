@@ -20,7 +20,7 @@ get_header('shop');
     <nav style="font-size:.82rem;color:var(--c-muted);margin-bottom:24px">
       <a href="<?php echo esc_url(home_url('/')); ?>" style="color:var(--c-muted)">Home</a>
       <span style="margin:0 8px;opacity:.5">/</span>
-      <a href="<?php echo esc_url(get_permalink(wc_get_page_id('shop'))); ?>" style="color:var(--c-muted)">Catalogo</a>
+      <a href="<?php echo esc_url(get_permalink(wc_get_page_id('shop'))); ?>" style="color:var(--c-muted)"><?php echo lcgf_t('nav_catalogo'); ?></a>
       <span style="margin:0 8px;opacity:.5">/</span>
       <span style="color:var(--c-ink)"><?php the_title(); ?></span>
     </nav>
@@ -54,7 +54,7 @@ get_header('shop');
         <?php if ((int) $product->get_review_count() > 0) : ?>
         <div style="display:flex;align-items:center;gap:10px;margin:18px 0">
           <?php echo wc_get_rating_html($product->get_average_rating()); ?>
-          <a href="#recensioni" style="font-size:.85rem;color:var(--c-muted);text-decoration:none"><?php echo esc_html($product->get_average_rating()); ?> · <?php echo (int) $product->get_review_count(); ?> recensioni</a>
+          <a href="#recensioni" style="font-size:.85rem;color:var(--c-muted);text-decoration:none"><?php echo esc_html($product->get_average_rating()); ?> · <?php echo (int) $product->get_review_count(); ?> <?php echo lcgf_t('sp_reviews'); ?></a>
         </div>
         <?php endif; ?>
 
@@ -86,7 +86,7 @@ get_header('shop');
             ?>
             <button type="submit" name="add-to-cart" value="<?php echo esc_attr($product->get_id()); ?>" class="single_add_to_cart_button button alt btn btn-lg">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              Aggiungi al carrello
+              <?php echo lcgf_t('add_to_cart'); ?>
             </button>
 
             <?php do_action('woocommerce_after_add_to_cart_button'); ?>
@@ -96,11 +96,11 @@ get_header('shop');
         <ul style="list-style:none;padding:0;margin:28px 0 0;border-top:1px solid var(--c-line)">
           <?php
           $meta_rows = [
-              'Codice SKU' => $product->get_sku() ?: '—',
-              'Disponibilità' => $product->is_in_stock() ? '<span style="color:var(--c-success)">✓ Disponibile</span>' : '<span style="color:var(--c-error)">Esaurito</span>',
-              'Spedizione' => '24-48h · gratis sopra €59',
-              'Certificazione' => 'Senza glutine + senza lattosio',
-              'Laboratorio' => 'Dedicato, privo di contaminazioni',
+              lcgf_t('sp_sku')   => $product->get_sku() ?: '—',
+              lcgf_t('sp_avail') => $product->is_in_stock() ? '<span style="color:var(--c-success)">' . lcgf_t('sp_instock') . '</span>' : '<span style="color:var(--c-error)">' . lcgf_t('sp_outstock') . '</span>',
+              lcgf_t('sp_ship')  => lcgf_t('sp_ship_val'),
+              lcgf_t('sp_cert')  => lcgf_t('sp_cert_val'),
+              lcgf_t('sp_lab')   => lcgf_t('sp_lab_val'),
           ];
           foreach ($meta_rows as $lbl => $val) : ?>
             <li style="padding:12px 0;border-bottom:1px solid var(--c-line);display:flex;gap:12px;font-size:.92rem">
@@ -112,7 +112,7 @@ get_header('shop');
 
         <div style="margin-top:24px;padding:16px 20px;background:var(--c-cream-2);border-radius:var(--r-md);display:flex;align-items:center;gap:12px;font-size:.88rem">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--c-olive-deep);flex-shrink:0"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-          <span>Hai bisogno di aiuto? <a href="https://wa.me/393276999897" target="_blank" rel="noopener" style="color:var(--c-olive-deep);font-weight:600">Scrivici su WhatsApp</a></span>
+          <span><?php echo lcgf_t('sp_help'); ?> <a href="https://wa.me/393276999897" target="_blank" rel="noopener" style="color:var(--c-olive-deep);font-weight:600"><?php echo lcgf_t('sp_help_wa'); ?></a></span>
         </div>
       </div>
     </div>
@@ -120,7 +120,7 @@ get_header('shop');
     <!-- DESCRIZIONE LUNGA -->
     <?php if ($product->get_description()): ?>
     <section style="margin-top:70px">
-      <h2 style="font-size:1.5rem !important;margin-bottom:18px">Descrizione</h2>
+      <h2 style="font-size:1.5rem !important;margin-bottom:18px"><?php echo lcgf_t('sp_desc'); ?></h2>
       <div style="max-width:760px;font-size:1.02rem;line-height:1.75;color:var(--c-ink-soft)">
         <?php echo wp_kses_post(wpautop($product->get_description())); ?>
       </div>
@@ -130,7 +130,7 @@ get_header('shop');
     <!-- RECENSIONI -->
     <?php if (comments_open() || (int) $product->get_review_count() > 0) : ?>
     <section style="margin-top:70px" id="recensioni">
-      <h2 style="font-size:1.5rem !important;margin-bottom:18px">Recensioni</h2>
+      <h2 style="font-size:1.5rem !important;margin-bottom:18px"><?php echo lcgf_t('sp_reviews_title'); ?></h2>
       <?php comments_template(); ?>
     </section>
     <?php endif; ?>
@@ -151,8 +151,8 @@ get_header('shop');
     ?>
         <section style="margin-top:80px">
           <div style="text-align:left;margin-bottom:24px">
-            <span class="eyebrow">Potrebbero piacerti</span>
-            <h2 style="font-size:1.8rem !important">Prodotti correlati</h2>
+            <span class="eyebrow"><?php echo lcgf_t('sp_related_eyebrow'); ?></span>
+            <h2 style="font-size:1.8rem !important"><?php echo lcgf_t('sp_related_h2'); ?></h2>
           </div>
           <div class="woocommerce">
             <ul class="products">
@@ -164,9 +164,9 @@ get_header('shop');
                   </a>
                   <span class="price"><?php echo $rp->get_price_html(); ?></span>
                   <?php if ($rp->is_type('simple') && $rp->is_purchasable() && $rp->is_in_stock()) : ?>
-                    <a href="<?php echo esc_url('?add-to-cart=' . get_the_ID()); ?>" class="button">Aggiungi al carrello</a>
+                    <a href="<?php echo esc_url('?add-to-cart=' . get_the_ID()); ?>" class="button"><?php echo lcgf_t('add_to_cart'); ?></a>
                   <?php else : ?>
-                    <a href="<?php the_permalink(); ?>" class="button">Seleziona opzioni</a>
+                    <a href="<?php the_permalink(); ?>" class="button"><?php echo lcgf_t('sp_select'); ?></a>
                   <?php endif; ?>
                 </li>
               <?php endwhile; wp_reset_postdata(); ?>

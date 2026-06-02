@@ -17,7 +17,7 @@
           <small style="font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(251,247,238,.5)">del Gluten Free</small>
         </span>
       </a>
-      <p class="lcgf-footer-blurb">Mangia con Gusto — Prodotti senza glutine e senza lattosio. Pane, basi pizza, focacce, dolci e cheesecake prodotti in laboratorio dedicato.</p>
+      <p class="lcgf-footer-blurb"><?php echo lcgf_t('foot_blurb'); ?></p>
       <div class="lcgf-social">
         <a href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
@@ -37,7 +37,7 @@
     <div>
       <h4>Shop</h4>
       <ul>
-        <li><a href="<?php echo esc_url(get_permalink(wc_get_page_id('shop'))); ?>">Catalogo completo</a></li>
+        <li><a href="<?php echo esc_url(get_permalink(wc_get_page_id('shop'))); ?>"><?php echo lcgf_t('foot_catalog_full'); ?></a></li>
         <?php
           $default_cat = (int) get_option('default_product_cat');
           $cats = get_terms([
@@ -54,22 +54,22 @@
     </div>
 
     <div>
-      <h4>Informazioni</h4>
+      <h4><?php echo lcgf_t('foot_info'); ?></h4>
       <ul>
-        <li><a href="<?php echo esc_url(home_url('/chi-siamo/')); ?>">Chi siamo</a></li>
+        <li><a href="<?php echo esc_url(home_url('/chi-siamo/')); ?>"><?php echo lcgf_t('nav_chisiamo'); ?></a></li>
         <li><a href="<?php echo esc_url(home_url('/faq/')); ?>">FAQ</a></li>
-        <li><a href="<?php echo esc_url(home_url('/spedizioni/')); ?>">Spedizioni e resi</a></li>
-        <li><a href="<?php echo esc_url(home_url('/condizioni/')); ?>">Condizioni di vendita</a></li>
-        <li><a href="<?php echo esc_url(home_url('/recesso/')); ?>">Diritto di recesso</a></li>
+        <li><a href="<?php echo esc_url(home_url('/spedizioni/')); ?>"><?php echo lcgf_t('foot_shipping'); ?></a></li>
+        <li><a href="<?php echo esc_url(home_url('/condizioni/')); ?>"><?php echo lcgf_t('foot_terms'); ?></a></li>
+        <li><a href="<?php echo esc_url(home_url('/recesso/')); ?>"><?php echo lcgf_t('foot_withdrawal'); ?></a></li>
         <li><a href="<?php echo esc_url(home_url('/privacy/')); ?>">Privacy</a></li>
         <li><a href="<?php echo esc_url(home_url('/cookie/')); ?>">Cookie</a></li>
       </ul>
     </div>
 
     <div>
-      <h4>Contatti</h4>
+      <h4><?php echo lcgf_t('nav_contatti'); ?></h4>
       <ul>
-        <li><a href="<?php echo esc_url(home_url('/contatti/')); ?>">Form contatti</a></li>
+        <li><a href="<?php echo esc_url(home_url('/contatti/')); ?>"><?php echo lcgf_t('foot_contact_form'); ?></a></li>
         <li>Carmelo · <a href="tel:+393276999897">+39 327 699 9897</a></li>
         <li>Gianluca · <a href="tel:+393495658876">+39 349 565 8876</a></li>
         <li>Gaetano · <a href="tel:+393513582074">+39 351 358 2074</a></li>
@@ -80,19 +80,19 @@
 
   <div class="container">
     <div class="lcgf-footer-trust">
-      <span class="lcgf-footer-trust-item"><?php echo lcgf_cert_logo('aic.png', 'AIC'); ?><small>Accreditati AIC</small></span>
-      <span class="lcgf-footer-trust-item"><?php echo lcgf_cert_logo('ministero-salute.png', 'Ministero della Salute'); ?><small>Prodotti mutuabili SSN</small></span>
+      <span class="lcgf-footer-trust-item"><?php echo lcgf_cert_logo('aic.png', 'AIC'); ?><small><?php echo lcgf_t('cert1_t'); ?></small></span>
+      <span class="lcgf-footer-trust-item"><?php echo lcgf_cert_logo('ministero-salute.png', 'Ministero della Salute'); ?><small><?php echo lcgf_t('trust_mutuabili'); ?></small></span>
       <span class="lcgf-footer-trust-item lcgf-footer-trust-seal">
         <svg width="34" height="34" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="none" stroke="rgba(251,247,238,.5)" stroke-width="3"/><path d="M50 30c-4 6-4 12 0 18 4-6 4-12 0-18z" fill="rgba(251,247,238,.85)"/><path d="M40 58l7 7 14-15" stroke="rgba(251,247,238,.95)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-        <small>Laboratorio 100% senza glutine</small>
+        <small><?php echo lcgf_t('cert3_t'); ?></small>
       </span>
     </div>
   </div>
 
   <div class="container lcgf-footer-bottom">
-    <p>&copy; <?php echo date('Y'); ?> La Compagnia del Gluten Free. Tutti i diritti riservati.</p>
+    <p>&copy; <?php echo date('Y'); ?> La Compagnia del Gluten Free. <?php echo lcgf_t('foot_rights'); ?></p>
     <a href="https://www.emcdigitalsolutions.it" target="_blank" rel="noopener noreferrer" class="emc-credit">
-      <span>Progettato e Sviluppato da</span>
+      <span><?php echo lcgf_t('foot_designed'); ?></span>
       <svg xmlns="http://www.w3.org/2000/svg" width="70" height="20" viewBox="0 0 200 50">
         <defs>
           <linearGradient id="emcBars" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7a9a5a"/><stop offset="100%" stop-color="#c9a96e"/></linearGradient>

@@ -27,7 +27,7 @@
 
     <nav class="lcgf-nav" aria-label="Navigazione principale">
       <ul>
-        <li><a href="<?php echo esc_url(get_permalink(wc_get_page_id('shop'))); ?>">Catalogo</a></li>
+        <li><a href="<?php echo esc_url(get_permalink(wc_get_page_id('shop'))); ?>"><?php echo lcgf_t('nav_catalogo'); ?></a></li>
         <?php
         $default_cat = (int) get_option('default_product_cat');
         $cats = get_terms([
@@ -50,9 +50,9 @@
           echo '<li><a href="' . esc_url($url) . '">' . esc_html($cat->name) . '</a></li>';
         }
         ?>
-        <li><a href="<?php echo esc_url(get_post_type_archive_link('lcgf_evento')); ?>">Fiere &amp; Eventi</a></li>
-        <li><a href="<?php echo esc_url(home_url('/chi-siamo/')); ?>">Chi siamo</a></li>
-        <li><a href="<?php echo esc_url(home_url('/contatti/')); ?>">Contatti</a></li>
+        <li><a href="<?php echo esc_url(get_post_type_archive_link('lcgf_evento')); ?>"><?php echo lcgf_t('nav_fiere'); ?></a></li>
+        <li><a href="<?php echo esc_url(home_url('/chi-siamo/')); ?>"><?php echo lcgf_t('nav_chisiamo'); ?></a></li>
+        <li><a href="<?php echo esc_url(home_url('/contatti/')); ?>"><?php echo lcgf_t('nav_contatti'); ?></a></li>
       </ul>
     </nav>
 
@@ -86,13 +86,13 @@
       </div>
       <?php endif; endif; ?>
 
-      <a href="<?php echo esc_url(home_url('/?s=&post_type=product')); ?>" class="lcgf-icon-btn" aria-label="Cerca">
+      <a href="<?php echo esc_url(home_url('/?s=&post_type=product')); ?>" class="lcgf-icon-btn" aria-label="<?php echo esc_attr(lcgf_t('aria_search')); ?>">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
       </a>
-      <a href="<?php echo esc_url(get_permalink(get_option('woocommerce_myaccount_page_id'))); ?>" class="lcgf-icon-btn" aria-label="Account">
+      <a href="<?php echo esc_url(get_permalink(get_option('woocommerce_myaccount_page_id'))); ?>" class="lcgf-icon-btn" aria-label="<?php echo esc_attr(lcgf_t('aria_account')); ?>">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>
       </a>
-      <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="lcgf-icon-btn" aria-label="Carrello">
+      <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="lcgf-icon-btn" aria-label="<?php echo esc_attr(lcgf_t('aria_cart')); ?>">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         <?php $count = function_exists('WC') && WC()->cart ? WC()->cart->get_cart_contents_count() : 0; ?>
         <?php if ($count > 0) : ?>

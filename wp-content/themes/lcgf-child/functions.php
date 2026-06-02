@@ -882,11 +882,11 @@ function lcgf_bis_form($product) {
     $ajax = admin_url('admin-ajax.php');
     ob_start(); ?>
     <div class="lcgf-bis" style="margin:24px 0;max-width:440px">
-      <p style="font-weight:700;color:var(--c-terracotta);margin-bottom:6px">Momentaneamente esaurito</p>
-      <p style="color:var(--c-ink-soft);font-size:.95rem;margin-bottom:12px">Lasciaci la tua email: ti avvisiamo appena torna disponibile.</p>
+      <p style="font-weight:700;color:var(--c-terracotta);margin-bottom:6px"><?php echo lcgf_t('bis_out'); ?></p>
+      <p style="color:var(--c-ink-soft);font-size:.95rem;margin-bottom:12px"><?php echo lcgf_t('bis_text'); ?></p>
       <form class="lcgf-bis-form" onsubmit="return lcgfBis(event,<?php echo $pid; ?>)" style="display:flex;gap:10px;flex-wrap:wrap">
-        <input type="email" required placeholder="La tua email" class="lcgf-bis-email" style="flex:1;min-width:200px">
-        <button type="submit" class="btn">Avvisami</button>
+        <input type="email" required placeholder="<?php echo esc_attr(lcgf_t('nl_email')); ?>" class="lcgf-bis-email" style="flex:1;min-width:200px">
+        <button type="submit" class="btn"><?php echo lcgf_t('bis_btn'); ?></button>
       </form>
       <p class="lcgf-bis-msg" style="margin-top:10px;font-size:.9rem"></p>
     </div>
@@ -932,3 +932,132 @@ add_action('init', function () {
     if (function_exists('wp_cache_flush')) wp_cache_flush();
     update_option('lcgf_flush_v1', current_time('mysql'));
 }, 105);
+
+/* ============================================================
+   i18n stringhe del tema (IT/EN/DE/FR) — Polylang non traduce i
+   testi fissi dei template, quindi li gestiamo con una mappa.
+   Uso: <?php echo lcgf_t('chiave'); ?>  (output già pronto, NON ri-escapare
+   le chiavi che contengono HTML volutamente, es. hero_h1/cert_sub).
+   ============================================================ */
+function lcgf_lang() {
+    $l = function_exists('pll_current_language') ? pll_current_language('slug') : '';
+    return in_array($l, ['it', 'en', 'de', 'fr'], true) ? $l : 'it';
+}
+function lcgf_t($key) {
+    static $T = null;
+    if ($T === null) $T = lcgf_i18n_strings();
+    $lang = lcgf_lang();
+    if (isset($T[$key][$lang])) return $T[$key][$lang];
+    if (isset($T[$key]['it'])) return $T[$key]['it'];
+    return $key;
+}
+function lcgf_i18n_strings() {
+    return [
+        // Header / nav
+        'nav_catalogo' => ['it' => 'Catalogo', 'en' => 'Catalog', 'de' => 'Katalog', 'fr' => 'Catalogue'],
+        'nav_fiere'    => ['it' => 'Fiere &amp; Eventi', 'en' => 'Fairs &amp; Events', 'de' => 'Messen &amp; Events', 'fr' => 'Foires &amp; Événements'],
+        'nav_chisiamo' => ['it' => 'Chi siamo', 'en' => 'About us', 'de' => 'Über uns', 'fr' => 'À propos'],
+        'nav_contatti' => ['it' => 'Contatti', 'en' => 'Contact', 'de' => 'Kontakt', 'fr' => 'Contact'],
+        'aria_search'  => ['it' => 'Cerca', 'en' => 'Search', 'de' => 'Suche', 'fr' => 'Rechercher'],
+        'aria_account' => ['it' => 'Account', 'en' => 'Account', 'de' => 'Konto', 'fr' => 'Compte'],
+        'aria_cart'    => ['it' => 'Carrello', 'en' => 'Cart', 'de' => 'Warenkorb', 'fr' => 'Panier'],
+        // Hero
+        'hero_eyebrow' => ['it' => 'Mangia con Gusto · Senza glutine e senza lattosio', 'en' => 'Mangia con Gusto · Gluten-free and lactose-free', 'de' => 'Mangia con Gusto · Glutenfrei und laktosefrei', 'fr' => 'Mangia con Gusto · Sans gluten et sans lactose'],
+        'hero_h1'      => ['it' => 'Senza glutine,<br/><em>ma con gusto.</em>', 'en' => 'Gluten-free,<br/><em>but full of flavor.</em>', 'de' => 'Glutenfrei,<br/><em>aber voller Geschmack.</em>', 'fr' => 'Sans gluten,<br/><em>mais plein de goût.</em>'],
+        'hero_lead'    => ['it' => 'Pinsa romana, focacce, basi pizza, cornetti, tiramisù, cheesecake: il nostro panificato e i nostri dolci sono prodotti in un laboratorio dedicato, privi di contaminazioni, completamente senza glutine e senza lattosio.', 'en' => 'Roman pinsa, focaccia, pizza bases, croissants, tiramisù, cheesecake: our bakery and desserts are made in a dedicated lab, contamination-free, completely gluten-free and lactose-free.', 'de' => 'Pinsa Romana, Focaccia, Pizzaböden, Croissants, Tiramisù, Cheesecake: unsere Backwaren und Desserts entstehen in einem eigenen Labor, frei von Kontamination, vollständig glutenfrei und laktosefrei.', 'fr' => 'Pinsa romaine, focaccia, bases pizza, croissants, tiramisù, cheesecake : notre boulangerie et nos desserts sont produits dans un laboratoire dédié, sans contamination, entièrement sans gluten et sans lactose.'],
+        'hero_cta1'    => ['it' => 'Scopri il catalogo', 'en' => 'Browse the catalog', 'de' => 'Katalog entdecken', 'fr' => 'Découvrir le catalogue'],
+        'our_story'    => ['it' => 'La nostra storia', 'en' => 'Our story', 'de' => 'Unsere Geschichte', 'fr' => 'Notre histoire'],
+        'stat_products' => ['it' => 'Prodotti artigianali', 'en' => 'Artisan products', 'de' => 'Handwerkliche Produkte', 'fr' => 'Produits artisanaux'],
+        'stat_gluten'  => ['it' => 'Glutine · 0% lattosio', 'en' => 'Gluten · 0% lactose', 'de' => 'Gluten · 0% Laktose', 'fr' => 'Gluten · 0% lactose'],
+        'stat_years'   => ['it' => 'Anni di esperienza', 'en' => 'Years of experience', 'de' => 'Jahre Erfahrung', 'fr' => "Ans d'expérience"],
+        'gluten_free'  => ['it' => 'Senza glutine', 'en' => 'Gluten-free', 'de' => 'Glutenfrei', 'fr' => 'Sans gluten'],
+        'lactose_free' => ['it' => 'Senza lattosio', 'en' => 'Lactose-free', 'de' => 'Laktosefrei', 'fr' => 'Sans lactose'],
+        'dedicated_lab' => ['it' => 'Laboratorio dedicato', 'en' => 'Dedicated lab', 'de' => 'Eigenes Labor', 'fr' => 'Laboratoire dédié'],
+        'frozen_ready' => ['it' => "Surgelati pronti all'uso", 'en' => 'Ready-to-use frozen', 'de' => 'Tiefkühlprodukte, sofort verwendbar', 'fr' => "Surgelés prêts à l'emploi"],
+        'exp_20y'      => ['it' => '20 anni di esperienza', 'en' => '20 years of experience', 'de' => '20 Jahre Erfahrung', 'fr' => "20 ans d'expérience"],
+        // Categorie
+        'cat_eyebrow'  => ['it' => 'Le nostre famiglie', 'en' => 'Our families', 'de' => 'Unsere Familien', 'fr' => 'Nos familles'],
+        'cat_h2'       => ['it' => 'Pane, basi e dolci', 'en' => 'Bread, bases & desserts', 'de' => 'Brot, Böden & Süßes', 'fr' => 'Pain, bases et desserts'],
+        'cat_sub'      => ['it' => "Surgelati pronti all'uso. Senza glutine, senza lattosio, senza compromessi sul gusto.", 'en' => 'Ready-to-use frozen. Gluten-free, lactose-free, with no compromise on taste.', 'de' => 'Tiefkühlprodukte, sofort verwendbar. Glutenfrei, laktosefrei, ohne Kompromisse beim Geschmack.', 'fr' => "Surgelés prêts à l'emploi. Sans gluten, sans lactose, sans compromis sur le goût."],
+        'products'     => ['it' => 'prodotti', 'en' => 'products', 'de' => 'Produkte', 'fr' => 'produits'],
+        // Featured
+        'feat_eyebrow' => ['it' => 'In evidenza', 'en' => 'Featured', 'de' => 'Im Fokus', 'fr' => 'En vedette'],
+        'feat_h2'      => ['it' => 'I più amati', 'en' => 'Most loved', 'de' => 'Die Beliebtesten', 'fr' => 'Les plus aimés'],
+        'feat_sub'     => ['it' => 'I prodotti che i nostri clienti riordinano sempre.', 'en' => 'The products our customers reorder again and again.', 'de' => 'Die Produkte, die unsere Kunden immer wieder bestellen.', 'fr' => 'Les produits que nos clients recommandent toujours.'],
+        'add_to_cart'  => ['it' => 'Aggiungi al carrello', 'en' => 'Add to cart', 'de' => 'In den Warenkorb', 'fr' => 'Ajouter au panier'],
+        'view_all'     => ['it' => 'Vedi tutti i prodotti', 'en' => 'View all products', 'de' => 'Alle Produkte ansehen', 'fr' => 'Voir tous les produits'],
+        // Storia
+        'story_h2'     => ['it' => "Da un'esigenza personale, una passione per tutti.", 'en' => 'From a personal need, a passion for everyone.', 'de' => 'Aus einem persönlichen Bedürfnis, eine Leidenschaft für alle.', 'fr' => "D'un besoin personnel, une passion pour tous."],
+        'story_p'      => ['it' => 'Da una esigenza personale, un\'esperienza ventennale e un gruppo di amici a cui piace sognare nasce "Mangia con Gusto - La Compagnia del Gluten Free". Quotidianamente ci impegniamo ad offrirvi prodotti gustosi e con materia prima di qualità.', 'en' => 'From a personal need, twenty years of experience and a group of friends who love to dream, "Mangia con Gusto - La Compagnia del Gluten Free" was born. Every day we strive to offer you tasty products made with quality ingredients.', 'de' => 'Aus einem persönlichen Bedürfnis, zwanzig Jahren Erfahrung und einer Gruppe von Freunden, die gerne träumen, entstand "Mangia con Gusto - La Compagnia del Gluten Free". Jeden Tag bemühen wir uns, Ihnen schmackhafte Produkte aus hochwertigen Zutaten anzubieten.', 'fr' => 'D\'un besoin personnel, de vingt ans d\'expérience et d\'un groupe d\'amis qui aiment rêver est né "Mangia con Gusto - La Compagnia del Gluten Free". Chaque jour, nous nous efforçons de vous offrir des produits savoureux avec des matières premières de qualité.'],
+        'story_li1'    => ['it' => 'Laboratorio dedicato, privo di contaminazioni da glutine.', 'en' => 'Dedicated lab, free from gluten contamination.', 'de' => 'Eigenes Labor, frei von Glutenkontamination.', 'fr' => 'Laboratoire dédié, sans contamination par le gluten.'],
+        'story_li2'    => ['it' => 'Tutti i prodotti sono anche senza lattosio.', 'en' => 'All products are lactose-free too.', 'de' => 'Alle Produkte sind auch laktosefrei.', 'fr' => 'Tous les produits sont aussi sans lactose.'],
+        'story_li3'    => ['it' => 'Surgelati pronti all\'uso, fragranza appena sfornata.', 'en' => 'Ready-to-use frozen, freshly baked fragrance.', 'de' => 'Tiefkühlprodukte, sofort verwendbar, frisch gebackener Duft.', 'fr' => 'Surgelés prêts à l\'emploi, parfum tout juste sorti du four.'],
+        'story_li4'    => ['it' => 'Anche fuori casa puoi mangiare buono e sano.', 'en' => 'Even away from home you can eat well and healthy.', 'de' => 'Auch unterwegs gut und gesund essen.', 'fr' => 'Même hors de chez vous, mangez bon et sain.'],
+        'story_cta'    => ['it' => 'Conosci la Compagnia', 'en' => 'Get to know us', 'de' => 'Lernen Sie uns kennen', 'fr' => 'Découvrez la Compagnia'],
+        // Certificazioni
+        'cert_eyebrow' => ['it' => 'Sicurezza &amp; certificazioni', 'en' => 'Safety &amp; certifications', 'de' => 'Sicherheit &amp; Zertifizierungen', 'fr' => 'Sécurité &amp; certifications'],
+        'cert_h2'      => ['it' => 'Di fiducia per chi vive la celiachia', 'en' => 'Trusted by those living with celiac disease', 'de' => 'Vertrauen für Menschen mit Zöliakie', 'fr' => 'De confiance pour ceux qui vivent la maladie cœliaque'],
+        'cert_sub'     => ['it' => 'Un laboratorio <strong>esclusivamente senza glutine</strong>, accreditati <strong>AIC</strong> e con prodotti <strong>mutuabili dal Servizio Sanitario Nazionale</strong>: la serenità che cercano le persone celiache e i genitori dei bambini celiaci.', 'en' => 'An <strong>exclusively gluten-free</strong> lab, <strong>AIC</strong> accredited and with products <strong>reimbursable by the National Health Service</strong>: the peace of mind sought by celiacs and parents of celiac children.', 'de' => 'Ein <strong>ausschließlich glutenfreies</strong> Labor, <strong>AIC</strong>-akkreditiert und mit Produkten, die <strong>vom nationalen Gesundheitsdienst erstattet</strong> werden: die Sicherheit, die Zöliakie-Betroffene und Eltern zöliakiekranker Kinder suchen.', 'fr' => 'Un laboratoire <strong>exclusivement sans gluten</strong>, accrédité <strong>AIC</strong> et avec des produits <strong>remboursables par le Service de Santé National</strong> : la sérénité que recherchent les cœliaques et les parents d\'enfants cœliaques.'],
+        'cert1_t'      => ['it' => 'Accreditati AIC', 'en' => 'AIC accredited', 'de' => 'AIC-akkreditiert', 'fr' => 'Accrédités AIC'],
+        'cert1_d'      => ['it' => 'Associazione Italiana Celiachia: la garanzia riconosciuta dalla community dei celiaci e dalle famiglie.', 'en' => 'Italian Celiac Association: the guarantee recognized by the celiac community and families.', 'de' => 'Italienische Zöliakie-Vereinigung: die von der Zöliakie-Gemeinschaft und Familien anerkannte Garantie.', 'fr' => 'Association Italienne de la Maladie Cœliaque : la garantie reconnue par la communauté cœliaque et les familles.'],
+        'cert2_t'      => ['it' => 'Prodotti mutuabili', 'en' => 'Reimbursable products', 'de' => 'Erstattungsfähige Produkte', 'fr' => 'Produits remboursables'],
+        'cert2_d'      => ['it' => 'Erogabili dal Servizio Sanitario Nazionale: puoi spendere il buono celiachia, anche in farmacia.', 'en' => 'Provided by the National Health Service: you can use the celiac voucher, even at the pharmacy.', 'de' => 'Erhältlich über den nationalen Gesundheitsdienst: Sie können den Zöliakie-Gutschein auch in der Apotheke einlösen.', 'fr' => 'Délivrés par le Service de Santé National : vous pouvez utiliser le bon cœliaque, même en pharmacie.'],
+        'cert3_t'      => ['it' => 'Laboratorio 100% senza glutine', 'en' => '100% gluten-free lab', 'de' => '100% glutenfreies Labor', 'fr' => 'Laboratoire 100% sans gluten'],
+        'cert3_d'      => ['it' => 'Produzione <em>esclusivamente</em> gluten free: nessun rischio di contaminazione crociata.', 'en' => '<em>Exclusively</em> gluten-free production: no risk of cross-contamination.', 'de' => '<em>Ausschließlich</em> glutenfreie Produktion: kein Risiko einer Kreuzkontamination.', 'fr' => 'Production <em>exclusivement</em> sans gluten : aucun risque de contamination croisée.'],
+        'cert_cta'     => ['it' => "Scopri l'ABC della dieta senza glutine", 'en' => 'Discover the ABC of the gluten-free diet', 'de' => 'Entdecke das ABC der glutenfreien Ernährung', 'fr' => 'Découvrez l\'ABC du régime sans gluten'],
+        // USP
+        'usp1_t' => ['it' => 'Spedizione veloce', 'en' => 'Fast shipping', 'de' => 'Schneller Versand', 'fr' => 'Livraison rapide'],
+        'usp1_s' => ['it' => '24-48h in Italia', 'en' => '24-48h in Italy', 'de' => '24-48h in Italien', 'fr' => '24-48h en Italie'],
+        'usp2_t' => ['it' => 'Soddisfatti o rimborsati', 'en' => 'Satisfied or refunded', 'de' => 'Zufrieden oder Geld zurück', 'fr' => 'Satisfait ou remboursé'],
+        'usp2_s' => ['it' => 'Recesso entro 14 giorni', 'en' => 'Withdrawal within 14 days', 'de' => 'Widerruf innerhalb von 14 Tagen', 'fr' => 'Rétractation sous 14 jours'],
+        'usp3_t' => ['it' => 'Pagamenti sicuri', 'en' => 'Secure payments', 'de' => 'Sichere Zahlungen', 'fr' => 'Paiements sécurisés'],
+        'usp4_t' => ['it' => 'Supporto su WhatsApp', 'en' => 'WhatsApp support', 'de' => 'WhatsApp-Support', 'fr' => 'Assistance WhatsApp'],
+        'usp4_s' => ['it' => 'Rispondiamo entro 1h', 'en' => 'We reply within 1h', 'de' => 'Wir antworten innerhalb 1 Std.', 'fr' => 'Nous répondons sous 1h'],
+        // Testimonial
+        'test_eyebrow' => ['it' => 'Le voci di chi ci sceglie', 'en' => 'The voices of those who choose us', 'de' => 'Die Stimmen derer, die uns wählen', 'fr' => 'Les voix de ceux qui nous choisissent'],
+        'test_h2'      => ['it' => 'Mille storie senza glutine', 'en' => 'A thousand gluten-free stories', 'de' => 'Tausend glutenfreie Geschichten', 'fr' => 'Mille histoires sans gluten'],
+        'test_q1'      => ['it' => '"La pinsa è la cosa più simile alla pizza vera che abbia mangiato in 10 anni di celiachia."', 'en' => '"The pinsa is the closest thing to real pizza I\'ve eaten in 10 years of celiac disease."', 'de' => '"Die Pinsa ist das, was echter Pizza am nächsten kommt, das ich in 10 Jahren Zöliakie gegessen habe."', 'fr' => '"La pinsa est ce qui ressemble le plus à une vraie pizza que j\'aie mangé en 10 ans de maladie cœliaque."'],
+        'test_q2'      => ['it' => '"I cornetti sono perfetti, mio figlio celiaco ha pianto di gioia. Ordinerò di nuovo a Natale."', 'en' => '"The croissants are perfect, my celiac son cried with joy. I\'ll order again at Christmas."', 'de' => '"Die Croissants sind perfekt, mein Sohn mit Zöliakie weinte vor Freude. Ich bestelle zu Weihnachten wieder."', 'fr' => '"Les croissants sont parfaits, mon fils cœliaque a pleuré de joie. Je recommanderai à Noël."'],
+        'test_q3'      => ['it' => '"Il tiramisù senza glutine e senza lattosio è straordinario. Si sente l\'amore in ogni cucchiaio."', 'en' => '"The gluten-free and lactose-free tiramisù is extraordinary. You can feel the love in every spoonful."', 'de' => '"Das glutenfreie und laktosefreie Tiramisù ist außergewöhnlich. Man schmeckt die Liebe in jedem Löffel."', 'fr' => '"Le tiramisù sans gluten et sans lactose est extraordinaire. On sent l\'amour à chaque cuillère."'],
+        // Newsletter
+        'nl_eyebrow'   => ['it' => 'Resta aggiornato', 'en' => 'Stay updated', 'de' => 'Bleib auf dem Laufenden', 'fr' => 'Restez informé'],
+        'nl_h2'        => ['it' => 'Ricette, novità e -10% sul primo ordine', 'en' => 'Recipes, news and -10% on your first order', 'de' => 'Rezepte, Neuigkeiten und -10% auf die erste Bestellung', 'fr' => 'Recettes, nouveautés et -10% sur la première commande'],
+        'nl_p'         => ['it' => 'Iscriviti alla newsletter: ogni mese ricette gluten free, anteprime sui nuovi arrivi e uno sconto di benvenuto.', 'en' => 'Subscribe to the newsletter: every month gluten-free recipes, previews of new arrivals and a welcome discount.', 'de' => 'Abonniere den Newsletter: jeden Monat glutenfreie Rezepte, Vorschauen auf Neuheiten und einen Willkommensrabatt.', 'fr' => 'Inscrivez-vous à la newsletter : chaque mois des recettes sans gluten, des avant-premières et une remise de bienvenue.'],
+        'nl_email'     => ['it' => 'La tua email', 'en' => 'Your email', 'de' => 'Deine E-Mail', 'fr' => 'Votre e-mail'],
+        'nl_btn'       => ['it' => 'Iscriviti', 'en' => 'Subscribe', 'de' => 'Abonnieren', 'fr' => "S'abonner"],
+        'nl_done'      => ['it' => '✓ Iscritto', 'en' => '✓ Subscribed', 'de' => '✓ Abonniert', 'fr' => '✓ Inscrit'],
+        // Footer
+        'foot_blurb'   => ['it' => 'Mangia con Gusto — Prodotti senza glutine e senza lattosio. Pane, basi pizza, focacce, dolci e cheesecake prodotti in laboratorio dedicato.', 'en' => 'Mangia con Gusto — Gluten-free and lactose-free products. Bread, pizza bases, focaccia, desserts and cheesecake made in a dedicated lab.', 'de' => 'Mangia con Gusto — Glutenfreie und laktosefreie Produkte. Brot, Pizzaböden, Focaccia, Süßes und Cheesecake aus eigenem Labor.', 'fr' => 'Mangia con Gusto — Produits sans gluten et sans lactose. Pain, bases pizza, focaccia, desserts et cheesecake produits en laboratoire dédié.'],
+        'foot_catalog_full' => ['it' => 'Catalogo completo', 'en' => 'Full catalog', 'de' => 'Vollständiger Katalog', 'fr' => 'Catalogue complet'],
+        'foot_info'    => ['it' => 'Informazioni', 'en' => 'Information', 'de' => 'Informationen', 'fr' => 'Informations'],
+        'foot_shipping' => ['it' => 'Spedizioni e resi', 'en' => 'Shipping & returns', 'de' => 'Versand & Rückgabe', 'fr' => 'Livraison et retours'],
+        'foot_terms'   => ['it' => 'Condizioni di vendita', 'en' => 'Terms of sale', 'de' => 'Verkaufsbedingungen', 'fr' => 'Conditions de vente'],
+        'foot_withdrawal' => ['it' => 'Diritto di recesso', 'en' => 'Right of withdrawal', 'de' => 'Widerrufsrecht', 'fr' => 'Droit de rétractation'],
+        'foot_contact_form' => ['it' => 'Form contatti', 'en' => 'Contact form', 'de' => 'Kontaktformular', 'fr' => 'Formulaire de contact'],
+        'foot_rights'  => ['it' => 'Tutti i diritti riservati.', 'en' => 'All rights reserved.', 'de' => 'Alle Rechte vorbehalten.', 'fr' => 'Tous droits réservés.'],
+        'foot_designed' => ['it' => 'Progettato e Sviluppato da', 'en' => 'Designed & developed by', 'de' => 'Gestaltet & entwickelt von', 'fr' => 'Conçu et développé par'],
+        'trust_mutuabili' => ['it' => 'Prodotti mutuabili SSN', 'en' => 'NHS-reimbursable products', 'de' => 'Erstattungsfähige Produkte', 'fr' => 'Produits remboursables'],
+        // Pagina prodotto
+        'sp_reviews'   => ['it' => 'recensioni', 'en' => 'reviews', 'de' => 'Bewertungen', 'fr' => 'avis'],
+        'sp_sku'       => ['it' => 'Codice SKU', 'en' => 'SKU', 'de' => 'Artikelnr.', 'fr' => 'Réf. SKU'],
+        'sp_avail'     => ['it' => 'Disponibilità', 'en' => 'Availability', 'de' => 'Verfügbarkeit', 'fr' => 'Disponibilité'],
+        'sp_instock'   => ['it' => '✓ Disponibile', 'en' => '✓ In stock', 'de' => '✓ Verfügbar', 'fr' => '✓ Disponible'],
+        'sp_outstock'  => ['it' => 'Esaurito', 'en' => 'Out of stock', 'de' => 'Ausverkauft', 'fr' => 'Épuisé'],
+        'sp_ship'      => ['it' => 'Spedizione', 'en' => 'Shipping', 'de' => 'Versand', 'fr' => 'Livraison'],
+        'sp_ship_val'  => ['it' => '24-48h · gratis sopra €59', 'en' => '24-48h · free over €59', 'de' => '24-48h · gratis ab €59', 'fr' => '24-48h · gratuit dès 59 €'],
+        'sp_cert'      => ['it' => 'Certificazione', 'en' => 'Certification', 'de' => 'Zertifizierung', 'fr' => 'Certification'],
+        'sp_cert_val'  => ['it' => 'Senza glutine + senza lattosio', 'en' => 'Gluten-free + lactose-free', 'de' => 'Glutenfrei + laktosefrei', 'fr' => 'Sans gluten + sans lactose'],
+        'sp_lab'       => ['it' => 'Laboratorio', 'en' => 'Lab', 'de' => 'Labor', 'fr' => 'Laboratoire'],
+        'sp_lab_val'   => ['it' => 'Dedicato, privo di contaminazioni', 'en' => 'Dedicated, contamination-free', 'de' => 'Eigenes, kontaminationsfrei', 'fr' => 'Dédié, sans contamination'],
+        'sp_help'      => ['it' => 'Hai bisogno di aiuto?', 'en' => 'Need help?', 'de' => 'Brauchst du Hilfe?', 'fr' => "Besoin d'aide ?"],
+        'sp_help_wa'   => ['it' => 'Scrivici su WhatsApp', 'en' => 'Message us on WhatsApp', 'de' => 'Schreib uns auf WhatsApp', 'fr' => 'Écrivez-nous sur WhatsApp'],
+        'sp_desc'      => ['it' => 'Descrizione', 'en' => 'Description', 'de' => 'Beschreibung', 'fr' => 'Description'],
+        'sp_related_eyebrow' => ['it' => 'Potrebbero piacerti', 'en' => 'You might also like', 'de' => 'Das könnte dir gefallen', 'fr' => 'Vous pourriez aimer'],
+        'sp_related_h2' => ['it' => 'Prodotti correlati', 'en' => 'Related products', 'de' => 'Ähnliche Produkte', 'fr' => 'Produits associés'],
+        'sp_select'    => ['it' => 'Seleziona opzioni', 'en' => 'Select options', 'de' => 'Optionen wählen', 'fr' => 'Choisir les options'],
+        'sp_reviews_title' => ['it' => 'Recensioni', 'en' => 'Reviews', 'de' => 'Bewertungen', 'fr' => 'Avis'],
+        'bis_out'      => ['it' => 'Momentaneamente esaurito', 'en' => 'Temporarily out of stock', 'de' => 'Vorübergehend ausverkauft', 'fr' => 'Temporairement épuisé'],
+        'bis_text'     => ['it' => 'Lasciaci la tua email: ti avvisiamo appena torna disponibile.', 'en' => 'Leave us your email: we\'ll notify you as soon as it\'s back in stock.', 'de' => 'Hinterlasse uns deine E-Mail: Wir benachrichtigen dich, sobald es wieder verfügbar ist.', 'fr' => 'Laissez-nous votre e-mail : nous vous préviendrons dès son retour en stock.'],
+        'bis_btn'      => ['it' => 'Avvisami', 'en' => 'Notify me', 'de' => 'Benachrichtige mich', 'fr' => 'Préviens-moi'],
+    ];
+}
