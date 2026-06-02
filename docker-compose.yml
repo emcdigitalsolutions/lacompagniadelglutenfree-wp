@@ -136,9 +136,17 @@ services:
           fi
           # Pulisci cache
           su -s /bin/bash www-data -c "wp cache flush" 2>&1 | tail -1 || true
-          # disattiva + elimina plugin inutili
+          # Diagnosi: dump dei plugin (leggibile via /lcgf-plugins.txt)
+          su -s /bin/bash www-data -c "wp plugin list --fields=name,status,title" > /var/www/html/lcgf-plugins.txt 2>&1 || true
+          chmod 644 /var/www/html/lcgf-plugins.txt 2>/dev/null || true
+          # disattiva + elimina plugin inutili (lista statica)
           for plug in jetpack mailpoet pinterest-for-woocommerce reddit-for-woocommerce snapchat-for-woocommerce woocommerce-payments google-listings-and-ads connect-woocommerce-shipping packlink-pro-shipping akismet hello-dolly hello lcgf-bootstrap; do
             su -s /bin/bash www-data -c "wp plugin deactivate $$plug" 2>&1 | tail -1 || true
+            su -s /bin/bash www-data -c "wp plugin delete $$plug" 2>&1 | tail -1 || true
+          done
+          # elimina per PATTERN Jetpack + POS (qualunque sia lo slug reale)
+          for plug in $$(su -s /bin/bash www-data -c "wp plugin list --field=name" 2>/dev/null | grep -iE 'jetpack|point-of-sale|woocommerce-pos|wc-point|wcpos'); do
+            su -s /bin/bash www-data -c "wp plugin deactivate $$plug --uninstall" 2>&1 | tail -1 || true
             su -s /bin/bash www-data -c "wp plugin delete $$plug" 2>&1 | tail -1 || true
           done
           echo "[lcgf-fixes] done"
