@@ -1155,3 +1155,37 @@ add_action('template_redirect', function () {
         exit;
     }
 }, 1);
+
+/**
+ * Crea le traduzioni Polylang (EN/DE/FR) della pagina ABC e le collega, così è
+ * raggiungibile/visibile in tutte le lingue. Il testo viene dal template via
+ * lcgf_t(), quindi le pagine-traduzione restano a contenuto vuoto. Guardia v1.
+ */
+add_action('init', function () {
+    if (get_option('lcgf_abc_i18n_v1')) return;
+    if (!function_exists('pll_set_post_language') || !function_exists('pll_save_post_translations') || !function_exists('pll_get_post')) return;
+    $it = get_page_by_path('abc-dieta-senza-glutine');
+    if (!$it) return;
+    $strings = lcgf_i18n_strings();
+    pll_set_post_language($it->ID, 'it');
+    $map = ['it' => $it->ID];
+    foreach (['en', 'de', 'fr'] as $lang) {
+        $existing = pll_get_post($it->ID, $lang);
+        if ($existing) { $map[$lang] = $existing; continue; }
+        $title = isset($strings['abc_h1'][$lang]) ? $strings['abc_h1'][$lang] : $strings['abc_h1']['it'];
+        $id = wp_insert_post([
+            'post_title'   => $title,
+            'post_name'    => 'abc-dieta-senza-glutine-' . $lang,
+            'post_status'  => 'publish',
+            'post_type'    => 'page',
+            'post_content' => '',
+        ]);
+        if ($id && !is_wp_error($id)) {
+            update_post_meta($id, '_wp_page_template', 'page-abc-celiachia.php');
+            pll_set_post_language($id, $lang);
+            $map[$lang] = $id;
+        }
+    }
+    pll_save_post_translations($map);
+    update_option('lcgf_abc_i18n_v1', current_time('mysql'));
+}, 106);
