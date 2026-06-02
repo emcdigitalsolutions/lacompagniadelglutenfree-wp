@@ -1059,5 +1059,99 @@ function lcgf_i18n_strings() {
         'bis_out'      => ['it' => 'Momentaneamente esaurito', 'en' => 'Temporarily out of stock', 'de' => 'Vorübergehend ausverkauft', 'fr' => 'Temporairement épuisé'],
         'bis_text'     => ['it' => 'Lasciaci la tua email: ti avvisiamo appena torna disponibile.', 'en' => 'Leave us your email: we\'ll notify you as soon as it\'s back in stock.', 'de' => 'Hinterlasse uns deine E-Mail: Wir benachrichtigen dich, sobald es wieder verfügbar ist.', 'fr' => 'Laissez-nous votre e-mail : nous vous préviendrons dès son retour en stock.'],
         'bis_btn'      => ['it' => 'Avvisami', 'en' => 'Notify me', 'de' => 'Benachrichtige mich', 'fr' => 'Préviens-moi'],
+        // Pagina ABC dieta senza glutine
+        'abc_eyebrow'  => ['it' => 'Guida pratica', 'en' => 'Practical guide', 'de' => 'Praktischer Leitfaden', 'fr' => 'Guide pratique'],
+        'abc_h1'       => ['it' => "L'ABC della dieta senza glutine", 'en' => 'The ABC of the gluten-free diet', 'de' => 'Das ABC der glutenfreien Ernährung', 'fr' => "L'ABC du régime sans gluten"],
+        'abc_intro'    => ['it' => 'Poche nozioni chiare per vivere serenamente la celiachia, ogni giorno. Una piccola guida per chi inizia e per i genitori dei bambini celiaci. Per approfondimenti completi e sempre aggiornati fai riferimento all\'<strong>Associazione Italiana Celiachia (AIC)</strong>.', 'en' => 'A few clear notions to live serenely with celiac disease, every day. A short guide for beginners and for parents of celiac children. For complete and always up-to-date information, refer to the <strong>Italian Celiac Association (AIC)</strong>.', 'de' => 'Ein paar klare Hinweise, um den Alltag mit Zöliakie gelassen zu meistern. Ein kurzer Leitfaden für Einsteiger und Eltern zöliakiekranker Kinder. Für vollständige und stets aktuelle Informationen wende dich an die <strong>Italienische Zöliakie-Vereinigung (AIC)</strong>.', 'fr' => 'Quelques notions claires pour vivre sereinement la maladie cœliaque, au quotidien. Un petit guide pour débuter et pour les parents d\'enfants cœliaques. Pour des informations complètes et toujours à jour, référez-vous à l\'<strong>Association Italienne de la Maladie Cœliaque (AIC)</strong>.'],
+        'abc_s1_t'     => ['it' => 'Le tre categorie di alimenti', 'en' => 'The three food categories', 'de' => 'Die drei Lebensmittelkategorien', 'fr' => 'Les trois catégories d\'aliments'],
+        'abc_s1_p1'    => ['it' => 'Per orientarsi, gli alimenti si dividono in tre gruppi:', 'en' => 'To find your way, foods fall into three groups:', 'de' => 'Zur Orientierung lassen sich Lebensmittel in drei Gruppen einteilen:', 'fr' => 'Pour s\'y retrouver, les aliments se divisent en trois groupes :'],
+        'abc_s1_li1'   => ['it' => '<strong>Permessi</strong> — naturalmente privi di glutine: riso, mais, patate, legumi, carne, pesce, uova, frutta, verdura, latte e formaggi naturali.', 'en' => '<strong>Allowed</strong> — naturally gluten-free: rice, corn, potatoes, legumes, meat, fish, eggs, fruit, vegetables, milk and natural cheeses.', 'de' => '<strong>Erlaubt</strong> — von Natur aus glutenfrei: Reis, Mais, Kartoffeln, Hülsenfrüchte, Fleisch, Fisch, Eier, Obst, Gemüse, Milch und Naturkäse.', 'fr' => '<strong>Autorisés</strong> — naturellement sans gluten : riz, maïs, pommes de terre, légumineuses, viande, poisson, œufs, fruits, légumes, lait et fromages naturels.'],
+        'abc_s1_li2'   => ['it' => '<strong>Vietati</strong> — contengono glutine: frumento, orzo, segale, farro, kamut, spelta, triticale e tutti i loro derivati (pane, pasta, pizza, dolci comuni).', 'en' => '<strong>Forbidden</strong> — contain gluten: wheat, barley, rye, spelt, kamut, spelt, triticale and all their derivatives (common bread, pasta, pizza, sweets).', 'de' => '<strong>Verboten</strong> — enthalten Gluten: Weizen, Gerste, Roggen, Dinkel, Kamut, Emmer, Triticale und alle ihre Derivate (gewöhnliches Brot, Nudeln, Pizza, Süßes).', 'fr' => '<strong>Interdits</strong> — contiennent du gluten : blé, orge, seigle, épeautre, kamut, petit épeautre, triticale et tous leurs dérivés (pain, pâtes, pizza, gâteaux courants).'],
+        'abc_s1_li3'   => ['it' => '<strong>A rischio</strong> — potrebbero contenere glutine per ingredienti o lavorazione (alcuni salumi, salse, preparati, avena non certificata): vanno sempre verificati.', 'en' => '<strong>At risk</strong> — may contain gluten due to ingredients or processing (some cured meats, sauces, mixes, uncertified oats): always check them.', 'de' => '<strong>Risikobehaftet</strong> — können aufgrund von Zutaten oder Verarbeitung Gluten enthalten (einige Wurstwaren, Saucen, Fertigmischungen, nicht zertifizierter Hafer): immer prüfen.', 'fr' => '<strong>À risque</strong> — peuvent contenir du gluten selon les ingrédients ou la transformation (certaines charcuteries, sauces, préparations, avoine non certifiée) : à toujours vérifier.'],
+        'abc_s1_p2'    => ['it' => 'I nostri prodotti appartengono alla categoria dei <strong>sostitutivi senza glutine</strong>: pane, basi pizza, focacce e dolci pensati per sostituire in sicurezza quelli vietati.', 'en' => 'Our products belong to the <strong>gluten-free substitutes</strong> category: bread, pizza bases, focaccia and desserts designed to safely replace the forbidden ones.', 'de' => 'Unsere Produkte gehören zur Kategorie der <strong>glutenfreien Ersatzprodukte</strong>: Brot, Pizzaböden, Focaccia und Süßes, um die verbotenen sicher zu ersetzen.', 'fr' => 'Nos produits appartiennent à la catégorie des <strong>substituts sans gluten</strong> : pain, bases pizza, focaccia et desserts conçus pour remplacer en toute sécurité les aliments interdits.'],
+        'abc_s2_t'     => ['it' => 'La contaminazione crociata', 'en' => 'Cross-contamination', 'de' => 'Kreuzkontamination', 'fr' => 'La contamination croisée'],
+        'abc_s2_p1'    => ['it' => 'Per chi è celiaco anche piccole tracce di glutine sono dannose. La contaminazione avviene quando un alimento sicuro entra in contatto con uno che contiene glutine: stesse superfici, utensili, friggitrici o acqua di cottura condivisi.', 'en' => 'For people with celiac disease even small traces of gluten are harmful. Contamination occurs when a safe food comes into contact with one containing gluten: shared surfaces, utensils, fryers or cooking water.', 'de' => 'Für Menschen mit Zöliakie sind selbst kleine Glutenspuren schädlich. Eine Kontamination entsteht, wenn ein sicheres Lebensmittel mit einem glutenhaltigen in Kontakt kommt: gemeinsame Flächen, Utensilien, Fritteusen oder Kochwasser.', 'fr' => 'Pour les cœliaques, même de petites traces de gluten sont nocives. La contamination survient lorsqu\'un aliment sûr entre en contact avec un aliment contenant du gluten : surfaces, ustensiles, friteuses ou eau de cuisson partagés.'],
+        'abc_s2_p2'    => ['it' => 'Per questo il nostro <strong>laboratorio è esclusivamente senza glutine</strong>: nessuna lavorazione con farine contenenti glutine, quindi nessun rischio di contaminazione crociata. A casa e fuori, usa utensili puliti e dedicati.', 'en' => 'That is why our <strong>lab is exclusively gluten-free</strong>: no processing with gluten-containing flours, so no risk of cross-contamination. At home and out, use clean, dedicated utensils.', 'de' => 'Deshalb ist unser <strong>Labor ausschließlich glutenfrei</strong>: keine Verarbeitung mit glutenhaltigem Mehl, also kein Risiko einer Kreuzkontamination. Zu Hause und unterwegs: saubere, eigene Utensilien verwenden.', 'fr' => 'C\'est pourquoi notre <strong>laboratoire est exclusivement sans gluten</strong> : aucune transformation avec des farines contenant du gluten, donc aucun risque de contamination croisée. Chez vous et à l\'extérieur, utilisez des ustensiles propres et dédiés.'],
+        'abc_s3_t'     => ['it' => 'Come leggere le etichette', 'en' => 'How to read labels', 'de' => 'Etiketten richtig lesen', 'fr' => 'Comment lire les étiquettes'],
+        'abc_s3_p1'    => ['it' => 'Controlla sempre l\'elenco ingredienti e la sezione allergeni: il glutine e i cereali che lo contengono vanno evidenziati per legge. Diffida dei prodotti senza etichetta chiara e, nel dubbio, scegli prodotti pensati e certificati per i celiaci.', 'en' => 'Always check the ingredient list and the allergens section: gluten and the cereals that contain it must be highlighted by law. Be wary of products without a clear label and, when in doubt, choose products designed and certified for celiacs.', 'de' => 'Prüfe immer die Zutatenliste und den Allergenhinweis: Gluten und glutenhaltige Getreide müssen gesetzlich hervorgehoben werden. Sei vorsichtig bei Produkten ohne klare Kennzeichnung und wähle im Zweifel speziell für Zöliakie zertifizierte Produkte.', 'fr' => 'Vérifiez toujours la liste des ingrédients et la section allergènes : le gluten et les céréales qui en contiennent doivent être mis en évidence par la loi. Méfiez-vous des produits sans étiquette claire et, en cas de doute, choisissez des produits conçus et certifiés pour les cœliaques.'],
+        'abc_s4_t'     => ['it' => 'Prodotti mutuabili e buono celiachia', 'en' => 'Reimbursable products and celiac voucher', 'de' => 'Erstattungsfähige Produkte und Zöliakie-Gutschein', 'fr' => 'Produits remboursables et bon cœliaque'],
+        'abc_s4_p1'    => ['it' => 'Le persone con diagnosi di celiachia hanno diritto a un <strong>contributo mensile</strong> del Servizio Sanitario Nazionale per l\'acquisto di prodotti sostitutivi senza glutine, registrati nell\'apposito Registro del <strong>Ministero della Salute</strong>. Il buono si utilizza nelle farmacie e nei punti vendita accreditati.', 'en' => 'People diagnosed with celiac disease are entitled to a <strong>monthly contribution</strong> from the National Health Service to buy gluten-free substitute products, registered in the dedicated Register of the <strong>Ministry of Health</strong>. The voucher is used in pharmacies and accredited points of sale.', 'de' => 'Menschen mit diagnostizierter Zöliakie haben Anspruch auf einen <strong>monatlichen Zuschuss</strong> des nationalen Gesundheitsdienstes für glutenfreie Ersatzprodukte, die im entsprechenden Register des <strong>Gesundheitsministeriums</strong> eingetragen sind. Der Gutschein wird in Apotheken und akkreditierten Verkaufsstellen eingelöst.', 'fr' => 'Les personnes diagnostiquées cœliaques ont droit à une <strong>contribution mensuelle</strong> du Service de Santé National pour l\'achat de produits de substitution sans gluten, inscrits au Registre dédié du <strong>Ministère de la Santé</strong>. Le bon s\'utilise en pharmacie et dans les points de vente agréés.'],
+        'abc_s4_p2'    => ['it' => 'I nostri <strong>prodotti mutuabili</strong> rientrano tra quelli erogabili: chiedici quali e come utilizzare il tuo buono.', 'en' => 'Our <strong>reimbursable products</strong> are among those provided: ask us which ones and how to use your voucher.', 'de' => 'Unsere <strong>erstattungsfähigen Produkte</strong> gehören zu den erhältlichen: Frag uns, welche und wie du deinen Gutschein einlöst.', 'fr' => 'Nos <strong>produits remboursables</strong> font partie de ceux délivrés : demandez-nous lesquels et comment utiliser votre bon.'],
+        'abc_s5_t'     => ['it' => 'Gli strumenti utili di AIC', 'en' => 'AIC\'s useful tools', 'de' => 'Nützliche AIC-Hilfsmittel', 'fr' => 'Les outils utiles de l\'AIC'],
+        'abc_s5_p1'    => ['it' => 'L\'<strong>Associazione Italiana Celiachia</strong> mette a disposizione strumenti preziosi: il <em>Prontuario degli Alimenti</em>, l\'app per consultarlo, e il marchio della spiga barrata che identifica i prodotti idonei. Noi siamo <strong>accreditati AIC</strong>.', 'en' => 'The <strong>Italian Celiac Association</strong> offers valuable tools: the <em>Food Handbook</em>, the app to consult it, and the crossed-grain mark that identifies suitable products. We are <strong>AIC accredited</strong>.', 'de' => 'Die <strong>Italienische Zöliakie-Vereinigung</strong> bietet wertvolle Hilfsmittel: das <em>Lebensmittelverzeichnis</em>, die App zum Nachschlagen und das durchgestrichene Ähren-Zeichen für geeignete Produkte. Wir sind <strong>AIC-akkreditiert</strong>.', 'fr' => 'L\'<strong>Association Italienne de la Maladie Cœliaque</strong> propose des outils précieux : le <em>Répertoire des Aliments</em>, l\'application pour le consulter, et le logo de l\'épi barré qui identifie les produits adaptés. Nous sommes <strong>accrédités AIC</strong>.'],
+        'abc_s5_link'  => ['it' => 'Approfondisci sul sito ufficiale di AIC →', 'en' => 'Learn more on the official AIC website →', 'de' => 'Mehr auf der offiziellen AIC-Website →', 'fr' => 'En savoir plus sur le site officiel de l\'AIC →'],
+        'abc_disclaimer' => ['it' => 'Contenuto a scopo divulgativo, non sostituisce le indicazioni del medico o di AIC. Fonte autorevole:', 'en' => 'Informational content, it does not replace the advice of your doctor or AIC. Authoritative source:', 'de' => 'Informativer Inhalt, ersetzt nicht die Hinweise des Arztes oder der AIC. Verlässliche Quelle:', 'fr' => 'Contenu informatif, ne remplace pas les indications du médecin ou de l\'AIC. Source de référence :'],
     ];
 }
+
+/**
+ * URL di una pagina nella lingua CORRENTE (Polylang). Dato lo slug della pagina
+ * italiana, ritorna il permalink della traduzione attiva; fallback alla pagina IT.
+ */
+function lcgf_page_url($slug) {
+    $page = get_page_by_path($slug);
+    if ($page) {
+        $id = $page->ID;
+        if (function_exists('pll_get_post')) {
+            $tr = pll_get_post($id);
+            if ($tr) $id = $tr;
+        }
+        return get_permalink($id);
+    }
+    return home_url('/' . $slug . '/');
+}
+
+/**
+ * Lingua all'accesso diretto alla home:
+ *  - PRIMO accesso (nessun cookie): usa la lingua del browser; se non disponibile,
+ *    default INGLESE. Salva la scelta nel cookie pll_language.
+ *  - ACCESSI SUCCESSIVI: rispetta la lingua ricordata nel cookie (impostata anche
+ *    da Polylang quando l'utente cambia lingua dal selettore).
+ * Agisce solo su accessi DIRETTI alla home (no navigazione interna, no bot), così
+ * non interferisce col selettore lingua né con la SEO.
+ */
+add_action('template_redirect', function () {
+    if (is_admin()) return;
+    if (defined('DOING_AJAX') && DOING_AJAX) return;
+    if (defined('REST_REQUEST') && REST_REQUEST) return;
+    if (!function_exists('pll_languages_list') || !function_exists('pll_current_language') || !function_exists('pll_home_url')) return;
+    if (!is_front_page()) return;
+
+    // Salta i crawler (preserva l'indicizzazione per lingua via hreflang)
+    $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+    if ($ua && preg_match('/bot|crawl|spider|slurp|mediapartners|facebookexternalhit|embedly|whatsapp|telegram|preview/i', $ua)) return;
+
+    // Non interferire con la navigazione interna (es. click sul selettore lingua)
+    $ref = wp_get_referer();
+    if ($ref && strpos($ref, home_url()) === 0) return;
+
+    $available = pll_languages_list();
+    if (empty($available)) return;
+    $current = pll_current_language('slug');
+
+    $cookie = '';
+    if (!empty($_COOKIE['pll_language'])) {
+        $cookie = substr(preg_replace('/[^a-z]/', '', strtolower($_COOKIE['pll_language'])), 0, 2);
+    }
+
+    if ($cookie && in_array($cookie, $available, true)) {
+        // Accessi successivi: lingua ricordata
+        $target = $cookie;
+    } else {
+        // Primo accesso: lingua del browser, fallback inglese
+        $target = in_array('en', $available, true) ? 'en' : $current;
+        $accept = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']) : '';
+        if ($accept) {
+            foreach (explode(',', $accept) as $part) {
+                $code = substr(trim(explode(';', $part)[0]), 0, 2);
+                if (in_array($code, $available, true)) { $target = $code; break; }
+            }
+        }
+        @setcookie('pll_language', $target, time() + YEAR_IN_SECONDS, defined('COOKIEPATH') && COOKIEPATH ? COOKIEPATH : '/', defined('COOKIE_DOMAIN') ? COOKIE_DOMAIN : '');
+    }
+
+    if ($target && $target !== $current) {
+        wp_safe_redirect(pll_home_url($target));
+        exit;
+    }
+}, 1);

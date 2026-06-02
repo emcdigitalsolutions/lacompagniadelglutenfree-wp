@@ -51,8 +51,8 @@
         }
         ?>
         <li><a href="<?php echo esc_url(get_post_type_archive_link('lcgf_evento')); ?>"><?php echo lcgf_t('nav_fiere'); ?></a></li>
-        <li><a href="<?php echo esc_url(home_url('/chi-siamo/')); ?>"><?php echo lcgf_t('nav_chisiamo'); ?></a></li>
-        <li><a href="<?php echo esc_url(home_url('/contatti/')); ?>"><?php echo lcgf_t('nav_contatti'); ?></a></li>
+        <li><a href="<?php echo esc_url(lcgf_page_url('chi-siamo')); ?>"><?php echo lcgf_t('nav_chisiamo'); ?></a></li>
+        <li><a href="<?php echo esc_url(lcgf_page_url('contatti')); ?>"><?php echo lcgf_t('nav_contatti'); ?></a></li>
       </ul>
     </nav>
 

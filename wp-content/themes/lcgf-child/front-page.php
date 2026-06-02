@@ -31,7 +31,7 @@ $logo = get_stylesheet_directory_uri() . '/assets/img/logo.webp';
             <?php echo lcgf_t('hero_cta1'); ?>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </a>
-          <a href="<?php echo esc_url(home_url('/chi-siamo/')); ?>" class="btn btn-ghost btn-lg"><?php echo lcgf_t('our_story'); ?></a>
+          <a href="<?php echo esc_url(lcgf_page_url('chi-siamo')); ?>" class="btn btn-ghost btn-lg"><?php echo lcgf_t('our_story'); ?></a>
         </div>
         <div class="lcgf-hero-stats">
           <div class="lcgf-hero-stat"><strong>13+</strong><span><?php echo lcgf_t('stat_products'); ?></span></div>
@@ -156,7 +156,7 @@ $logo = get_stylesheet_directory_uri() . '/assets/img/logo.webp';
           <li><span class="ck">✓</span><span><?php echo lcgf_t('story_li3'); ?></span></li>
           <li><span class="ck">✓</span><span><?php echo lcgf_t('story_li4'); ?></span></li>
         </ul>
-        <a href="<?php echo esc_url(home_url('/chi-siamo/')); ?>" class="btn btn-lg" style="margin-top:24px">
+        <a href="<?php echo esc_url(lcgf_page_url('chi-siamo')); ?>" class="btn btn-lg" style="margin-top:24px">
           <?php echo lcgf_t('story_cta'); ?>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
@@ -209,7 +209,7 @@ $logo = get_stylesheet_directory_uri() . '/assets/img/logo.webp';
 
     </div>
     <p style="text-align:center;margin-top:30px">
-      <a href="<?php echo esc_url(home_url('/abc-dieta-senza-glutine/')); ?>" class="btn-ghost" style="display:inline-flex;align-items:center;gap:8px">
+      <a href="<?php echo esc_url(lcgf_page_url('abc-dieta-senza-glutine')); ?>" class="btn-ghost" style="display:inline-flex;align-items:center;gap:8px">
         <?php echo lcgf_t('cert_cta'); ?>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </a>

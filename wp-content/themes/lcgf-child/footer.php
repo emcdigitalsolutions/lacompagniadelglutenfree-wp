@@ -56,20 +56,20 @@
     <div>
       <h4><?php echo lcgf_t('foot_info'); ?></h4>
       <ul>
-        <li><a href="<?php echo esc_url(home_url('/chi-siamo/')); ?>"><?php echo lcgf_t('nav_chisiamo'); ?></a></li>
-        <li><a href="<?php echo esc_url(home_url('/faq/')); ?>">FAQ</a></li>
-        <li><a href="<?php echo esc_url(home_url('/spedizioni/')); ?>"><?php echo lcgf_t('foot_shipping'); ?></a></li>
-        <li><a href="<?php echo esc_url(home_url('/condizioni/')); ?>"><?php echo lcgf_t('foot_terms'); ?></a></li>
-        <li><a href="<?php echo esc_url(home_url('/recesso/')); ?>"><?php echo lcgf_t('foot_withdrawal'); ?></a></li>
-        <li><a href="<?php echo esc_url(home_url('/privacy/')); ?>">Privacy</a></li>
-        <li><a href="<?php echo esc_url(home_url('/cookie/')); ?>">Cookie</a></li>
+        <li><a href="<?php echo esc_url(lcgf_page_url('chi-siamo')); ?>"><?php echo lcgf_t('nav_chisiamo'); ?></a></li>
+        <li><a href="<?php echo esc_url(lcgf_page_url('faq')); ?>">FAQ</a></li>
+        <li><a href="<?php echo esc_url(lcgf_page_url('spedizioni')); ?>"><?php echo lcgf_t('foot_shipping'); ?></a></li>
+        <li><a href="<?php echo esc_url(lcgf_page_url('condizioni')); ?>"><?php echo lcgf_t('foot_terms'); ?></a></li>
+        <li><a href="<?php echo esc_url(lcgf_page_url('recesso')); ?>"><?php echo lcgf_t('foot_withdrawal'); ?></a></li>
+        <li><a href="<?php echo esc_url(lcgf_page_url('privacy')); ?>">Privacy</a></li>
+        <li><a href="<?php echo esc_url(lcgf_page_url('cookie')); ?>">Cookie</a></li>
       </ul>
     </div>
 
     <div>
       <h4><?php echo lcgf_t('nav_contatti'); ?></h4>
       <ul>
-        <li><a href="<?php echo esc_url(home_url('/contatti/')); ?>"><?php echo lcgf_t('foot_contact_form'); ?></a></li>
+        <li><a href="<?php echo esc_url(lcgf_page_url('contatti')); ?>"><?php echo lcgf_t('foot_contact_form'); ?></a></li>
         <li>Carmelo · <a href="tel:+393276999897">+39 327 699 9897</a></li>
         <li>Gianluca · <a href="tel:+393495658876">+39 349 565 8876</a></li>
         <li>Gaetano · <a href="tel:+393513582074">+39 351 358 2074</a></li>
