@@ -146,8 +146,12 @@ services:
           fi
           # Pulisci cache
           su -s /bin/bash www-data -c "wp cache flush" 2>&1 | tail -1 || true
-          # Diagnosi: dump dei plugin (leggibile via /lcgf-plugins.txt)
+          # Diagnosi: dump plugin + contenuto directory plugins/ e mu-plugins/
           su -s /bin/bash www-data -c "wp plugin list --fields=name,status,title" > /var/www/html/lcgf-plugins.txt 2>&1 || true
+          echo "--- plugins/ dir ---" >> /var/www/html/lcgf-plugins.txt
+          ls -1 /var/www/html/wp-content/plugins/ >> /var/www/html/lcgf-plugins.txt 2>&1 || true
+          echo "--- mu-plugins/ dir ---" >> /var/www/html/lcgf-plugins.txt
+          ls -1 /var/www/html/wp-content/mu-plugins/ >> /var/www/html/lcgf-plugins.txt 2>&1 || true
           chmod 644 /var/www/html/lcgf-plugins.txt 2>/dev/null || true
           # disattiva + elimina plugin inutili (lista statica)
           for plug in jetpack mailpoet pinterest-for-woocommerce reddit-for-woocommerce snapchat-for-woocommerce woocommerce-payments google-listings-and-ads connect-woocommerce-shipping packlink-pro-shipping akismet hello-dolly hello lcgf-bootstrap; do
@@ -159,6 +163,13 @@ services:
             su -s /bin/bash www-data -c "wp plugin deactivate $$plug --uninstall" 2>&1 | tail -1 || true
             su -s /bin/bash www-data -c "wp plugin delete $$plug" 2>&1 | tail -1 || true
           done
+          # RIMOZIONE FORZATA dei file (le route jetpack/pos erano VIVE → loader regular o mu-plugin)
+          rm -rf /var/www/html/wp-content/plugins/jetpack* /var/www/html/wp-content/plugins/woocommerce-pos* /var/www/html/wp-content/plugins/*point-of-sale* /var/www/html/wp-content/plugins/*-pos 2>/dev/null || true
+          rm -rf /var/www/html/wp-content/mu-plugins/*jetpack* /var/www/html/wp-content/mu-plugins/*pos* /var/www/html/wp-content/mu-plugins/*point-of-sale* 2>/dev/null || true
+          # Blocca l'auto-install di Jetpack da parte di WooCommerce
+          su -s /bin/bash www-data -c "wp option update woocommerce_allow_tracking no" 2>&1 | tail -1 || true
+          su -s /bin/bash www-data -c "wp transient delete --all" 2>&1 | tail -1 || true
+          su -s /bin/bash www-data -c "wp cache flush" 2>&1 | tail -1 || true
           echo "[lcgf-fixes] done"
         ) &
         exec docker-entrypoint.sh apache2-foreground
