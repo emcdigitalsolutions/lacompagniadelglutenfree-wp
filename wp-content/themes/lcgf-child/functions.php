@@ -912,3 +912,23 @@ add_action('woocommerce_before_shop_loop', function () {
     }
     echo '</nav>';
 }, 5);
+
+/**
+ * Pulizia cache/SEO post-migrazione dominio (una volta, guardia lcgf_flush_v1):
+ * resetta gli indexable Yoast (rigenera canonical/hreflang con l'URL corrente,
+ * gluten) e svuota transient + object cache (elimina i namespace REST stantii
+ * di plugin ormai rimossi e gli URL sslip residui).
+ */
+add_action('init', function () {
+    if (get_option('lcgf_flush_v1')) return;
+    global $wpdb;
+    foreach (['yoast_indexable', 'yoast_indexable_hierarchy'] as $tbl) {
+        $t = $wpdb->prefix . $tbl;
+        if ($wpdb->get_var("SHOW TABLES LIKE '{$t}'") === $t) {
+            $wpdb->query("TRUNCATE TABLE {$t}");
+        }
+    }
+    $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '\\_transient\\_%' OR option_name LIKE '\\_site\\_transient\\_%'");
+    if (function_exists('wp_cache_flush')) wp_cache_flush();
+    update_option('lcgf_flush_v1', current_time('mysql'));
+}, 105);
