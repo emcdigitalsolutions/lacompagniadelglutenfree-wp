@@ -134,6 +134,14 @@ services:
           if [ -z "$$VAR_DONE" ] && [ -f /var/www/html/lcgf-scripts/lcgf-variants.php ]; then
             su -s /bin/bash www-data -c "wp eval-file /var/www/html/lcgf-scripts/lcgf-variants.php" 2>&1 | tail -30 || true
           fi
+          # Completa le traduzioni mancanti EN/DE/FR (Gemini, idempotente: salta le
+          # esistenti). Gira UNA volta (guardia lcgf_translate_v2). In background,
+          # dopo l'avvio di apache, quindi non blocca il sito.
+          TR_DONE=$$(su -s /bin/bash www-data -c "wp option get lcgf_translate_v2" 2>/dev/null)
+          if [ -z "$$TR_DONE" ] && [ -f /var/www/html/lcgf-scripts/translate-lcgf.php ]; then
+            su -s /bin/bash www-data -c "wp eval-file /var/www/html/lcgf-scripts/translate-lcgf.php" 2>&1 | tail -25 || true
+            su -s /bin/bash www-data -c "wp option update lcgf_translate_v2 done" 2>&1 | tail -1 || true
+          fi
           # Allinea gli URL salvati al dominio gluten (guardia lcgf_url_v3)
           URL_DONE=$$(su -s /bin/bash www-data -c "wp option get lcgf_url_v3" 2>/dev/null)
           if [ -z "$$URL_DONE" ]; then
