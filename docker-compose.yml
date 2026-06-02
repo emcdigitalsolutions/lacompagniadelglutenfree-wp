@@ -134,6 +134,12 @@ services:
           if [ -z "$$VAR_DONE" ] && [ -f /var/www/html/lcgf-scripts/lcgf-variants.php ]; then
             su -s /bin/bash www-data -c "wp eval-file /var/www/html/lcgf-scripts/lcgf-variants.php" 2>&1 | tail -30 || true
           fi
+          # Allinea gli URL salvati al dominio gluten (una volta, guardia lcgf_url_v1)
+          URL_DONE=$$(su -s /bin/bash www-data -c "wp option get lcgf_url_v1" 2>/dev/null)
+          if [ -z "$$URL_DONE" ]; then
+            su -s /bin/bash www-data -c "wp search-replace 'http://n10lllsj578ewpb6widdoxap.49.13.173.127.sslip.io' 'https://gluten.emcdigitalsolutions.it' --all-tables --skip-columns=guid" 2>&1 | tail -2 || true
+            su -s /bin/bash www-data -c "wp option update lcgf_url_v1 done" 2>&1 | tail -1 || true
+          fi
           # Pulisci cache
           su -s /bin/bash www-data -c "wp cache flush" 2>&1 | tail -1 || true
           # Diagnosi: dump dei plugin (leggibile via /lcgf-plugins.txt)
@@ -153,7 +159,7 @@ services:
         ) &
         exec docker-entrypoint.sh apache2-foreground
     environment:
-      SERVICE_FQDN_WORDPRESS_80: /
+      SERVICE_FQDN_WORDPRESS_80: https://gluten.emcdigitalsolutions.it
       LCGF_FORCE_SYNC: "1"
       # Chiave Gemini per la traduzione multilingue — valore SOLO da env Coolify, mai in chiaro
       GEMINI_API_KEY: ${GEMINI_API_KEY}
@@ -164,8 +170,8 @@ services:
       WORDPRESS_TABLE_PREFIX: lcgf_
       WORDPRESS_DEBUG: ${WP_DEBUG:-0}
       WORDPRESS_CONFIG_EXTRA: |
-        define('WP_HOME', '${WP_HOME:-http://localhost:8080}');
-        define('WP_SITEURL', '${WP_SITEURL:-http://localhost:8080}');
+        define('WP_HOME', '${WP_HOME:-https://gluten.emcdigitalsolutions.it}');
+        define('WP_SITEURL', '${WP_SITEURL:-https://gluten.emcdigitalsolutions.it}');
         define('WP_MEMORY_LIMIT', '256M');
         define('WP_POST_REVISIONS', 5);
         define('DISALLOW_FILE_EDIT', true);
