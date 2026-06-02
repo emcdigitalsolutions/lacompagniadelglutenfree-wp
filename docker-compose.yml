@@ -134,11 +134,15 @@ services:
           if [ -z "$$VAR_DONE" ] && [ -f /var/www/html/lcgf-scripts/lcgf-variants.php ]; then
             su -s /bin/bash www-data -c "wp eval-file /var/www/html/lcgf-scripts/lcgf-variants.php" 2>&1 | tail -30 || true
           fi
-          # Allinea gli URL salvati al dominio gluten (una volta, guardia lcgf_url_v1)
-          URL_DONE=$$(su -s /bin/bash www-data -c "wp option get lcgf_url_v1" 2>/dev/null)
+          # Allinea gli URL salvati al dominio gluten (guardia lcgf_url_v3)
+          URL_DONE=$$(su -s /bin/bash www-data -c "wp option get lcgf_url_v3" 2>/dev/null)
           if [ -z "$$URL_DONE" ]; then
-            su -s /bin/bash www-data -c "wp search-replace 'http://n10lllsj578ewpb6widdoxap.49.13.173.127.sslip.io' 'https://gluten.emcdigitalsolutions.it' --all-tables --skip-columns=guid" 2>&1 | tail -2 || true
-            su -s /bin/bash www-data -c "wp option update lcgf_url_v1 done" 2>&1 | tail -1 || true
+            su -s /bin/bash www-data -c "wp option update home 'https://gluten.emcdigitalsolutions.it'" 2>&1 | tail -1 || true
+            su -s /bin/bash www-data -c "wp option update siteurl 'https://gluten.emcdigitalsolutions.it'" 2>&1 | tail -1 || true
+            su -s /bin/bash www-data -c "wp search-replace 'n10lllsj578ewpb6widdoxap.49.13.173.127.sslip.io' 'gluten.emcdigitalsolutions.it' --all-tables --skip-columns=guid" 2>&1 | tail -2 || true
+            su -s /bin/bash www-data -c "wp search-replace 'http://gluten.emcdigitalsolutions.it' 'https://gluten.emcdigitalsolutions.it' --all-tables --skip-columns=guid" 2>&1 | tail -2 || true
+            su -s /bin/bash www-data -c "wp cache flush" 2>&1 | tail -1 || true
+            su -s /bin/bash www-data -c "wp option update lcgf_url_v3 done" 2>&1 | tail -1 || true
           fi
           # Pulisci cache
           su -s /bin/bash www-data -c "wp cache flush" 2>&1 | tail -1 || true
