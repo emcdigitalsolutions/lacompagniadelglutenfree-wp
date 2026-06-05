@@ -1026,6 +1026,17 @@ function lcgf_i18n_strings() {
         'nl_email'     => ['it' => 'La tua email', 'en' => 'Your email', 'de' => 'Deine E-Mail', 'fr' => 'Votre e-mail'],
         'nl_btn'       => ['it' => 'Iscriviti', 'en' => 'Subscribe', 'de' => 'Abonnieren', 'fr' => "S'abonner"],
         'nl_done'      => ['it' => '✓ Iscritto', 'en' => '✓ Subscribed', 'de' => '✓ Abonniert', 'fr' => '✓ Inscrit'],
+        'nl_gdpr'      => ['it' => 'Acconsento al trattamento dei dati per ricevere la newsletter.', 'en' => 'I consent to data processing to receive the newsletter.', 'de' => 'Ich stimme der Datenverarbeitung zum Erhalt des Newsletters zu.', 'fr' => 'J\'accepte le traitement des données pour recevoir la newsletter.'],
+        'nl_privacy'   => ['it' => 'Informativa privacy', 'en' => 'Privacy policy', 'de' => 'Datenschutz', 'fr' => 'Politique de confidentialité'],
+        'nl_invalid'   => ['it' => 'Inserisci un indirizzo email valido.', 'en' => 'Please enter a valid email address.', 'de' => 'Bitte gib eine gültige E-Mail-Adresse ein.', 'fr' => 'Veuillez saisir une adresse e-mail valide.'],
+        'nl_gdpr_req'  => ['it' => 'Devi accettare l\'informativa privacy.', 'en' => 'You must accept the privacy policy.', 'de' => 'Du musst die Datenschutzerklärung akzeptieren.', 'fr' => 'Vous devez accepter la politique de confidentialité.'],
+        'nl_check'     => ['it' => 'Controlla la tua email e conferma l\'iscrizione: ti abbiamo inviato un link.', 'en' => 'Check your email and confirm your subscription: we sent you a link.', 'de' => 'Prüfe deine E-Mail und bestätige die Anmeldung: Wir haben dir einen Link geschickt.', 'fr' => 'Vérifiez votre e-mail et confirmez l\'inscription : nous vous avons envoyé un lien.'],
+        'nl_already'   => ['it' => 'Sei già iscritto, grazie!', 'en' => 'You are already subscribed, thank you!', 'de' => 'Du bist bereits angemeldet, danke!', 'fr' => 'Vous êtes déjà inscrit, merci !'],
+        'nl_conf_h'    => ['it' => 'Iscrizione confermata! 🌾', 'en' => 'Subscription confirmed! 🌾', 'de' => 'Anmeldung bestätigt! 🌾', 'fr' => 'Inscription confirmée ! 🌾'],
+        'nl_conf_p'    => ['it' => 'Grazie! Ecco il tuo sconto di benvenuto del 10% sul primo ordine. Usa questo codice al checkout:', 'en' => 'Thank you! Here is your 10% welcome discount on your first order. Use this code at checkout:', 'de' => 'Danke! Hier ist dein 10% Willkommensrabatt auf die erste Bestellung. Verwende diesen Code an der Kasse:', 'fr' => 'Merci ! Voici votre remise de bienvenue de 10% sur la première commande. Utilisez ce code au paiement :'],
+        'nl_conf_cta'  => ['it' => 'Vai al negozio', 'en' => 'Go to shop', 'de' => 'Zum Shop', 'fr' => 'Aller à la boutique'],
+        'nl_bad_h'     => ['it' => 'Link non valido', 'en' => 'Invalid link', 'de' => 'Ungültiger Link', 'fr' => 'Lien non valide'],
+        'nl_bad_p'     => ['it' => 'Questo link di conferma non è valido o è scaduto. Prova a iscriverti di nuovo.', 'en' => 'This confirmation link is invalid or expired. Please try subscribing again.', 'de' => 'Dieser Bestätigungslink ist ungültig oder abgelaufen. Bitte melde dich erneut an.', 'fr' => 'Ce lien de confirmation n\'est pas valide ou a expiré. Veuillez vous réinscrire.'],
         // Footer
         'foot_blurb'   => ['it' => 'Mangia con Gusto — Prodotti senza glutine e senza lattosio. Pane, basi pizza, focacce, dolci e cheesecake prodotti in laboratorio dedicato.', 'en' => 'Mangia con Gusto — Gluten-free and lactose-free products. Bread, pizza bases, focaccia, desserts and cheesecake made in a dedicated lab.', 'de' => 'Mangia con Gusto — Glutenfreie und laktosefreie Produkte. Brot, Pizzaböden, Focaccia, Süßes und Cheesecake aus eigenem Labor.', 'fr' => 'Mangia con Gusto — Produits sans gluten et sans lactose. Pain, bases pizza, focaccia, desserts et cheesecake produits en laboratoire dédié.'],
         'foot_catalog_full' => ['it' => 'Catalogo completo', 'en' => 'Full catalog', 'de' => 'Vollständiger Katalog', 'fr' => 'Catalogue complet'],
@@ -1189,3 +1200,180 @@ add_action('init', function () {
     pll_save_post_translations($map);
     update_option('lcgf_abc_i18n_v1', current_time('mysql'));
 }, 106);
+
+/* =========================================================================
+ * NEWSLETTER (double opt-in) — tabella iscritti, AJAX, conferma, coupon -10%
+ * ========================================================================= */
+
+// Once-run (lcgf_nl_v1): tabella iscritti + coupon di benvenuto BENVENUTO10
+add_action('init', function () {
+    if (get_option('lcgf_nl_v1')) return;
+    if (!function_exists('WC')) return;
+    global $wpdb;
+    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+    $tb = $wpdb->prefix . 'lcgf_newsletter';
+    dbDelta("CREATE TABLE {$tb} (
+      id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+      email VARCHAR(190) NOT NULL,
+      token VARCHAR(40) NOT NULL,
+      status VARCHAR(12) NOT NULL DEFAULT 'pending',
+      lang VARCHAR(5) NOT NULL DEFAULT 'it',
+      created_at DATETIME NOT NULL,
+      confirmed_at DATETIME NULL,
+      PRIMARY KEY  (id),
+      UNIQUE KEY email (email)
+    ) " . $wpdb->get_charset_collate() . ";");
+
+    if (function_exists('wc_get_coupon_id_by_code') && !wc_get_coupon_id_by_code('BENVENUTO10')) {
+        $c = new WC_Coupon();
+        $c->set_code('BENVENUTO10');
+        $c->set_discount_type('percent');
+        $c->set_amount(10);
+        $c->set_individual_use(true);
+        $c->set_description('Sconto di benvenuto newsletter -10%');
+        $c->save();
+    }
+    update_option('lcgf_nl_v1', current_time('mysql'));
+}, 107);
+
+// Email di conferma (double opt-in), brandizzata + multilingua
+function lcgf_nl_optin_email($email, $token, $lang) {
+    $confirm = add_query_arg(
+        ['lcgf_action' => 'nl_confirm', 'e' => rawurlencode($email), 't' => $token],
+        home_url('/')
+    );
+    $S = [
+        'it' => ['s' => 'Conferma la tua iscrizione 🌾', 'h' => 'Ci sei quasi!', 'p' => 'Conferma la tua iscrizione alla newsletter di La Compagnia del Gluten Free e ricevi subito il <strong>10% di sconto</strong> sul primo ordine.', 'b' => 'Conferma iscrizione', 'f' => 'Se non ti sei iscritto tu, ignora pure questa email.'],
+        'en' => ['s' => 'Confirm your subscription 🌾', 'h' => 'Almost there!', 'p' => 'Confirm your subscription to the La Compagnia del Gluten Free newsletter and get <strong>10% off</strong> your first order right away.', 'b' => 'Confirm subscription', 'f' => 'If you did not subscribe, please ignore this email.'],
+        'de' => ['s' => 'Bestätige deine Anmeldung 🌾', 'h' => 'Fast geschafft!', 'p' => 'Bestätige deine Anmeldung zum Newsletter von La Compagnia del Gluten Free und erhalte sofort <strong>10% Rabatt</strong> auf die erste Bestellung.', 'b' => 'Anmeldung bestätigen', 'f' => 'Wenn du dich nicht angemeldet hast, ignoriere diese E-Mail.'],
+        'fr' => ['s' => 'Confirmez votre inscription 🌾', 'h' => 'Vous y êtes presque !', 'p' => 'Confirmez votre inscription à la newsletter de La Compagnia del Gluten Free et recevez tout de suite <strong>10% de remise</strong> sur la première commande.', 'b' => 'Confirmer l\'inscription', 'f' => 'Si vous ne vous êtes pas inscrit, ignorez cet e-mail.'],
+    ];
+    $t = $S[$lang] ?? $S['it'];
+    $logo = get_stylesheet_directory_uri() . '/assets/img/logo.webp';
+    $body = '<div style="font-family:Arial,Helvetica,sans-serif;max-width:520px;margin:0 auto;color:#2f3a2a">'
+        . '<div style="text-align:center;padding:18px 0"><img src="' . esc_url($logo) . '" alt="La Compagnia del Gluten Free" width="90" style="width:90px;height:auto"></div>'
+        . '<div style="background:#fff;border:1px solid #e6e0cf;border-radius:14px;padding:28px 26px">'
+        . '<h1 style="font-size:21px;color:#4f6e37;margin:0 0 10px">' . esc_html($t['h']) . '</h1>'
+        . '<p style="font-size:15px;line-height:1.6;margin:0 0 22px">' . $t['p'] . '</p>'
+        . '<p style="text-align:center;margin:0 0 20px"><a href="' . esc_url($confirm) . '" style="display:inline-block;background:#6b8e4e;color:#fff;text-decoration:none;font-weight:700;padding:13px 28px;border-radius:999px">' . esc_html($t['b']) . '</a></p>'
+        . '<p style="font-size:12px;color:#8a8a7a;margin:0">' . esc_html($t['f']) . '</p>'
+        . '</div></div>';
+    wp_mail($email, $t['s'], $body, ['Content-Type: text/html; charset=UTF-8']);
+}
+
+// AJAX iscrizione (anche non loggati)
+function lcgf_nl_save() {
+    check_ajax_referer('lcgf_nl', 'nonce');
+    $email = sanitize_email($_POST['email'] ?? '');
+    if (!is_email($email)) wp_send_json_error(['msg' => lcgf_t('nl_invalid')], 400);
+    if (empty($_POST['gdpr'])) wp_send_json_error(['msg' => lcgf_t('nl_gdpr_req')], 400);
+    global $wpdb; $tb = $wpdb->prefix . 'lcgf_newsletter';
+    $lang = function_exists('pll_current_language') ? (pll_current_language('slug') ?: 'it') : 'it';
+    $row = $wpdb->get_row($wpdb->prepare("SELECT id,status FROM {$tb} WHERE email=%s", $email));
+    if ($row && $row->status === 'confirmed') wp_send_json_success(['msg' => lcgf_t('nl_already')]);
+    $token = wp_generate_password(24, false);
+    if ($row) {
+        $wpdb->update($tb, ['token' => $token, 'lang' => $lang, 'created_at' => current_time('mysql')], ['id' => $row->id]);
+    } else {
+        $wpdb->insert($tb, ['email' => $email, 'token' => $token, 'status' => 'pending', 'lang' => $lang, 'created_at' => current_time('mysql')]);
+    }
+    lcgf_nl_optin_email($email, $token, $lang);
+    wp_send_json_success(['msg' => lcgf_t('nl_check')]);
+}
+add_action('wp_ajax_lcgf_nl', 'lcgf_nl_save');
+add_action('wp_ajax_nopriv_lcgf_nl', 'lcgf_nl_save');
+
+// Conferma double opt-in → pagina brandizzata con coupon
+add_action('template_redirect', function () {
+    if (($_GET['lcgf_action'] ?? '') !== 'nl_confirm') return;
+    $email = sanitize_email($_GET['e'] ?? '');
+    $token = sanitize_text_field($_GET['t'] ?? '');
+    global $wpdb; $tb = $wpdb->prefix . 'lcgf_newsletter';
+    $row = ($email && $token) ? $wpdb->get_row($wpdb->prepare("SELECT * FROM {$tb} WHERE email=%s AND token=%s", $email, $token)) : null;
+    $ok = (bool) $row;
+    if ($row && $row->status !== 'confirmed') {
+        $wpdb->update($tb, ['status' => 'confirmed', 'confirmed_at' => current_time('mysql')], ['id' => $row->id]);
+    }
+    status_header(200); nocache_headers();
+    get_header();
+    echo '<main style="max-width:640px;margin:60px auto;padding:0 22px;text-align:center;min-height:42vh">';
+    if ($ok) {
+        echo '<h1 style="color:#4f6e37">' . esc_html(lcgf_t('nl_conf_h')) . '</h1>';
+        echo '<p style="font-size:1.05rem;color:#4a4a3a">' . esc_html(lcgf_t('nl_conf_p')) . '</p>';
+        echo '<div style="display:inline-block;border:2px dashed #6b8e4e;border-radius:12px;padding:14px 30px;font-size:1.7rem;font-weight:800;letter-spacing:4px;color:#4f6e37;margin:16px 0">BENVENUTO10</div>';
+        echo '<p style="margin-top:18px"><a class="btn" href="' . esc_url(wc_get_page_permalink('shop')) . '">' . esc_html(lcgf_t('nl_conf_cta')) . '</a></p>';
+    } else {
+        echo '<h1>' . esc_html(lcgf_t('nl_bad_h')) . '</h1><p style="color:#4a4a3a">' . esc_html(lcgf_t('nl_bad_p')) . '</p>';
+    }
+    echo '</main>';
+    get_footer();
+    exit;
+});
+
+// Export CSV iscritti (solo admin): /?lcgf_action=nl_list
+add_action('init', function () {
+    if (($_GET['lcgf_action'] ?? '') !== 'nl_list') return;
+    if (!current_user_can('manage_options')) { status_header(403); exit('forbidden'); }
+    global $wpdb; $tb = $wpdb->prefix . 'lcgf_newsletter';
+    $rows = $wpdb->get_results("SELECT email,status,lang,created_at,confirmed_at FROM {$tb} ORDER BY id DESC", ARRAY_A);
+    nocache_headers();
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename=newsletter-lcgf.csv');
+    $out = fopen('php://output', 'w');
+    fputcsv($out, ['email', 'status', 'lang', 'created_at', 'confirmed_at']);
+    foreach ((array) $rows as $r) fputcsv($out, $r);
+    fclose($out);
+    exit;
+});
+
+/* JSON-LD schema.org Product/Offer sulle pagine prodotto (single) */
+add_action('wp_footer', function () {
+    if (!function_exists('is_product') || !is_product()) return;
+    $product = wc_get_product(get_queried_object_id());
+    if (!$product instanceof WC_Product) return;
+    $url = get_permalink($product->get_id());
+    $img = wp_get_attachment_url($product->get_image_id());
+    $desc = wp_strip_all_tags($product->get_short_description() ?: $product->get_description() ?: $product->get_name());
+    $schema = [
+        '@context'    => 'https://schema.org/',
+        '@type'       => 'Product',
+        'name'        => $product->get_name(),
+        'description' => mb_substr($desc, 0, 500),
+        'url'         => $url,
+        'brand'       => ['@type' => 'Brand', 'name' => 'La Compagnia del Gluten Free'],
+    ];
+    if ($img) $schema['image'] = [$img];
+    if ($product->get_sku()) $schema['sku'] = $product->get_sku();
+    $instock = $product->is_in_stock() ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock';
+    $cur = get_woocommerce_currency();
+    if ($product->is_type('variable')) {
+        $prices = $product->get_variation_prices(true);
+        $arr = !empty($prices['price']) ? array_map('floatval', $prices['price']) : [];
+        $schema['offers'] = [
+            '@type'         => 'AggregateOffer',
+            'priceCurrency' => $cur,
+            'lowPrice'      => wc_format_decimal($arr ? min($arr) : $product->get_price(), 2),
+            'highPrice'     => wc_format_decimal($arr ? max($arr) : $product->get_price(), 2),
+            'offerCount'    => count($arr),
+            'availability'  => $instock,
+            'url'           => $url,
+        ];
+    } else {
+        $schema['offers'] = [
+            '@type'         => 'Offer',
+            'priceCurrency' => $cur,
+            'price'         => wc_format_decimal($product->get_price(), 2),
+            'availability'  => $instock,
+            'url'           => $url,
+            'priceValidUntil' => gmdate('Y-12-31'),
+        ];
+    }
+    if ((int) $product->get_review_count() > 0) {
+        $schema['aggregateRating'] = [
+            '@type'       => 'AggregateRating',
+            'ratingValue' => (string) $product->get_average_rating(),
+            'reviewCount' => (int) $product->get_review_count(),
+        ];
+    }
+    echo "\n" . '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+}, 20);

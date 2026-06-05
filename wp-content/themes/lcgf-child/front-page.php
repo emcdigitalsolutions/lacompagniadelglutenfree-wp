@@ -292,10 +292,20 @@ $logo = get_stylesheet_directory_uri() . '/assets/img/logo.webp';
       <span class="eyebrow"><?php echo lcgf_t('nl_eyebrow'); ?></span>
       <h2><?php echo lcgf_t('nl_h2'); ?></h2>
       <p><?php echo lcgf_t('nl_p'); ?></p>
-      <form class="lcgf-newsletter-form" id="lcgfNewsletter" onsubmit="event.preventDefault();this.querySelector('button').textContent='<?php echo esc_js(lcgf_t('nl_done')); ?>';">
-        <input type="email" placeholder="<?php echo esc_attr(lcgf_t('nl_email')); ?>" required />
-        <button type="submit" class="btn"><?php echo lcgf_t('nl_btn'); ?></button>
+      <form class="lcgf-newsletter-form" id="lcgfNewsletter" onsubmit="return lcgfNl(event)">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+          <input type="email" class="lcgf-nl-email" placeholder="<?php echo esc_attr(lcgf_t('nl_email')); ?>" required />
+          <button type="submit" class="btn"><?php echo lcgf_t('nl_btn'); ?></button>
+        </div>
+        <label style="display:flex;align-items:flex-start;gap:8px;margin:12px auto 0;max-width:460px;font-size:.82rem;opacity:.85;text-align:left">
+          <input type="checkbox" class="lcgf-nl-gdpr" required style="margin-top:3px;flex-shrink:0">
+          <span><?php echo lcgf_t('nl_gdpr'); ?> <a href="<?php echo esc_url(lcgf_page_url('privacy')); ?>" style="text-decoration:underline"><?php echo lcgf_t('nl_privacy'); ?></a></span>
+        </label>
+        <p class="lcgf-nl-msg" style="margin-top:10px;font-size:.92rem;font-weight:600;min-height:1.2em"></p>
       </form>
+      <script>
+      function lcgfNl(e){e.preventDefault();var f=e.target,em=f.querySelector('.lcgf-nl-email').value,gd=f.querySelector('.lcgf-nl-gdpr').checked,m=f.querySelector('.lcgf-nl-msg');var d=new FormData();d.append('action','lcgf_nl');d.append('nonce','<?php echo esc_js(wp_create_nonce('lcgf_nl')); ?>');d.append('email',em);d.append('gdpr',gd?'1':'');fetch('<?php echo esc_url(admin_url('admin-ajax.php')); ?>',{method:'POST',body:d}).then(function(r){return r.json();}).then(function(j){m.textContent=(j.data&&j.data.msg)||'';m.style.color=j.success?'#4f6e37':'#B14545';if(j.success){f.querySelector('.lcgf-nl-email').value='';f.querySelector('.lcgf-nl-gdpr').checked=false;}}).catch(function(){m.textContent='Errore, riprova.';m.style.color='#B14545';});return false;}
+      </script>
     </div>
   </div>
 </section>
