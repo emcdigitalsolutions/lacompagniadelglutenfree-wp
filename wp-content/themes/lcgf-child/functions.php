@@ -1125,6 +1125,7 @@ add_action('template_redirect', function () {
     if (is_admin()) return;
     if (defined('DOING_AJAX') && DOING_AJAX) return;
     if (defined('REST_REQUEST') && REST_REQUEST) return;
+    if (isset($_GET['lcgf_action'])) return; // non interferire con gli endpoint custom (es. conferma newsletter)
     if (!function_exists('pll_languages_list') || !function_exists('pll_current_language') || !function_exists('pll_home_url')) return;
     if (!is_front_page()) return;
 
