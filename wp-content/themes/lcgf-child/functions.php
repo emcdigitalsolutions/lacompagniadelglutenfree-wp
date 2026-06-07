@@ -756,6 +756,8 @@ add_filter('robots_txt', function ($output, $public) {
 add_action('template_redirect', function () {
     $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
     if ($path !== 'llms.txt') return;
+    status_header(200);
+    nocache_headers();
     header('Content-Type: text/plain; charset=utf-8');
     $home = home_url('/');
     echo "# La Compagnia del Gluten Free — Mangia con Gusto\n\n";
