@@ -285,6 +285,29 @@ $logo = get_stylesheet_directory_uri() . '/assets/img/logo.webp';
   </div>
 </section>
 
+<!-- FAQ -->
+<section class="section" style="background:var(--c-cream-2,#f4ece0)">
+  <div class="container" style="max-width:860px">
+    <div style="text-align:center;margin-bottom:32px">
+      <span class="eyebrow"><?php echo lcgf_t('faq_eye'); ?></span>
+      <h2><?php echo lcgf_t('faq_h2'); ?></h2>
+    </div>
+    <div class="lcgf-faq">
+      <?php for ($i = 1; $i <= 6; $i++): ?>
+      <details><summary><?php echo lcgf_t('faq_q' . $i); ?></summary><p><?php echo lcgf_t('faq_a' . $i); ?></p></details>
+      <?php endfor; ?>
+    </div>
+  </div>
+</section>
+<style>
+.lcgf-faq details{background:#fff;border:1px solid var(--c-line,#e6e0cf);border-radius:14px;padding:0 22px;margin-bottom:12px}
+.lcgf-faq summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:700;color:var(--c-olive-deep,#2f4823);display:flex;justify-content:space-between;gap:14px;align-items:center}
+.lcgf-faq summary::-webkit-details-marker{display:none}
+.lcgf-faq summary::after{content:"+";font-size:24px;font-weight:400;color:var(--c-olive,#6b8e4e);transition:.2s;flex-shrink:0}
+.lcgf-faq details[open] summary::after{transform:rotate(45deg)}
+.lcgf-faq details p{padding:0 0 18px;margin:0;color:var(--c-ink-soft,#4a4a3a);line-height:1.65}
+</style>
+
 <!-- NEWSLETTER -->
 <section class="section">
   <div class="container" style="max-width:880px">

@@ -773,6 +773,17 @@ add_action('template_redirect', function () {
     exit;
 });
 
+// 6b) FAQPage schema sulla home (coerente con la FAQ visibile, lingua corrente)
+add_action('wp_head', function () {
+    if (!is_front_page()) return;
+    $qa = [];
+    for ($i = 1; $i <= 6; $i++) {
+        $qa[] = ['@type' => 'Question', 'name' => wp_strip_all_tags(lcgf_t('faq_q' . $i)), 'acceptedAnswer' => ['@type' => 'Answer', 'text' => wp_strip_all_tags(lcgf_t('faq_a' . $i))]];
+    }
+    $schema = ['@context' => 'https://schema.org', '@type' => 'FAQPage', 'mainEntity' => $qa];
+    echo "\n<script type=\"application/ld+json\">" . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "</script>\n";
+});
+
 /**
  * Restituisce il markup di un logo certificazione: l'immagine ufficiale se il
  * file è presente in /assets/certs/, altrimenti un placeholder pulito (così la
@@ -1030,6 +1041,20 @@ function lcgf_i18n_strings() {
         'nl_done'      => ['it' => '✓ Iscritto', 'en' => '✓ Subscribed', 'de' => '✓ Abonniert', 'fr' => '✓ Inscrit'],
         'nl_gdpr'      => ['it' => 'Acconsento al trattamento dei dati per ricevere la newsletter.', 'en' => 'I consent to data processing to receive the newsletter.', 'de' => 'Ich stimme der Datenverarbeitung zum Erhalt des Newsletters zu.', 'fr' => 'J\'accepte le traitement des données pour recevoir la newsletter.'],
         'nl_privacy'   => ['it' => 'Informativa privacy', 'en' => 'Privacy policy', 'de' => 'Datenschutz', 'fr' => 'Politique de confidentialité'],
+        'faq_eye'      => ['it' => 'Domande frequenti', 'en' => 'FAQ', 'de' => 'Häufige Fragen', 'fr' => 'Questions fréquentes'],
+        'faq_h2'       => ['it' => 'Tutto quello che vuoi sapere', 'en' => 'Everything you want to know', 'de' => 'Alles, was du wissen möchtest', 'fr' => 'Tout ce que vous voulez savoir'],
+        'faq_q1'       => ['it' => 'I prodotti sono adatti ai celiaci?', 'en' => 'Are the products suitable for coeliacs?', 'de' => 'Sind die Produkte für Zöliakie-Betroffene geeignet?', 'fr' => 'Les produits conviennent-ils aux cœliaques ?'],
+        'faq_a1'       => ['it' => 'Sì. Produciamo in un laboratorio esclusivamente senza glutine, senza alcun rischio di contaminazione crociata, e siamo accreditati AIC (Associazione Italiana Celiachia).', 'en' => 'Yes. We produce in an exclusively gluten-free lab, with no risk of cross-contamination, and we are AIC (Italian Coeliac Association) accredited.', 'de' => 'Ja. Wir produzieren in einem ausschließlich glutenfreien Labor, ohne Risiko einer Kreuzkontamination, und sind von der AIC (Italienische Zöliakie-Vereinigung) akkreditiert.', 'fr' => 'Oui. Nous produisons dans un laboratoire exclusivement sans gluten, sans risque de contamination croisée, et nous sommes accrédités AIC (Association Italienne de la Maladie Cœliaque).'],
+        'faq_q2'       => ['it' => 'Sono anche senza lattosio?', 'en' => 'Are they also lactose-free?', 'de' => 'Sind sie auch laktosefrei?', 'fr' => 'Sont-ils aussi sans lactose ?'],
+        'faq_a2'       => ['it' => 'Sì: tutti i nostri prodotti sono senza glutine e senza lattosio.', 'en' => 'Yes: all our products are gluten-free and lactose-free.', 'de' => 'Ja: Alle unsere Produkte sind glutenfrei und laktosefrei.', 'fr' => 'Oui : tous nos produits sont sans gluten et sans lactose.'],
+        'faq_q3'       => ['it' => 'Posso usare il buono celiachia? I prodotti sono mutuabili?', 'en' => 'Can I use the coeliac voucher? Are the products reimbursable?', 'de' => 'Kann ich den Zöliakie-Gutschein nutzen? Sind die Produkte erstattungsfähig?', 'fr' => 'Puis-je utiliser le bon cœliaque ? Les produits sont-ils remboursables ?'],
+        'faq_a3'       => ['it' => 'Diversi nostri prodotti sono mutuabili dal Servizio Sanitario Nazionale e spendibili con il buono celiachia. Contattaci per sapere quali.', 'en' => 'Several of our products are reimbursable by the National Health Service and can be purchased with the coeliac voucher. Contact us to find out which ones.', 'de' => 'Mehrere unserer Produkte sind vom nationalen Gesundheitsdienst erstattungsfähig und mit dem Zöliakie-Gutschein erhältlich. Kontaktiere uns, um zu erfahren, welche.', 'fr' => 'Plusieurs de nos produits sont remboursables par le service de santé national et peuvent être achetés avec le bon cœliaque. Contactez-nous pour savoir lesquels.'],
+        'faq_q4'       => ['it' => 'Fate spedizioni in tutta Italia?', 'en' => 'Do you ship throughout Italy?', 'de' => 'Versendet ihr in ganz Italien?', 'fr' => 'Livrez-vous dans toute l\'Italie ?'],
+        'faq_a4'       => ['it' => 'Sì, spediamo in tutta Italia con spedizione tracciata; consegniamo anche in diverse zone dell\'Unione Europea.', 'en' => 'Yes, we ship throughout Italy with tracked delivery; we also deliver to several areas of the European Union.', 'de' => 'Ja, wir versenden in ganz Italien mit Sendungsverfolgung; wir liefern auch in mehrere Gebiete der Europäischen Union.', 'fr' => 'Oui, nous livrons dans toute l\'Italie avec suivi ; nous livrons aussi dans plusieurs régions de l\'Union européenne.'],
+        'faq_q5'       => ['it' => 'Come si conservano i prodotti?', 'en' => 'How should the products be stored?', 'de' => 'Wie werden die Produkte aufbewahrt?', 'fr' => 'Comment conserver les produits ?'],
+        'faq_a5'       => ['it' => 'I prodotti da forno senza glutine si gustano al meglio freschi, ma si conservano benissimo in freezer: basta scongelarli o riscaldarli al momento del consumo.', 'en' => 'Gluten-free baked goods are best enjoyed fresh, but they freeze very well: just thaw or warm them up before eating.', 'de' => 'Glutenfreie Backwaren schmecken frisch am besten, lassen sich aber sehr gut einfrieren: einfach vor dem Verzehr auftauen oder erwärmen.', 'fr' => 'Les produits de boulangerie sans gluten se dégustent au mieux frais, mais se conservent très bien au congélateur : il suffit de les décongeler ou de les réchauffer avant de les consommer.'],
+        'faq_q6'       => ['it' => 'Dove avete sede?', 'en' => 'Where are you based?', 'de' => 'Wo ist euer Sitz?', 'fr' => 'Où êtes-vous situés ?'],
+        'faq_a6'       => ['it' => 'Siamo a Campobello di Licata (AG), in Sicilia. La vendita è online, con spedizione a domicilio.', 'en' => 'We are in Campobello di Licata (AG), Sicily. Sales are online, with home delivery.', 'de' => 'Wir sind in Campobello di Licata (AG), Sizilien. Der Verkauf erfolgt online mit Lieferung nach Hause.', 'fr' => 'Nous sommes à Campobello di Licata (AG), en Sicile. La vente se fait en ligne, avec livraison à domicile.'],
         'nl_invalid'   => ['it' => 'Inserisci un indirizzo email valido.', 'en' => 'Please enter a valid email address.', 'de' => 'Bitte gib eine gültige E-Mail-Adresse ein.', 'fr' => 'Veuillez saisir une adresse e-mail valide.'],
         'nl_gdpr_req'  => ['it' => 'Devi accettare l\'informativa privacy.', 'en' => 'You must accept the privacy policy.', 'de' => 'Du musst die Datenschutzerklärung akzeptieren.', 'fr' => 'Vous devez accepter la politique de confidentialité.'],
         'nl_check'     => ['it' => 'Controlla la tua email e conferma l\'iscrizione: ti abbiamo inviato un link.', 'en' => 'Check your email and confirm your subscription: we sent you a link.', 'de' => 'Prüfe deine E-Mail und bestätige die Anmeldung: Wir haben dir einen Link geschickt.', 'fr' => 'Vérifiez votre e-mail et confirmez l\'inscription : nous vous avons envoyé un lien.'],
