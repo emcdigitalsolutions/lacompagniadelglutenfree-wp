@@ -758,6 +758,24 @@ add_action('init', function () {
 }, 110);
 
 /**
+ * Assegna il template page-faq.php alle pagine FAQ (it/en/de/fr). La pagina
+ * /faq/ era uno stub; ora riusa le FAQ multilingua (chiavi faq_* di lcgf_t).
+ * Idempotente, guardato da option.
+ */
+add_action('init', function () {
+    if (get_option('lcgf_faq_tpl_v1')) return;
+    $slugs = ['faq', 'frequently-asked-questions', 'haufig-gestellte-fragen', 'foire-aux-questions'];
+    $n = 0;
+    foreach ($slugs as $slug) {
+        $q = get_posts(['post_type'=>'page','name'=>$slug,'numberposts'=>1,'post_status'=>'publish','suppress_filters'=>true]);
+        if (!$q) continue;
+        update_post_meta($q[0]->ID, '_wp_page_template', 'page-faq.php');
+        $n++;
+    }
+    update_option('lcgf_faq_tpl_v1', current_time('mysql') . " ({$n} pagine)");
+}, 115);
+
+/**
  * Messaggio di benvenuto brandizzato in cima alla dashboard "Il mio account".
  */
 add_action('woocommerce_account_dashboard', function () {
