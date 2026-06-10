@@ -57,6 +57,7 @@
       <h3><?php echo lcgf_t('foot_info'); ?></h3>
       <ul>
         <li><a href="<?php echo esc_url(lcgf_page_url('chi-siamo')); ?>"><?php echo lcgf_t('nav_chisiamo'); ?></a></li>
+        <li><a href="<?php echo esc_url(get_post_type_archive_link('lcgf_evento')); ?>"><?php echo lcgf_t('nav_fiere'); ?></a></li>
         <li><a href="<?php echo esc_url(lcgf_page_url('faq')); ?>">FAQ</a></li>
         <li><a href="<?php echo esc_url(lcgf_page_url('spedizioni')); ?>"><?php echo lcgf_t('foot_shipping'); ?></a></li>
         <li><a href="<?php echo esc_url(lcgf_page_url('condizioni')); ?>"><?php echo lcgf_t('foot_terms'); ?></a></li>

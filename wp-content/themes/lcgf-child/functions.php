@@ -321,9 +321,9 @@ add_action('admin_notices', function () {
 add_action('init', function () {
     register_post_type('lcgf_evento', [
         'labels' => [
-            'name'               => 'Fiere ed Eventi',
-            'singular_name'      => 'Evento',
-            'menu_name'          => 'Fiere ed Eventi',
+            'name'               => 'Novità & Eventi',
+            'singular_name'      => 'Voce',
+            'menu_name'          => 'Novità & Eventi',
             'add_new'            => 'Aggiungi evento',
             'add_new_item'       => 'Nuovo evento',
             'edit_item'          => 'Modifica evento',
@@ -337,7 +337,7 @@ add_action('init', function () {
         ],
         'public'              => true,
         'show_in_rest'        => true,
-        'has_archive'         => 'fiere-eventi',
+        'has_archive'         => 'novita-eventi',
         'rewrite'             => ['slug' => 'evento', 'with_front' => false],
         'supports'            => ['title', 'editor', 'thumbnail', 'excerpt'],
         'menu_icon'           => 'dashicons-calendar-alt',
@@ -349,9 +349,9 @@ add_action('init', function () {
 
 /* Flush rewrite rules una sola volta dopo il deploy del nuovo CPT */
 add_action('init', function () {
-    if (get_option('lcgf_rewrite_flushed_v2') === 'done') return;
+    if (get_option('lcgf_rewrite_flushed_v3') === 'done') return;
     flush_rewrite_rules(false);
-    update_option('lcgf_rewrite_flushed_v2', 'done');
+    update_option('lcgf_rewrite_flushed_v3', 'done');
 }, 99);
 
 /**
@@ -362,6 +362,7 @@ add_action('init', function () {
  */
 add_filter('pll_get_post_types', function ($post_types, $is_settings = false) {
     $post_types['product'] = 'product';
+    $post_types['lcgf_evento'] = 'lcgf_evento';
     return $post_types;
 }, 10, 2);
 add_filter('pll_get_taxonomies', function ($taxonomies, $is_settings = false) {
@@ -404,9 +405,9 @@ function lcgf_evento_render_meta_box($post) {
     </style>
     <div class="lcgf-meta-grid">
       <div>
-        <label>Data inizio *</label>
-        <input type="date" name="lcgf_evento[data_inizio]" value="<?php echo esc_attr($f['data_inizio']); ?>" required />
-        <p class="lcgf-meta-hint">Es. 2026-05-15</p>
+        <label>Data inizio</label>
+        <input type="date" name="lcgf_evento[data_inizio]" value="<?php echo esc_attr($f['data_inizio']); ?>" />
+        <p class="lcgf-meta-hint">Compila per un <strong>evento</strong>. Lascia vuoto per una <strong>novità/notizia</strong>.</p>
       </div>
       <div>
         <label>Data fine (opzionale)</label>
@@ -422,8 +423,8 @@ function lcgf_evento_render_meta_box($post) {
         <input type="text" name="lcgf_evento[prezzo]" value="<?php echo esc_attr($f['prezzo']); ?>" placeholder="Es. Ingresso libero" />
       </div>
       <div class="full">
-        <label>Luogo (nome) *</label>
-        <input type="text" name="lcgf_evento[luogo]" value="<?php echo esc_attr($f['luogo']); ?>" placeholder="Es. Piazza Garibaldi, Sagra del Pane" required />
+        <label>Luogo (nome)</label>
+        <input type="text" name="lcgf_evento[luogo]" value="<?php echo esc_attr($f['luogo']); ?>" placeholder="Es. Piazza Garibaldi, Sagra del Pane" />
       </div>
       <div>
         <label>Indirizzo</label>
@@ -579,6 +580,46 @@ add_action('admin_init', function () {
     }
     update_option('lcgf_evento_seeded_v1', 'done');
 });
+
+/**
+ * Seed "Novità & Eventi": pubblica gli eventi in bozza + crea 2 novità (senza
+ * data) + assegna la lingua IT. Idempotente, guardato da option.
+ */
+add_action('init', function () {
+    if (get_option('lcgf_news_seed_v2')) return;
+    if (!post_type_exists('lcgf_evento')) return;
+    $set_lang = function ($id) {
+        if (function_exists('pll_set_post_language') && function_exists('pll_get_post_language') && !pll_get_post_language($id)) {
+            pll_set_post_language($id, 'it');
+        }
+    };
+    // Pubblica eventuali eventi in bozza + assegna lingua
+    $existing = get_posts(['post_type' => 'lcgf_evento', 'post_status' => ['draft', 'publish'], 'numberposts' => -1, 'suppress_filters' => true]);
+    foreach ($existing as $e) {
+        if ($e->post_status === 'draft') wp_update_post(['ID' => $e->ID, 'post_status' => 'publish']);
+        $set_lang($e->ID);
+    }
+    // Crea 2 novità (senza data) se non presenti
+    $news = [
+        [
+            'title'   => 'Il nostro shop online è aperto!',
+            'excerpt' => 'Da oggi puoi ordinare i nostri prodotti senza glutine e senza lattosio comodamente online.',
+            'content' => "<!-- wp:paragraph --><p>Siamo felici di annunciare l'apertura del nostro <strong>shop online</strong>! Da oggi puoi ordinare pane, pinse, focacce, basi pizza e dolci <strong>senza glutine e senza lattosio</strong> direttamente da casa, con spedizione in tutta Italia. Sfoglia il catalogo e scopri tutte le bontà della nostra bottega.</p><!-- /wp:paragraph -->",
+        ],
+        [
+            'title'   => 'Cheesecake senza glutine: 5 gusti da provare',
+            'excerpt' => 'Pistacchio, frutti di bosco, fragola, limone e Pan di Stelle: la nostra cheesecake in cinque varianti golose.',
+            'content' => "<!-- wp:paragraph --><p>La nostra <strong>cheesecake senza glutine e senza lattosio</strong> arriva in cinque gusti irresistibili: pistacchio, frutti di bosco, fragola, limone e Pan di Stelle. Cremosa, fragrante e adatta a tutta la famiglia. Disponibile in monoporzione o nel formato da condividere.</p><!-- /wp:paragraph -->",
+        ],
+    ];
+    foreach ($news as $n) {
+        $found = get_posts(['post_type' => 'lcgf_evento', 'title' => $n['title'], 'numberposts' => 1, 'post_status' => 'any', 'suppress_filters' => true]);
+        if ($found) { $set_lang($found[0]->ID); continue; }
+        $id = wp_insert_post(['post_type' => 'lcgf_evento', 'post_status' => 'publish', 'post_title' => $n['title'], 'post_content' => $n['content'], 'post_excerpt' => $n['excerpt']]);
+        if ($id && !is_wp_error($id)) $set_lang($id);
+    }
+    update_option('lcgf_news_seed_v2', current_time('mysql'));
+}, 105);
 
 /**
  * Trigger manuale traduzione automatica IT -> EN/DE/FR via Gemini.
@@ -1159,7 +1200,7 @@ function lcgf_i18n_strings() {
     return [
         // Header / nav
         'nav_catalogo' => ['it' => 'Catalogo', 'en' => 'Catalog', 'de' => 'Katalog', 'fr' => 'Catalogue'],
-        'nav_fiere'    => ['it' => 'Fiere &amp; Eventi', 'en' => 'Fairs &amp; Events', 'de' => 'Messen &amp; Events', 'fr' => 'Foires &amp; Événements'],
+        'nav_fiere'    => ['it' => 'Novità &amp; Eventi', 'en' => 'News &amp; Events', 'de' => 'Neuigkeiten &amp; Events', 'fr' => 'Actualités &amp; Événements'],
         'nav_chisiamo' => ['it' => 'Chi siamo', 'en' => 'About us', 'de' => 'Über uns', 'fr' => 'À propos'],
         'nav_contatti' => ['it' => 'Contatti', 'en' => 'Contact', 'de' => 'Kontakt', 'fr' => 'Contact'],
         'aria_search'  => ['it' => 'Cerca', 'en' => 'Search', 'de' => 'Suche', 'fr' => 'Rechercher'],
