@@ -854,15 +854,23 @@ body { padding-top: var(--header-h); }
   .woocommerce-account.logged-in .woocommerce { grid-template-columns: 1fr; gap: 20px; }
 }
 
-/* ---- Login / Registrazione: due card affiancate ---- */
+/* ---- Login / Registrazione: due card affiancate ----
+   Flexbox (non grid): Astra/WooCommerce iniettano regole di placement sui
+   .col-1/.col-2 che falsano l'auto-placement della griglia. Il flex con
+   due figli flex:1 è immune e li tiene affiancati e allineati in alto. */
 .woocommerce-account:not(.logged-in) .woocommerce > .u-columns,
-.woocommerce .col2-set { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
-/* WooCommerce applica ai figli float + width:47% (vecchio layout float):
-   con la griglia vanno azzerati, così ogni card riempie la sua traccia. */
+.woocommerce .col2-set {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 28px;
+  align-items: flex-start;
+}
 .woocommerce .col2-set > .col-1,
 .woocommerce .col2-set > .col-2 {
+  flex: 1 1 0 !important;
+  min-width: 280px;
+  width: auto !important;
   float: none !important;
-  width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
 }
