@@ -123,35 +123,51 @@
 })();
 </script>
 
+<?php
+$lcgf_l = function_exists('pll_current_language') ? pll_current_language('slug') : 'it';
+$lcgf_cart_url = function_exists('wc_get_cart_url') ? wc_get_cart_url() : home_url('/carrello/');
+$lcgf_atc = ['it'=>'Prodotto aggiunto al carrello.','en'=>'Product added to cart.','de'=>'Produkt in den Warenkorb gelegt.','fr'=>'Produit ajouté au panier.'];
+$lcgf_view = ['it'=>'Visualizza carrello','en'=>'View cart','de'=>'Warenkorb ansehen','fr'=>'Voir le panier'];
+$lcgf_atc_msg = $lcgf_atc[$lcgf_l] ?? $lcgf_atc['it'];
+$lcgf_view_lbl = $lcgf_view[$lcgf_l] ?? $lcgf_view['it'];
+?>
 <script>
-/* Notifiche WooCommerce -> toast temporanei (appaiono, 5s, poi spariscono; X per chiudere).
-   Esclude le notifiche dentro carrello/checkout (gli errori lì devono restare visibili). */
+/* Notifiche -> toast temporanei: appaiono, restano 5s, poi spariscono (X per chiudere).
+   1) Evento AJAX 'added_to_cart' di WooCommerce (aggiunta dal catalogo, senza reload).
+   2) Conversione delle notifiche server (.woocommerce-message ecc.) che altrimenti
+      si accumulerebbero dentro le pagine. Escluse quelle di carrello/checkout. */
 (function(){
-  function initToasts(){
-    var found = [].slice.call(document.querySelectorAll('.woocommerce-message, .woocommerce-info, .woocommerce-error'))
-      .filter(function(n){ return !n.closest('.wc-block-checkout, .wp-block-woocommerce-checkout, .wp-block-woocommerce-cart, form.checkout, #lcgf-toasts'); });
-    if(!found.length) return;
-    var box = document.getElementById('lcgf-toasts');
-    if(!box){ box = document.createElement('div'); box.id = 'lcgf-toasts'; document.body.appendChild(box); }
-    found.forEach(function(n){
-      var t = document.createElement('div');
-      t.className = 'lcgf-toast';
-      if(n.classList.contains('woocommerce-error')) t.classList.add('is-error');
-      else if(n.classList.contains('woocommerce-info')) t.classList.add('is-info');
-      t.innerHTML = n.innerHTML;
-      var x = document.createElement('button');
-      x.type = 'button'; x.className = 'lcgf-toast-x'; x.setAttribute('aria-label', 'Chiudi'); x.innerHTML = '×';
-      var done = false;
-      function close(){ if(done) return; done = true; t.classList.add('is-out'); setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 360); }
-      x.addEventListener('click', close);
-      t.appendChild(x);
-      box.appendChild(t);
-      setTimeout(close, 5000);
-      if(n.parentNode) n.parentNode.removeChild(n);
-    });
+  var CART_URL = <?php echo json_encode($lcgf_cart_url); ?>;
+  var ATC_MSG  = <?php echo json_encode($lcgf_atc_msg); ?>;
+  var VIEW_LBL = <?php echo json_encode($lcgf_view_lbl); ?>;
+  function box(){ var b=document.getElementById('lcgf-toasts'); if(!b){ b=document.createElement('div'); b.id='lcgf-toasts'; document.body.appendChild(b); } return b; }
+  function toast(html, type){
+    var t=document.createElement('div');
+    t.className='lcgf-toast'+(type==='error'?' is-error':(type==='info'?' is-info':''));
+    t.innerHTML=html;
+    var x=document.createElement('button'); x.type='button'; x.className='lcgf-toast-x'; x.setAttribute('aria-label','Chiudi'); x.innerHTML='×';
+    var done=false; function close(){ if(done) return; done=true; t.classList.add('is-out'); setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); },360); }
+    x.addEventListener('click',close); t.appendChild(x); box().appendChild(t); setTimeout(close,5000);
   }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initToasts);
-  else initToasts();
+  function convertNotices(){
+    [].slice.call(document.querySelectorAll('.woocommerce-message, .woocommerce-info, .woocommerce-error'))
+      .filter(function(n){ return !n.closest('.wc-block-checkout, .wp-block-woocommerce-checkout, .wp-block-woocommerce-cart, form.checkout, #lcgf-toasts'); })
+      .forEach(function(n){
+        var type = n.classList.contains('woocommerce-error') ? 'error' : (n.classList.contains('woocommerce-info') ? 'info' : 'success');
+        toast(n.innerHTML, type);
+        if(n.parentNode) n.parentNode.removeChild(n);
+      });
+  }
+  function init(){
+    convertNotices();
+    if(window.jQuery){
+      jQuery(document.body).on('added_to_cart', function(){
+        toast('<strong>'+ATC_MSG+'</strong><br><a class="button" href="'+CART_URL+'">'+VIEW_LBL+'</a>', 'success');
+      });
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
 })();
 </script>
 <?php wp_footer(); ?>
