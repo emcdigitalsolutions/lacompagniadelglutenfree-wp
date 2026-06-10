@@ -870,6 +870,18 @@ add_filter('wpseo_metadesc', function ($desc) {
         return 'Catalogo di prodotti senza glutine e senza lattosio: pane, basi pizza, focacce e dolci '
              . 'artigianali. Laboratorio dedicato, accreditati AIC. Spedizione in tutta Italia.';
     }
+    // Pagine prodotto: usa la descrizione breve/estratto del prodotto, con fallback
+    // (Lighthouse segnalava "Document does not have a meta description" sui prodotti).
+    if (function_exists('is_product') && is_product()) {
+        $p = function_exists('wc_get_product') ? wc_get_product(get_the_ID()) : null;
+        $src = '';
+        if ($p) $src = $p->get_short_description() ?: $p->get_description();
+        if (!$src) $src = get_the_excerpt() ?: get_the_content();
+        $src = trim(wp_strip_all_tags($src));
+        if ($src) return wp_trim_words($src, 30, '…');
+        // Fallback generico con il nome del prodotto
+        return get_the_title() . ' — prodotto artigianale senza glutine e senza lattosio di La Compagnia del Gluten Free. Laboratorio dedicato, accreditati AIC, spedizione in tutta Italia.';
+    }
     return $desc;
 });
 
