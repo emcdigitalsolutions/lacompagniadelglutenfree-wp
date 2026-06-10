@@ -786,6 +786,8 @@ body { padding-top: var(--header-h); }
 .woocommerce-account input[type="email"],
 .woocommerce-account input[type="password"],
 .woocommerce-account input[type="tel"] {
+  width: 100% !important;
+  box-sizing: border-box !important;
   border: 1.5px solid var(--c-line) !important;
   border-radius: var(--r-md) !important;
   padding: 12px 14px !important;
@@ -794,6 +796,9 @@ body { padding-top: var(--header-h); }
   font-family: var(--f-sans) !important;
   transition: border-color .18s ease, box-shadow .18s ease !important;
 }
+/* Il campo password è avvolto in uno <span.password-input>: deve essere full-width */
+.woocommerce form .form-row .password-input,
+.woocommerce-account .password-input { display: block; position: relative; width: 100%; }
 .woocommerce form .form-row input.input-text:focus,
 .woocommerce-account input:focus {
   outline: none !important;
@@ -801,8 +806,11 @@ body { padding-top: var(--header-h); }
   box-shadow: 0 0 0 3px rgba(107, 142, 78, .15) !important;
 }
 
-/* ---- My Account: layout + navigazione laterale brandizzata ---- */
-.woocommerce-account .woocommerce {
+/* ---- My Account: layout + navigazione laterale brandizzata ----
+   SOLO da loggato (la dashboard ha la nav laterale). La pagina di
+   login/registrazione è anch'essa .woocommerce-account ma NON .logged-in:
+   va lasciata a tutta larghezza, altrimenti i form si schiacciano. */
+.woocommerce-account.logged-in .woocommerce {
   display: grid;
   grid-template-columns: 260px 1fr;
   gap: 40px;
@@ -843,7 +851,7 @@ body { padding-top: var(--header-h); }
 }
 .woocommerce-account .woocommerce-MyAccount-content a:not(.button) { color: var(--c-olive-deep); }
 @media (max-width: 820px) {
-  .woocommerce-account .woocommerce { grid-template-columns: 1fr; gap: 20px; }
+  .woocommerce-account.logged-in .woocommerce { grid-template-columns: 1fr; gap: 20px; }
 }
 
 /* ---- Login / Registrazione: due card affiancate ---- */
