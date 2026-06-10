@@ -902,7 +902,7 @@ add_filter('wpseo_schema_organization', function ($data) {
     $data['areaServed'] = ['@type' => 'Country', 'name' => 'Italia'];
     $data['address'] = [
         '@type' => 'PostalAddress',
-        'streetAddress' => 'Via Filippo Turati 13',
+        'streetAddress' => 'Via Angelo Giovanni Testasecca 7',
         'addressLocality' => 'Ravanusa',
         'postalCode' => '92029',
         'addressRegion' => 'AG',

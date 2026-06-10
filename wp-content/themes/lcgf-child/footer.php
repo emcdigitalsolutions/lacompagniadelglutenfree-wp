@@ -91,7 +91,7 @@
 
   <div class="container lcgf-footer-bottom">
     <p>&copy; <?php echo date('Y'); ?> La Compagnia del Gluten Free. <?php echo lcgf_t('foot_rights'); ?></p>
-    <p style="font-size:11.5px;opacity:.7;margin-top:4px">La Compagnia del Glutenfree S.r.l.s. · Via Filippo Turati 13, 92029 Ravanusa (AG) · P.IVA 03088660844</p>
+    <p style="font-size:11.5px;opacity:.7;margin-top:4px">La Compagnia del Glutenfree S.r.l.s. · Sede legale: Via Angelo Giovanni Testasecca 7, 92029 Ravanusa (AG) · P.IVA 03088660844 · REA AG-226109</p>
     <a href="https://www.emcdigitalsolutions.it" target="_blank" rel="noopener noreferrer" class="emc-credit">
       <span><?php echo lcgf_t('foot_designed'); ?></span>
       <svg xmlns="http://www.w3.org/2000/svg" width="70" height="20" viewBox="0 0 200 50">
