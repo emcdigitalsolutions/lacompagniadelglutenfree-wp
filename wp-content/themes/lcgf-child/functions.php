@@ -664,6 +664,100 @@ add_action('init', function () {
 }, 100);
 
 /**
+ * Importa le BOZZE legali nelle pagine IT (condizioni, cookie, privacy, recesso,
+ * spedizioni) leggendo i file `legal/*.html` del tema (blocchi Gutenberg). Le
+ * pagine erano vuote. Testo di prova, da far revisionare al commercialista.
+ * Idempotente: riempie solo se la pagina è vuota (non sovrascrive contenuto reale).
+ */
+add_action('init', function () {
+    if (get_option('lcgf_legal_import_v1')) return;
+    $map = [
+        'condizioni' => 'condizioni.html',
+        'cookie'     => 'cookie.html',
+        'privacy'    => 'privacy.html',
+        'recesso'    => 'recesso.html',
+        'spedizioni' => 'spedizioni.html',
+    ];
+    $dir = get_stylesheet_directory() . '/legal/';
+    $filled = 0;
+    foreach ($map as $slug => $file) {
+        $q = get_posts(['post_type'=>'page','name'=>$slug,'post_status'=>'publish','numberposts'=>1,'suppress_filters'=>true]);
+        if (!$q) continue;
+        $p = $q[0];
+        if (strlen(trim(wp_strip_all_tags($p->post_content))) > 60) continue; // ha già contenuto reale
+        $path = $dir . $file;
+        if (!file_exists($path)) continue;
+        $html = file_get_contents($path);
+        if (!$html) continue;
+        wp_update_post(['ID' => $p->ID, 'post_content' => $html]);
+        $filled++;
+    }
+    update_option('lcgf_legal_import_v1', current_time('mysql') . " ({$filled} pagine)");
+}, 105);
+
+/**
+ * Ripara i collegamenti Polylang delle pagine tradotte. Una run di traduzione
+ * precedente aveva creato le pagine EN/DE/FR (slug tradotti) ma le aveva
+ * lasciate etichettate "it" e SCOLLEGATE dall'originale, rompendo language
+ * switcher e hreflang (solo la pagina ABC risultava collegata). Qui assegniamo
+ * la lingua corretta in base allo slug e ricostruiamo i gruppi di traduzione.
+ * Idempotente, guardato da option. Pattern affidabile su init (vale anche su
+ * Keliweb dopo la migrazione).
+ */
+add_action('init', function () {
+    if (get_option('lcgf_pll_relink_v1')) return;
+    if (!function_exists('pll_set_post_language') || !function_exists('pll_save_post_translations')) return;
+    if (!function_exists('pll_languages_list') || count(pll_languages_list()) < 2) return;
+
+    // slug IT (master) => [lingua => slug tradotto]
+    $groups = [
+        'chi-siamo'   => ['en' => 'about-us',                  'de' => 'uber-uns',                  'fr' => 'qui-sommes-nous'],
+        'contatti'    => ['en' => 'contacts',                  'de' => 'kontakt',                   'fr' => 'contacts-2'],
+        'faq'         => ['en' => 'frequently-asked-questions','de' => 'haufig-gestellte-fragen',   'fr' => 'foire-aux-questions'],
+        'spedizioni'  => ['en' => 'shipping-and-returns',      'de' => 'versand-und-rucksendungen', 'fr' => 'livraisons-et-retours'],
+        'privacy'     => ['en' => 'privacy-policy-2',          'de' => 'datenschutzerklarung',      'fr' => 'politique-de-confidentialite'],
+        'cookie'      => ['en' => 'cookie-policy',             'de' => 'cookie-richtlinie',         'fr' => 'politique-en-matiere-de-cookies'],
+        'recesso'     => ['en' => 'right-of-withdrawal',       'de' => 'widerrufsrecht',            'fr' => 'droit-de-retractation'],
+        'condizioni'  => ['en' => 'terms-of-sale',             'de' => 'verkaufsbedingungen',       'fr' => 'conditions-de-vente'],
+        'negozio'     => ['en' => 'shop',                      'de' => 'shop-2',                    'fr' => 'boutique'],
+        'carrello'    => ['en' => 'cart',                      'de' => 'warenkorb',                 'fr' => 'panier'],
+        'pagamento'   => ['en' => 'payment',                   'de' => 'zahlung',                   'fr' => 'paiement'],
+        'mio-account' => ['en' => 'my-account',                'de' => 'mein-konto',                'fr' => 'mon-compte'],
+    ];
+
+    // Resolver per slug che ignora i filtri di lingua di Polylang (gli slug sono univoci).
+    $resolve = function ($slug) {
+        $q = get_posts([
+            'post_type'       => 'page',
+            'name'            => $slug,
+            'post_status'     => 'publish',
+            'numberposts'     => 1,
+            'suppress_filters'=> true,
+        ]);
+        return $q ? $q[0] : null;
+    };
+
+    $done = 0;
+    foreach ($groups as $it_slug => $tr) {
+        $it = $resolve($it_slug);
+        if (!$it) continue;
+        pll_set_post_language($it->ID, 'it');
+        $map = ['it' => $it->ID];
+        foreach ($tr as $lang => $slug) {
+            $p = $resolve($slug);
+            if (!$p) continue;
+            pll_set_post_language($p->ID, $lang);
+            $map[$lang] = $p->ID;
+        }
+        if (count($map) > 1) {
+            pll_save_post_translations($map);
+            $done++;
+        }
+    }
+    update_option('lcgf_pll_relink_v1', current_time('mysql') . " ({$done} gruppi)");
+}, 110);
+
+/**
  * Messaggio di benvenuto brandizzato in cima alla dashboard "Il mio account".
  */
 add_action('woocommerce_account_dashboard', function () {
@@ -689,10 +783,19 @@ function lcgf_seo_keywords() {
          . 'Agrigento, spedizione in tutta Italia';
 }
 
-// 1) Titolo corretto per la pagina account (Yoast sovrascrive il post_title)
+// 1) Titolo corretto per la pagina account (Yoast sovrascrive il post_title),
+//    localizzato per la lingua corrente (IT/EN/DE/FR).
 add_filter('wpseo_title', function ($title) {
     if (function_exists('is_account_page') && is_account_page()) {
-        return 'Il mio account — La Compagnia del Gluten Free';
+        $l = function_exists('pll_current_language') ? pll_current_language('slug') : 'it';
+        $map = [
+            'it' => 'Il mio account',
+            'en' => 'My account',
+            'de' => 'Mein Konto',
+            'fr' => 'Mon compte',
+        ];
+        $name = $map[$l] ?? $map['it'];
+        return $name . ' — La Compagnia del Gluten Free';
     }
     return $title;
 });
