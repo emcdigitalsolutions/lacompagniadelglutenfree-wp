@@ -349,9 +349,9 @@ add_action('init', function () {
 
 /* Flush rewrite rules una sola volta dopo il deploy del nuovo CPT */
 add_action('init', function () {
-    if (get_option('lcgf_evento_rewrite_flushed_v1') === 'done') return;
+    if (get_option('lcgf_rewrite_flushed_v2') === 'done') return;
     flush_rewrite_rules(false);
-    update_option('lcgf_evento_rewrite_flushed_v1', 'done');
+    update_option('lcgf_rewrite_flushed_v2', 'done');
 }, 99);
 
 /**
