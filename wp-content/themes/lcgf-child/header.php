@@ -86,7 +86,7 @@
       </div>
       <?php endif; endif; ?>
 
-      <a href="<?php echo esc_url(home_url('/?s=&post_type=product')); ?>" class="lcgf-icon-btn" aria-label="<?php echo esc_attr(lcgf_t('aria_search')); ?>">
+      <a href="<?php echo esc_url(home_url('/?s=')); ?>" class="lcgf-icon-btn" aria-label="<?php echo esc_attr(lcgf_t('aria_search')); ?>">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
       </a>
       <a href="<?php echo esc_url(get_permalink(get_option('woocommerce_myaccount_page_id'))); ?>" class="lcgf-icon-btn" aria-label="<?php echo esc_attr(lcgf_t('aria_account')); ?>">

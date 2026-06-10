@@ -791,6 +791,31 @@ add_action('init', function () {
 }, 115);
 
 /**
+ * Ricerca sito "su tutto": la ricerca principale include prodotti, pagine e
+ * articoli (così trova prodotti, descrizioni, info legali/pagamento, ecc.).
+ * Esclude le pagine funzionali WooCommerce (shop/carrello/checkout/account)
+ * dai risultati per non sporcarli. Polylang filtra già per lingua corrente.
+ */
+add_action('pre_get_posts', function ($q) {
+    if (is_admin() || !$q->is_main_query() || !$q->is_search()) return;
+    $q->set('post_type', ['product', 'page', 'post']);
+    $q->set('posts_per_page', 12);
+    if (function_exists('wc_get_page_id')) {
+        $exclude = [];
+        foreach (['shop', 'cart', 'checkout', 'myaccount'] as $k) {
+            $id = wc_get_page_id($k);
+            if ($id && $id > 0) {
+                $exclude[] = $id;
+                if (function_exists('pll_get_post_translations')) {
+                    foreach (pll_get_post_translations($id) as $tid) $exclude[] = (int)$tid;
+                }
+            }
+        }
+        if ($exclude) $q->set('post__not_in', array_values(array_unique($exclude)));
+    }
+});
+
+/**
  * Messaggio di benvenuto brandizzato in cima alla dashboard "Il mio account".
  */
 add_action('woocommerce_account_dashboard', function () {
