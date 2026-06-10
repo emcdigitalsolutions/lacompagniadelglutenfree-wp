@@ -130,7 +130,7 @@ $L = function ($it, $en, $de, $fr) use ($__lang) {
           <strong style="display:block;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--c-muted);margin-bottom:10px"><?php echo $L('Contatti aziendali', 'Company contacts', 'Firmenkontakte', "Contacts de l'entreprise"); ?></strong>
           <p style="margin:0;font-size:.92rem;line-height:1.7">
             <?php echo $L('Ufficio', 'Office', 'Büro', 'Bureau'); ?>: <a href="tel:+393513582074" style="color:var(--c-olive-deep);font-weight:600;text-decoration:none">+39 351 358 2074</a><br>
-            <?php echo $L('Altro', 'Other', 'Weitere', 'Autre'); ?>: <a href="tel:+393276999687" style="color:var(--c-olive-deep);font-weight:600;text-decoration:none">+39 327 699 9687</a><br>
+            <?php echo $L('Altro', 'Other', 'Weitere', 'Autre'); ?>: <a href="tel:+393276999897" style="color:var(--c-olive-deep);font-weight:600;text-decoration:none">+39 327 699 9897</a><br>
             Email: <a href="mailto:comp.glutenfree@libero.it" style="color:var(--c-olive-deep);font-weight:600;text-decoration:none">comp.glutenfree@libero.it</a>
           </p>
         </div>
