@@ -26,10 +26,10 @@ Text Domain: lcgf-child
   --c-burgundy:     #6E2A2A;
   --c-ink:          #1F1B14;
   --c-ink-soft:     #3D362C;
-  --c-muted:        #7A7160;
+  --c-muted:        #6A6053;
   --c-line:         #E6DECB;
   --c-white:        #FFFFFF;
-  --c-success:      #4D8B5A;
+  --c-success:      #357A45;
   --c-error:        #B14545;
 
   --g-hero:    radial-gradient(circle at 20% 20%, #F7EBD0 0%, transparent 60%),
@@ -96,7 +96,7 @@ header.site-header { display: none !important; }
   font-weight: 600;
   letter-spacing: .22em;
   text-transform: uppercase;
-  color: var(--c-wheat-dark);
+  color: #7a5e1f; /* gold scuro: contrasto AA (>=4.5:1) su fondo chiaro */
   margin-bottom: 14px;
 }
 .eyebrow::before { content: "✦"; margin-right: 10px; color: var(--c-olive); }
@@ -607,7 +607,7 @@ body { padding-top: var(--header-h); }
   padding-bottom: 50px;
   border-bottom: 1px solid rgba(255,255,255,.08);
 }
-.lcgf-footer h4 {
+.lcgf-footer h3 {
   color: var(--c-wheat) !important;
   font-family: var(--f-sans) !important;
   font-size: .8rem !important;

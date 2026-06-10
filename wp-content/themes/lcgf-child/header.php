@@ -70,7 +70,7 @@
           if (!$current) $current = reset($langs);
       ?>
       <div class="lcgf-lang">
-        <button class="lcgf-icon-btn lcgf-lang-btn" type="button" aria-label="Lingua" aria-haspopup="true" aria-expanded="false">
+        <button class="lcgf-icon-btn lcgf-lang-btn" type="button" aria-label="<?php echo esc_attr(strtoupper($current['slug']) . ' - ' . $current['name']); ?>" aria-haspopup="true" aria-expanded="false">
           <span class="lcgf-lang-flag"><?php echo esc_html(strtoupper($current['slug'])); ?></span>
         </button>
         <ul class="lcgf-lang-menu" role="menu">

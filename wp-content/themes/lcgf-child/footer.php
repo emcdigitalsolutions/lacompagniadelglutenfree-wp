@@ -35,7 +35,7 @@
     </div>
 
     <div>
-      <h4>Shop</h4>
+      <h3>Shop</h3>
       <ul>
         <li><a href="<?php echo esc_url(get_permalink(wc_get_page_id('shop'))); ?>"><?php echo lcgf_t('foot_catalog_full'); ?></a></li>
         <?php
@@ -54,7 +54,7 @@
     </div>
 
     <div>
-      <h4><?php echo lcgf_t('foot_info'); ?></h4>
+      <h3><?php echo lcgf_t('foot_info'); ?></h3>
       <ul>
         <li><a href="<?php echo esc_url(lcgf_page_url('chi-siamo')); ?>"><?php echo lcgf_t('nav_chisiamo'); ?></a></li>
         <li><a href="<?php echo esc_url(lcgf_page_url('faq')); ?>">FAQ</a></li>
@@ -67,7 +67,7 @@
     </div>
 
     <div>
-      <h4><?php echo lcgf_t('nav_contatti'); ?></h4>
+      <h3><?php echo lcgf_t('nav_contatti'); ?></h3>
       <ul>
         <li><a href="<?php echo esc_url(lcgf_page_url('contatti')); ?>"><?php echo lcgf_t('foot_contact_form'); ?></a></li>
         <li>Carmelo · <a href="tel:+393276999897">+39 327 699 9897</a></li>
