@@ -693,6 +693,39 @@ body { padding-top: var(--header-h); }
 }
 .lcgf-lang-menu a:hover { background: var(--c-cream-2); color: var(--c-olive-deep); }
 .lcgf-lang-menu a.is-current { background: var(--c-cream); font-weight: 600; }
+
+/* ---- Toast notifiche (WooCommerce add-to-cart, ecc.) ---- */
+#lcgf-toasts {
+  position: fixed; top: 90px; right: 20px; z-index: 99999;
+  display: flex; flex-direction: column; gap: 12px;
+  width: min(380px, calc(100% - 40px)); pointer-events: none;
+}
+#lcgf-toasts .lcgf-toast {
+  pointer-events: auto; position: relative;
+  background: var(--c-white); color: var(--c-ink);
+  border: 1px solid var(--c-line); border-left: 4px solid var(--c-olive);
+  border-radius: 12px; box-shadow: 0 14px 38px rgba(31,27,20,.20);
+  padding: 15px 40px 15px 18px; font-size: .94rem; line-height: 1.45;
+  animation: lcgf-toast-in .32s cubic-bezier(.2,.8,.25,1);
+}
+#lcgf-toasts .lcgf-toast.is-info  { border-left-color: var(--c-wheat-dark); }
+#lcgf-toasts .lcgf-toast.is-error { border-left-color: #c0392b; }
+#lcgf-toasts .lcgf-toast.is-out { animation: lcgf-toast-out .35s ease forwards; }
+#lcgf-toasts .lcgf-toast a { color: var(--c-olive-deep); font-weight: 600; }
+#lcgf-toasts .lcgf-toast .button, #lcgf-toasts .lcgf-toast a.button {
+  display: inline-block; margin: 10px 0 0; padding: 8px 16px; font-size: .82rem;
+  background: var(--g-cta, var(--c-olive)); color: var(--c-cream) !important;
+  border-radius: 999px; text-decoration: none; box-shadow: none;
+}
+#lcgf-toasts .lcgf-toast-x {
+  position: absolute; top: 8px; right: 10px; width: 24px; height: 24px;
+  border: none; background: none; cursor: pointer; color: var(--c-muted);
+  font-size: 20px; line-height: 1; padding: 0;
+}
+#lcgf-toasts .lcgf-toast-x:hover { color: var(--c-ink); }
+@keyframes lcgf-toast-in  { from { opacity: 0; transform: translateX(45px); } to { opacity: 1; transform: none; } }
+@keyframes lcgf-toast-out { to   { opacity: 0; transform: translateX(45px); } }
+@media (max-width: 600px) { #lcgf-toasts { top: 74px; right: 12px; left: 12px; width: auto; } }
 .lcgf-lang-code {
   font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
   background: var(--c-cream-2); color: var(--c-olive-deep);

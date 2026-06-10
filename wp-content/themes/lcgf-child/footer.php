@@ -123,6 +123,37 @@
 })();
 </script>
 
+<script>
+/* Notifiche WooCommerce -> toast temporanei (appaiono, 5s, poi spariscono; X per chiudere).
+   Esclude le notifiche dentro carrello/checkout (gli errori lì devono restare visibili). */
+(function(){
+  function initToasts(){
+    var found = [].slice.call(document.querySelectorAll('.woocommerce-message, .woocommerce-info, .woocommerce-error'))
+      .filter(function(n){ return !n.closest('.wc-block-checkout, .wp-block-woocommerce-checkout, .wp-block-woocommerce-cart, form.checkout, #lcgf-toasts'); });
+    if(!found.length) return;
+    var box = document.getElementById('lcgf-toasts');
+    if(!box){ box = document.createElement('div'); box.id = 'lcgf-toasts'; document.body.appendChild(box); }
+    found.forEach(function(n){
+      var t = document.createElement('div');
+      t.className = 'lcgf-toast';
+      if(n.classList.contains('woocommerce-error')) t.classList.add('is-error');
+      else if(n.classList.contains('woocommerce-info')) t.classList.add('is-info');
+      t.innerHTML = n.innerHTML;
+      var x = document.createElement('button');
+      x.type = 'button'; x.className = 'lcgf-toast-x'; x.setAttribute('aria-label', 'Chiudi'); x.innerHTML = '×';
+      var done = false;
+      function close(){ if(done) return; done = true; t.classList.add('is-out'); setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 360); }
+      x.addEventListener('click', close);
+      t.appendChild(x);
+      box.appendChild(t);
+      setTimeout(close, 5000);
+      if(n.parentNode) n.parentNode.removeChild(n);
+    });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initToasts);
+  else initToasts();
+})();
+</script>
 <?php wp_footer(); ?>
 </body>
 </html>
