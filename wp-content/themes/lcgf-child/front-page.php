@@ -43,7 +43,7 @@ $logo = get_stylesheet_directory_uri() . '/assets/img/logo.webp';
       <div class="lcgf-hero-visual">
         <div class="lcgf-hero-glow"></div>
         <div class="lcgf-hero-logo">
-          <img src="<?php echo esc_url($logo); ?>" alt="La Compagnia del Gluten Free" />
+          <img src="<?php echo esc_url($logo); ?>" alt="La Compagnia del Gluten Free" fetchpriority="high" decoding="async" />
         </div>
         <div class="lcgf-pillbadge b1"><span class="dot"></span> <?php echo lcgf_t('gluten_free'); ?></div>
         <div class="lcgf-pillbadge b2"><span class="dot" style="background:#C7613E"></span> <?php echo lcgf_t('lactose_free'); ?></div>
