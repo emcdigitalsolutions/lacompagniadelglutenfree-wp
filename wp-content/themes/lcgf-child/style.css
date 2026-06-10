@@ -1069,3 +1069,48 @@ body { padding-top: var(--header-h); }
 }
 .lcgf-chip:hover { border-color:var(--c-olive); color:var(--c-olive-deep); }
 .lcgf-chip.is-active { background:var(--g-cta); color:var(--c-cream); border-color:transparent; }
+
+/* ============================================================
+   WooCommerce: paginazione + ordinamento (palette tema, niente blu default)
+   Tutti i colori passano dalle variabili: si cambiano in un colpo solo.
+   ============================================================ */
+.woocommerce nav.woocommerce-pagination { margin-top: 40px; text-align: center; }
+.woocommerce nav.woocommerce-pagination ul {
+  display: inline-flex; gap: 8px; border: none; margin: 0; padding: 0; flex-wrap: wrap;
+}
+.woocommerce nav.woocommerce-pagination ul li { border: none; margin: 0; }
+.woocommerce nav.woocommerce-pagination ul li a.page-numbers,
+.woocommerce nav.woocommerce-pagination ul li span.page-numbers {
+  display: flex; align-items: center; justify-content: center;
+  min-width: 42px; height: 42px; padding: 0 13px;
+  border: 1.5px solid var(--c-line); border-radius: var(--r-md);
+  background: var(--c-white); color: var(--c-olive-deep);
+  font-family: var(--f-sans); font-weight: 600; font-size: .95rem;
+  text-decoration: none; transition: border-color .15s ease, background .15s ease, color .15s ease;
+}
+.woocommerce nav.woocommerce-pagination ul li a.page-numbers:hover {
+  border-color: var(--c-olive); background: var(--c-cream-2); color: var(--c-olive-deep);
+}
+.woocommerce nav.woocommerce-pagination ul li span.current,
+.woocommerce nav.woocommerce-pagination ul li span.page-numbers.current {
+  background: var(--g-cta) !important; color: var(--c-cream) !important; border-color: transparent !important;
+}
+
+/* Barra ordinamento + conteggio risultati */
+.woocommerce .woocommerce-result-count { color: var(--c-muted); font-size: .9rem; }
+.woocommerce .woocommerce-ordering { margin-bottom: 8px; }
+.woocommerce .woocommerce-ordering select,
+.woocommerce-page .woocommerce-ordering select.orderby {
+  font-family: var(--f-sans); font-size: .9rem; color: var(--c-ink);
+  border: 1.5px solid var(--c-line) !important; border-radius: var(--r-pill);
+  padding: 10px 40px 10px 16px; background-color: var(--c-white); cursor: pointer;
+  -webkit-appearance: none; appearance: none; line-height: 1.2;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23364E25' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+}
+.woocommerce .woocommerce-ordering select:focus,
+.woocommerce-page .woocommerce-ordering select.orderby:focus {
+  outline: none; border-color: var(--c-olive) !important; box-shadow: 0 0 0 3px rgba(107,142,78,.15);
+}
+/* Link generici WooCommerce -> colore tema (evita eventuali azzurri ereditati) */
+.woocommerce a:not(.button):not(.lcgf-chip):not(.page-numbers) { color: var(--c-olive-deep); }
