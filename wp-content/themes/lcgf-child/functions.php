@@ -763,16 +763,31 @@ add_action('init', function () {
  * Idempotente, guardato da option.
  */
 add_action('init', function () {
-    if (get_option('lcgf_faq_tpl_v1')) return;
-    $slugs = ['faq', 'frequently-asked-questions', 'haufig-gestellte-fragen', 'foire-aux-questions'];
+    if (get_option('lcgf_faq_tpl_v2')) return;
+    // slug FAQ => lingua (per impostare una meta description pulita al posto dello stub)
+    $faq = [
+        'faq'                        => 'it',
+        'frequently-asked-questions' => 'en',
+        'haufig-gestellte-fragen'    => 'de',
+        'foire-aux-questions'        => 'fr',
+    ];
+    $intro = [
+        'it' => 'Le risposte alle domande più comuni su prodotti senza glutine, celiachia, spedizioni e conservazione.',
+        'en' => 'Answers to the most common questions about gluten-free products, coeliac disease, shipping and storage.',
+        'de' => 'Antworten auf die häufigsten Fragen zu glutenfreien Produkten, Zöliakie, Versand und Aufbewahrung.',
+        'fr' => 'Les réponses aux questions les plus fréquentes sur les produits sans gluten, la maladie cœliaque, la livraison et la conservation.',
+    ];
     $n = 0;
-    foreach ($slugs as $slug) {
+    foreach ($faq as $slug => $lang) {
         $q = get_posts(['post_type'=>'page','name'=>$slug,'numberposts'=>1,'post_status'=>'publish','suppress_filters'=>true]);
         if (!$q) continue;
         update_post_meta($q[0]->ID, '_wp_page_template', 'page-faq.php');
+        // Sostituisce lo stub ("da personalizzare") con un'introduzione pulita
+        // (il template non stampa the_content: serve solo per meta/SEO).
+        wp_update_post(['ID' => $q[0]->ID, 'post_content' => '<!-- wp:paragraph --><p>' . esc_html($intro[$lang]) . '</p><!-- /wp:paragraph -->']);
         $n++;
     }
-    update_option('lcgf_faq_tpl_v1', current_time('mysql') . " ({$n} pagine)");
+    update_option('lcgf_faq_tpl_v2', current_time('mysql') . " ({$n} pagine)");
 }, 115);
 
 /**
