@@ -127,6 +127,15 @@ $L = function ($it, $en, $de, $fr) use ($__lang) {
         <?php endforeach; ?>
 
         <div style="margin-top:18px;padding-top:18px;border-top:1px dashed var(--c-line)">
+          <strong style="display:block;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--c-muted);margin-bottom:10px"><?php echo $L('Contatti aziendali', 'Company contacts', 'Firmenkontakte', "Contacts de l'entreprise"); ?></strong>
+          <p style="margin:0;font-size:.92rem;line-height:1.7">
+            <?php echo $L('Ufficio', 'Office', 'Büro', 'Bureau'); ?>: <a href="tel:+393513582074" style="color:var(--c-olive-deep);font-weight:600;text-decoration:none">+39 351 358 2074</a><br>
+            <?php echo $L('Altro', 'Other', 'Weitere', 'Autre'); ?>: <a href="tel:+393276999687" style="color:var(--c-olive-deep);font-weight:600;text-decoration:none">+39 327 699 9687</a><br>
+            Email: <a href="mailto:comp.glutenfree@libero.it" style="color:var(--c-olive-deep);font-weight:600;text-decoration:none">comp.glutenfree@libero.it</a>
+          </p>
+        </div>
+
+        <div style="margin-top:18px;padding-top:18px;border-top:1px dashed var(--c-line)">
           <div style="display:flex;gap:14px;align-items:center">
             <div style="width:44px;height:44px;border-radius:50%;background:var(--c-wheat);color:var(--c-ink);display:grid;place-items:center;flex-shrink:0">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
