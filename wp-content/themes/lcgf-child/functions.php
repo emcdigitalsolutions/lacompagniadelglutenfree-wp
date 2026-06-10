@@ -415,7 +415,7 @@ function lcgf_evento_render_meta_box($post) {
       </div>
       <div>
         <label>Città</label>
-        <input type="text" name="lcgf_evento[citta]" value="<?php echo esc_attr($f['citta']); ?>" placeholder="Es. Campobello di Licata (AG)" />
+        <input type="text" name="lcgf_evento[citta]" value="<?php echo esc_attr($f['citta']); ?>" placeholder="Es. Ravanusa (AG)" />
       </div>
       <div class="full">
         <label>Link esterno (sito ufficiale evento)</label>
@@ -558,7 +558,7 @@ add_action('admin_init', function () {
         update_post_meta($post_id, '_lcgf_evento_data_inizio', date('Y-m-d', strtotime('+45 days')));
         update_post_meta($post_id, '_lcgf_evento_ora_inizio',  '10:00');
         update_post_meta($post_id, '_lcgf_evento_luogo',       'Piazza centrale, Sagra del Pane');
-        update_post_meta($post_id, '_lcgf_evento_citta',       'Campobello di Licata (AG)');
+        update_post_meta($post_id, '_lcgf_evento_citta',       'Ravanusa (AG)');
         update_post_meta($post_id, '_lcgf_evento_prezzo',      'Ingresso libero');
     }
     update_option('lcgf_evento_seeded_v1', 'done');
@@ -837,7 +837,7 @@ function lcgf_seo_keywords() {
          . 'pane senza glutine, pizza senza glutine, pinsa senza glutine, focaccia senza glutine, '
          . 'dolci senza glutine, cheesecake senza glutine, tiramisù senza glutine, AIC, '
          . 'Associazione Italiana Celiachia, prodotti mutuabili celiachia, buono celiachia, '
-         . 'laboratorio senza glutine, surgelati senza glutine, Sicilia, Campobello di Licata, '
+         . 'laboratorio senza glutine, surgelati senza glutine, Sicilia, Ravanusa, '
          . 'Agrigento, spedizione in tutta Italia';
 }
 
@@ -902,11 +902,13 @@ add_filter('wpseo_schema_organization', function ($data) {
     $data['areaServed'] = ['@type' => 'Country', 'name' => 'Italia'];
     $data['address'] = [
         '@type' => 'PostalAddress',
-        'addressLocality' => 'Campobello di Licata',
+        'streetAddress' => 'Via Filippo Turati 13',
+        'addressLocality' => 'Ravanusa',
+        'postalCode' => '92029',
         'addressRegion' => 'AG',
         'addressCountry' => 'IT',
     ];
-    $data['telephone'] = '+39 327 699 9897';
+    $data['telephone'] = '+39 351 358 2074';
     $data['sameAs'] = [
         'https://www.instagram.com/',
         'https://www.facebook.com/',
@@ -934,7 +936,7 @@ add_action('template_redirect', function () {
     header('Content-Type: text/plain; charset=utf-8');
     $home = home_url('/');
     echo "# La Compagnia del Gluten Free — Mangia con Gusto\n\n";
-    echo "> E-commerce artigianale di prodotti SENZA GLUTINE e SENZA LATTOSIO, prodotti in un laboratorio esclusivamente gluten free (nessuna contaminazione crociata). Accreditati AIC (Associazione Italiana Celiachia); diversi prodotti sono mutuabili dal Servizio Sanitario Nazionale (spendibili col buono celiachia, anche in farmacia). Sede: Campobello di Licata (AG), Sicilia. Spedizione in tutta Italia.\n\n";
+    echo "> E-commerce artigianale di prodotti SENZA GLUTINE e SENZA LATTOSIO, prodotti in un laboratorio esclusivamente gluten free (nessuna contaminazione crociata). Accreditati AIC (Associazione Italiana Celiachia); diversi prodotti sono mutuabili dal Servizio Sanitario Nazionale (spendibili col buono celiachia, anche in farmacia). Sede: Ravanusa (AG), Sicilia. Spedizione in tutta Italia.\n\n";
     echo "## Per chi\nPersone celiache e con intolleranza al lattosio, famiglie e genitori di bambini celiaci, farmacie.\n\n";
     echo "## Categorie e prodotti\n";
     echo "- Pane & Basi: Pinsa Romana, Pan Focaccia, Focaccia Rotonda, Base Pizza, Pane Filoncino, Pane Rosetta, Box Family (assortimento)\n";
@@ -1227,7 +1229,7 @@ function lcgf_i18n_strings() {
         'faq_q5'       => ['it' => 'Come si conservano i prodotti?', 'en' => 'How should the products be stored?', 'de' => 'Wie werden die Produkte aufbewahrt?', 'fr' => 'Comment conserver les produits ?'],
         'faq_a5'       => ['it' => 'I prodotti da forno senza glutine si gustano al meglio freschi, ma si conservano benissimo in freezer: basta scongelarli o riscaldarli al momento del consumo.', 'en' => 'Gluten-free baked goods are best enjoyed fresh, but they freeze very well: just thaw or warm them up before eating.', 'de' => 'Glutenfreie Backwaren schmecken frisch am besten, lassen sich aber sehr gut einfrieren: einfach vor dem Verzehr auftauen oder erwärmen.', 'fr' => 'Les produits de boulangerie sans gluten se dégustent au mieux frais, mais se conservent très bien au congélateur : il suffit de les décongeler ou de les réchauffer avant de les consommer.'],
         'faq_q6'       => ['it' => 'Dove avete sede?', 'en' => 'Where are you based?', 'de' => 'Wo ist euer Sitz?', 'fr' => 'Où êtes-vous situés ?'],
-        'faq_a6'       => ['it' => 'Siamo a Campobello di Licata (AG), in Sicilia. La vendita è online, con spedizione a domicilio.', 'en' => 'We are in Campobello di Licata (AG), Sicily. Sales are online, with home delivery.', 'de' => 'Wir sind in Campobello di Licata (AG), Sizilien. Der Verkauf erfolgt online mit Lieferung nach Hause.', 'fr' => 'Nous sommes à Campobello di Licata (AG), en Sicile. La vente se fait en ligne, avec livraison à domicile.'],
+        'faq_a6'       => ['it' => 'Siamo a Ravanusa (AG), in Sicilia. La vendita è online, con spedizione a domicilio.', 'en' => 'We are in Ravanusa (AG), Sicily. Sales are online, with home delivery.', 'de' => 'Wir sind in Ravanusa (AG), Sizilien. Der Verkauf erfolgt online mit Lieferung nach Hause.', 'fr' => 'Nous sommes à Ravanusa (AG), en Sicile. La vente se fait en ligne, avec livraison à domicile.'],
         'nl_invalid'   => ['it' => 'Inserisci un indirizzo email valido.', 'en' => 'Please enter a valid email address.', 'de' => 'Bitte gib eine gültige E-Mail-Adresse ein.', 'fr' => 'Veuillez saisir une adresse e-mail valide.'],
         'nl_gdpr_req'  => ['it' => 'Devi accettare l\'informativa privacy.', 'en' => 'You must accept the privacy policy.', 'de' => 'Du musst die Datenschutzerklärung akzeptieren.', 'fr' => 'Vous devez accepter la politique de confidentialité.'],
         'nl_check'     => ['it' => 'Controlla la tua email e conferma l\'iscrizione: ti abbiamo inviato un link.', 'en' => 'Check your email and confirm your subscription: we sent you a link.', 'de' => 'Prüfe deine E-Mail und bestätige die Anmeldung: Wir haben dir einen Link geschickt.', 'fr' => 'Vérifiez votre e-mail et confirmez l\'inscription : nous vous avons envoyé un lien.'],
