@@ -1,8 +1,14 @@
 <?php
 /**
  * Template Name: Contatti (LCGF)
+ * Stringhe multilingua via helper locale $L(it, en, de, fr).
  */
 get_header();
+$__lang = function_exists('pll_current_language') ? pll_current_language('slug') : 'it';
+$L = function ($it, $en, $de, $fr) use ($__lang) {
+  $m = ['it' => $it, 'en' => $en, 'de' => $de, 'fr' => $fr];
+  return $m[$__lang] ?? $it;
+};
 ?>
 
 <section class="lcgf-hero" style="padding: 80px 0 60px">
@@ -11,11 +17,16 @@ get_header();
       <nav style="font-size:.82rem;color:var(--c-muted);margin-bottom:14px">
         <a href="<?php echo esc_url(home_url('/')); ?>" style="color:var(--c-muted)">Home</a>
         <span style="margin:0 8px;opacity:.5">/</span>
-        <span style="color:var(--c-ink)">Contatti</span>
+        <span style="color:var(--c-ink)"><?php echo $L('Contatti', 'Contact', 'Kontakt', 'Contact'); ?></span>
       </nav>
-      <span class="eyebrow">Parliamo</span>
-      <h1 style="color: var(--c-olive-deep) !important">Scrivici o chiamaci.</h1>
-      <p style="font-size:1.1rem;color:var(--c-ink-soft);max-width:580px">Hai una domanda sui prodotti, sulla spedizione o vuoi fare una sorpresa con una gift card? Rispondiamo entro 24h.</p>
+      <span class="eyebrow"><?php echo $L('Parliamo', "Let's talk", 'Sprechen wir', 'Parlons-en'); ?></span>
+      <h1 style="color: var(--c-olive-deep) !important"><?php echo $L('Scrivici o chiamaci.', 'Write or call us.', 'Schreiben oder rufen Sie uns an.', 'Écrivez-nous ou appelez-nous.'); ?></h1>
+      <p style="font-size:1.1rem;color:var(--c-ink-soft);max-width:580px"><?php echo $L(
+        'Hai una domanda sui prodotti, sulla spedizione o vuoi fare una sorpresa con una gift card? Rispondiamo entro 24h.',
+        'Have a question about our products or shipping, or want to surprise someone with a gift card? We reply within 24h.',
+        'Haben Sie eine Frage zu den Produkten oder zum Versand, oder möchten Sie jemandem mit einer Geschenkkarte eine Freude machen? Wir antworten innerhalb von 24 Std.',
+        'Vous avez une question sur les produits ou la livraison, ou souhaitez faire une surprise avec une carte cadeau ? Nous répondons sous 24h.'
+      ); ?></p>
     </div>
   </div>
 </section>
@@ -24,7 +35,7 @@ get_header();
   <div class="container">
     <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:60px;align-items:start" class="lcgf-contact-grid">
       <div>
-        <h3 style="font-size:1.4rem !important;margin-bottom:24px">Scrivici un messaggio</h3>
+        <h3 style="font-size:1.4rem !important;margin-bottom:24px"><?php echo $L('Scrivici un messaggio', 'Send us a message', 'Schreiben Sie uns eine Nachricht', 'Envoyez-nous un message'); ?></h3>
         <?php
         if (shortcode_exists('wpforms')) {
             // Cerca il primo form WPForms disponibile
@@ -32,45 +43,58 @@ get_header();
             if (!empty($forms)) {
                 echo do_shortcode('[wpforms id="' . $forms[0]->ID . '"]');
             } else {
-                echo '<p style="background:var(--c-cream-2);padding:16px;border-radius:var(--r-md);font-size:.92rem;color:var(--c-muted)">Form contatti in configurazione. Nel frattempo usa WhatsApp o telefono qui a fianco.</p>';
+                echo '<p style="background:var(--c-cream-2);padding:16px;border-radius:var(--r-md);font-size:.92rem;color:var(--c-muted)">' . $L(
+                    'Form contatti in configurazione. Nel frattempo usa WhatsApp o telefono qui a fianco.',
+                    'Contact form being set up. In the meantime, use WhatsApp or phone on the side.',
+                    'Kontaktformular wird eingerichtet. Nutzen Sie in der Zwischenzeit WhatsApp oder Telefon nebenan.',
+                    'Formulaire de contact en cours de configuration. En attendant, utilisez WhatsApp ou le téléphone ci-contre.'
+                ) . '</p>';
             }
         }
         ?>
 
         <!-- Fallback form se WPForms non ha form configurato -->
-        <?php if (!shortcode_exists('wpforms') || empty(get_posts(['post_type' => 'wpforms', 'posts_per_page' => 1]))): ?>
-          <form id="lcgf-contact-form" style="display:grid;gap:16px;margin-top:8px" onsubmit="event.preventDefault();this.innerHTML='<div style=\'padding:40px;text-align:center;background:var(--c-cream-2);border-radius:var(--r-lg)\'><div style=\'width:64px;height:64px;border-radius:50%;background:var(--c-olive);display:grid;place-items:center;margin:0 auto 18px\'><svg width=30 height=30 viewBox=\'0 0 24 24\' fill=none stroke=white stroke-width=3 stroke-linecap=round><polyline points=\'20 6 9 17 4 12\'/></svg></div><h2 style=\'color:var(--c-olive-deep);margin:0\'>Messaggio inviato!</h2><p style=\'color:var(--c-muted);margin-top:8px\'>Ti risponderemo entro 24h.</p></div>';">
+        <?php if (!shortcode_exists('wpforms') || empty(get_posts(['post_type' => 'wpforms', 'posts_per_page' => 1]))):
+          $sent_title = $L('Messaggio inviato!', 'Message sent!', 'Nachricht gesendet!', 'Message envoyé !');
+          $sent_body  = $L('Ti risponderemo entro 24h.', 'We will reply within 24h.', 'Wir antworten innerhalb von 24 Std.', 'Nous répondons sous 24h.');
+        ?>
+          <form id="lcgf-contact-form" style="display:grid;gap:16px;margin-top:8px" onsubmit="event.preventDefault();this.innerHTML='<div style=\'padding:40px;text-align:center;background:var(--c-cream-2);border-radius:var(--r-lg)\'><div style=\'width:64px;height:64px;border-radius:50%;background:var(--c-olive);display:grid;place-items:center;margin:0 auto 18px\'><svg width=30 height=30 viewBox=\'0 0 24 24\' fill=none stroke=white stroke-width=3 stroke-linecap=round><polyline points=\'20 6 9 17 4 12\'/></svg></div><h2 style=\'color:var(--c-olive-deep);margin:0\'><?php echo esc_js($sent_title); ?></h2><p style=\'color:var(--c-muted);margin-top:8px\'><?php echo esc_js($sent_body); ?></p></div>';">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
               <label style="display:flex;flex-direction:column;gap:6px;font-size:.85rem;color:var(--c-ink-soft);font-weight:500">
-                Nome
+                <?php echo $L('Nome', 'Name', 'Name', 'Nom'); ?>
                 <input type="text" required style="padding:13px 16px;background:#fff;border:1.5px solid var(--c-line);border-radius:var(--r-md);font-size:.95rem;outline:none;transition:border-color .2s">
               </label>
               <label style="display:flex;flex-direction:column;gap:6px;font-size:.85rem;color:var(--c-ink-soft);font-weight:500">
-                Email
+                <?php echo $L('Email', 'Email', 'E-Mail', 'E-mail'); ?>
                 <input type="email" required style="padding:13px 16px;background:#fff;border:1.5px solid var(--c-line);border-radius:var(--r-md);font-size:.95rem;outline:none">
               </label>
             </div>
             <label style="display:flex;flex-direction:column;gap:6px;font-size:.85rem;color:var(--c-ink-soft);font-weight:500">
-              Oggetto
+              <?php echo $L('Oggetto', 'Subject', 'Betreff', 'Objet'); ?>
               <select style="padding:13px 16px;background:#fff;border:1.5px solid var(--c-line);border-radius:var(--r-md);font-size:.95rem;outline:none">
-                <option>Domanda su un ordine</option>
-                <option>Informazioni su un prodotto</option>
-                <option>Spedizione e resi</option>
-                <option>Gift card e regali</option>
-                <option>Collaborazioni B2B</option>
-                <option>Altro</option>
+                <option><?php echo $L('Domanda su un ordine', 'Question about an order', 'Frage zu einer Bestellung', 'Question sur une commande'); ?></option>
+                <option><?php echo $L('Informazioni su un prodotto', 'Product information', 'Produktinformationen', 'Informations sur un produit'); ?></option>
+                <option><?php echo $L('Spedizione e resi', 'Shipping and returns', 'Versand und Rücksendungen', 'Livraison et retours'); ?></option>
+                <option><?php echo $L('Gift card e regali', 'Gift cards and presents', 'Geschenkkarten und Geschenke', 'Cartes cadeaux et cadeaux'); ?></option>
+                <option><?php echo $L('Collaborazioni B2B', 'B2B partnerships', 'B2B-Kooperationen', 'Partenariats B2B'); ?></option>
+                <option><?php echo $L('Altro', 'Other', 'Sonstiges', 'Autre'); ?></option>
               </select>
             </label>
             <label style="display:flex;flex-direction:column;gap:6px;font-size:.85rem;color:var(--c-ink-soft);font-weight:500">
-              Messaggio
+              <?php echo $L('Messaggio', 'Message', 'Nachricht', 'Message'); ?>
               <textarea rows="6" required style="padding:13px 16px;background:#fff;border:1.5px solid var(--c-line);border-radius:var(--r-md);font-size:.95rem;outline:none;font-family:inherit;resize:vertical"></textarea>
             </label>
             <label style="display:flex;gap:10px;align-items:flex-start;font-size:.88rem">
               <input type="checkbox" required style="width:18px;height:18px;accent-color:var(--c-olive);margin-top:2px">
-              <span>Acconsento al trattamento dei dati per rispondere alla mia richiesta.</span>
+              <span><?php echo $L(
+                'Acconsento al trattamento dei dati per rispondere alla mia richiesta.',
+                'I consent to the processing of my data to respond to my request.',
+                'Ich willige in die Verarbeitung meiner Daten zur Beantwortung meiner Anfrage ein.',
+                'Je consens au traitement de mes données pour répondre à ma demande.'
+              ); ?></span>
             </label>
             <button type="submit" class="btn btn-lg" style="justify-self:start">
-              Invia messaggio
+              <?php echo $L('Invia messaggio', 'Send message', 'Nachricht senden', 'Envoyer le message'); ?>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
             </button>
           </form>
@@ -78,7 +102,7 @@ get_header();
       </div>
 
       <aside style="background:var(--c-cream-2);border-radius:var(--r-xl);padding:32px;position:sticky;top:calc(var(--header-h) + 20px)">
-        <h3 style="font-size:1.2rem !important;margin:0 0 22px">Chiamaci direttamente</h3>
+        <h3 style="font-size:1.2rem !important;margin:0 0 22px"><?php echo $L('Chiamaci direttamente', 'Call us directly', 'Rufen Sie uns direkt an', 'Appelez-nous directement'); ?></h3>
 
         <?php
         $contacts = [
@@ -109,7 +133,7 @@ get_header();
             </div>
             <div>
               <strong style="display:block;font-size:.95rem">lacompagniadelglutenfree.it</strong>
-              <span style="font-size:.78rem;color:var(--c-muted)">Ordini online 24/7</span>
+              <span style="font-size:.78rem;color:var(--c-muted)"><?php echo $L('Ordini online 24/7', 'Online orders 24/7', 'Online-Bestellungen rund um die Uhr', 'Commandes en ligne 24h/24'); ?></span>
             </div>
           </div>
         </div>

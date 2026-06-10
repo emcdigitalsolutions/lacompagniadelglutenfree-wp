@@ -2,18 +2,29 @@
 /**
  * Template Name: Chi Siamo (LCGF)
  * Pagina chi-siamo con storia + valori + team.
+ * Stringhe multilingua via helper locale $L(it, en, de, fr).
  */
 get_header();
 $logo = get_stylesheet_directory_uri() . '/assets/img/logo.webp';
+$__lang = function_exists('pll_current_language') ? pll_current_language('slug') : 'it';
+$L = function ($it, $en, $de, $fr) use ($__lang) {
+  $m = ['it' => $it, 'en' => $en, 'de' => $de, 'fr' => $fr];
+  return $m[$__lang] ?? $it;
+};
 ?>
 
 <section class="lcgf-hero" style="padding: 90px 0 80px">
   <div class="container">
     <div style="max-width:760px;margin:0 auto;text-align:center;position:relative;z-index:1">
-      <span class="eyebrow">La nostra storia</span>
+      <span class="eyebrow"><?php echo $L('La nostra storia', 'Our story', 'Unsere Geschichte', 'Notre histoire'); ?></span>
       <h1 style="color: var(--c-olive-deep) !important">Mangia con Gusto.</h1>
       <p style="font-size:1.15rem;color:var(--c-ink-soft);margin-top:18px">
-        Una bottega di prodotti senza glutine e senza lattosio. Pane, pinse, focacce, basi pizza e dolci sfornati in laboratorio dedicato e privo di contaminazioni.
+        <?php echo $L(
+          'Una bottega di prodotti senza glutine e senza lattosio. Pane, pinse, focacce, basi pizza e dolci sfornati in laboratorio dedicato e privo di contaminazioni.',
+          'A workshop of gluten-free and lactose-free products. Bread, pinsa, focaccia, pizza bases and sweets baked in a dedicated, contamination-free laboratory.',
+          'Eine Manufaktur für glutenfreie und laktosefreie Produkte. Brot, Pinsa, Focaccia, Pizzaböden und Süßes, gebacken in einem dedizierten, kontaminationsfreien Labor.',
+          'Un atelier de produits sans gluten et sans lactose. Pain, pinsa, focaccia, bases à pizza et douceurs cuits dans un laboratoire dédié et sans contamination.'
+        ); ?>
       </p>
     </div>
   </div>
@@ -23,12 +34,27 @@ $logo = get_stylesheet_directory_uri() . '/assets/img/logo.webp';
   <div class="container">
     <div class="lcgf-split">
       <div class="lcgf-split-content">
-        <span class="eyebrow">Come è nata</span>
-        <h2>Da un'esigenza, una passione.</h2>
-        <p>Da una esigenza personale, un'esperienza ventennale e un gruppo di amici a cui piace sognare nasce <strong>"Mangia con Gusto — La Compagnia del Gluten Free"</strong>.</p>
-        <p>Quotidianamente ci impegniamo ad offrirvi prodotti gustosi e con materia prima di qualità, creati in un laboratorio dedicato e privo di contaminazioni, per offrire ai nostri clienti — anche fuori casa — un'alimentazione buona e sana.</p>
+        <span class="eyebrow"><?php echo $L('Come è nata', 'How it began', 'Wie alles begann', 'Comment elle est née'); ?></span>
+        <h2><?php echo $L("Da un'esigenza, una passione.", 'From a need, a passion.', 'Aus einem Bedürfnis, eine Leidenschaft.', "D'un besoin, une passion."); ?></h2>
+        <p><?php echo $L(
+          'Da una esigenza personale, un\'esperienza ventennale e un gruppo di amici a cui piace sognare nasce <strong>"Mangia con Gusto — La Compagnia del Gluten Free"</strong>.',
+          'From a personal need, twenty years of experience and a group of friends who love to dream, <strong>"Mangia con Gusto — La Compagnia del Gluten Free"</strong> was born.',
+          'Aus einem persönlichen Bedürfnis, zwanzig Jahren Erfahrung und einer Gruppe von Freunden, die gerne träumen, entstand <strong>„Mangia con Gusto — La Compagnia del Gluten Free"</strong>.',
+          'D\'un besoin personnel, d\'une expérience de vingt ans et d\'un groupe d\'amis qui aiment rêver est née <strong>« Mangia con Gusto — La Compagnia del Gluten Free »</strong>.'
+        ); ?></p>
+        <p><?php echo $L(
+          'Quotidianamente ci impegniamo ad offrirvi prodotti gustosi e con materia prima di qualità, creati in un laboratorio dedicato e privo di contaminazioni, per offrire ai nostri clienti — anche fuori casa — un\'alimentazione buona e sana.',
+          'Every day we strive to offer you tasty products made with quality ingredients, created in a dedicated, contamination-free laboratory, to give our customers — even away from home — good and healthy food.',
+          'Täglich setzen wir uns dafür ein, Ihnen schmackhafte Produkte aus hochwertigen Zutaten zu bieten, hergestellt in einem dedizierten, kontaminationsfreien Labor, um unseren Kunden — auch unterwegs — eine gute und gesunde Ernährung zu bieten.',
+          'Chaque jour, nous nous engageons à vous offrir des produits savoureux à base d\'ingrédients de qualité, créés dans un laboratoire dédié et sans contamination, pour offrir à nos clients — même hors de chez eux — une alimentation bonne et saine.'
+        ); ?></p>
         <p style="font-family: var(--f-display); font-style: italic; font-size: 1.4rem; color: var(--c-wheat-dark); margin-top: 24px">
-          "Mangia senza glutine, ma con gusto!"
+          <?php echo $L(
+            '"Mangia senza glutine, ma con gusto!"',
+            '"Eat gluten-free, but with taste!"',
+            '„Iss glutenfrei, aber mit Genuss!"',
+            '« Mangez sans gluten, mais avec goût ! »'
+          ); ?>
         </p>
       </div>
       <div class="lcgf-split-visual">
@@ -41,16 +67,20 @@ $logo = get_stylesheet_directory_uri() . '/assets/img/logo.webp';
 <section class="section" style="background: var(--c-cream-2)">
   <div class="container">
     <div class="lcgf-section-head">
-      <span class="eyebrow">I nostri valori</span>
-      <h2>Quattro promesse, ogni giorno.</h2>
+      <span class="eyebrow"><?php echo $L('I nostri valori', 'Our values', 'Unsere Werte', 'Nos valeurs'); ?></span>
+      <h2><?php echo $L('Quattro promesse, ogni giorno.', 'Four promises, every day.', 'Vier Versprechen, jeden Tag.', 'Quatre promesses, chaque jour.'); ?></h2>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px">
       <?php
       $values = [
-        ['icon' => '🌾', 'title' => 'Senza glutine.',           'body' => 'Laboratorio dedicato e privo di contaminazioni crociate.'],
-        ['icon' => '🥛', 'title' => 'Senza lattosio.',          'body' => 'Tutti i nostri prodotti sono anche privi di lattosio.'],
-        ['icon' => '👨‍🍳', 'title' => '20 anni di esperienza.', 'body' => 'Una vita passata a perfezionare ogni ricetta gluten free.'],
-        ['icon' => '❄️',  'title' => 'Surgelati pronti all\'uso.', 'body' => 'Fragranza appena sfornata in 5 minuti di forno.'],
+        ['icon' => '🌾', 'title' => $L('Senza glutine.', 'Gluten-free.', 'Glutenfrei.', 'Sans gluten.'),
+          'body' => $L('Laboratorio dedicato e privo di contaminazioni crociate.', 'A dedicated laboratory free from cross-contamination.', 'Ein dediziertes Labor ohne Kreuzkontamination.', 'Un laboratoire dédié et sans contamination croisée.')],
+        ['icon' => '🥛', 'title' => $L('Senza lattosio.', 'Lactose-free.', 'Laktosefrei.', 'Sans lactose.'),
+          'body' => $L('Tutti i nostri prodotti sono anche privi di lattosio.', 'All our products are also lactose-free.', 'Alle unsere Produkte sind außerdem laktosefrei.', 'Tous nos produits sont également sans lactose.')],
+        ['icon' => '👨‍🍳', 'title' => $L('20 anni di esperienza.', '20 years of experience.', '20 Jahre Erfahrung.', "20 ans d'expérience."),
+          'body' => $L('Una vita passata a perfezionare ogni ricetta gluten free.', 'A lifetime spent perfecting every gluten-free recipe.', 'Ein Leben lang jedes glutenfreie Rezept perfektioniert.', 'Une vie passée à perfectionner chaque recette sans gluten.')],
+        ['icon' => '❄️', 'title' => $L("Surgelati pronti all'uso.", 'Frozen, ready to use.', 'Tiefkühlkost, gebrauchsfertig.', "Surgelés, prêts à l'emploi."),
+          'body' => $L('Fragranza appena sfornata in 5 minuti di forno.', 'Freshly-baked fragrance in just 5 minutes in the oven.', 'Ofenfrischer Genuss in nur 5 Minuten im Ofen.', 'Le parfum du tout juste sorti du four en 5 minutes.')],
       ];
       foreach ($values as $v) : ?>
         <div style="background:var(--c-white);padding:32px;border-radius:var(--r-lg);text-align:center;box-shadow:var(--sh-1)">
@@ -66,9 +96,9 @@ $logo = get_stylesheet_directory_uri() . '/assets/img/logo.webp';
 <section class="section">
   <div class="container">
     <div class="lcgf-section-head">
-      <span class="eyebrow">Il team</span>
-      <h2>Gli amici dietro la Compagnia</h2>
-      <p>Tre persone, una passione condivisa.</p>
+      <span class="eyebrow"><?php echo $L('Il team', 'The team', 'Das Team', "L'équipe"); ?></span>
+      <h2><?php echo $L('Gli amici dietro la Compagnia', 'The friends behind the Compagnia', 'Die Freunde hinter der Compagnia', 'Les amis derrière la Compagnia'); ?></h2>
+      <p><?php echo $L('Tre persone, una passione condivisa.', 'Three people, one shared passion.', 'Drei Menschen, eine gemeinsame Leidenschaft.', 'Trois personnes, une passion partagée.'); ?></p>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;max-width:900px;margin:0 auto">
       <?php
@@ -96,10 +126,10 @@ $logo = get_stylesheet_directory_uri() . '/assets/img/logo.webp';
 
 <section class="section lcgf-testimonials">
   <div class="container" style="text-align:center">
-    <span class="eyebrow" style="color:var(--c-wheat) !important">Pronto?</span>
-    <h2 style="color:var(--c-cream) !important">Mangia senza glutine. Mangia con Gusto.</h2>
+    <span class="eyebrow" style="color:var(--c-wheat) !important"><?php echo $L('Pronto?', 'Ready?', 'Bereit?', 'Prêt ?'); ?></span>
+    <h2 style="color:var(--c-cream) !important"><?php echo $L('Mangia senza glutine. Mangia con Gusto.', 'Eat gluten-free. Mangia con Gusto.', 'Iss glutenfrei. Mangia con Gusto.', 'Mangez sans gluten. Mangia con Gusto.'); ?></h2>
     <a href="<?php echo esc_url(get_permalink(wc_get_page_id('shop'))); ?>" class="btn btn-wheat btn-lg" style="margin-top:24px">
-      Scopri il catalogo
+      <?php echo $L('Scopri il catalogo', 'Browse the catalogue', 'Zum Katalog', 'Découvrir le catalogue'); ?>
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </a>
   </div>
