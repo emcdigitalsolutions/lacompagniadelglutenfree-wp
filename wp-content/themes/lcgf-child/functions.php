@@ -354,6 +354,22 @@ add_action('init', function () {
     update_option('lcgf_evento_rewrite_flushed_v1', 'done');
 }, 99);
 
+/**
+ * Rende i PRODOTTI (e le loro tassonomie) traducibili/filtrabili da Polylang.
+ * Senza questo, il post type WooCommerce 'product' non è gestito da Polylang e
+ * il catalogo mostra TUTTE le lingue insieme (52 prodotti) invece dei 13 della
+ * lingua corrente. (Equivale a "Polylang for WooCommerce" per il solo filtro lingua.)
+ */
+add_filter('pll_get_post_types', function ($post_types, $is_settings = false) {
+    $post_types['product'] = 'product';
+    return $post_types;
+}, 10, 2);
+add_filter('pll_get_taxonomies', function ($taxonomies, $is_settings = false) {
+    $taxonomies['product_cat'] = 'product_cat';
+    $taxonomies['product_tag'] = 'product_tag';
+    return $taxonomies;
+}, 10, 2);
+
 /* Meta box dettagli evento */
 add_action('add_meta_boxes', function () {
     add_meta_box(
