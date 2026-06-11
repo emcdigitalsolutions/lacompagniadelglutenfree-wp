@@ -53,8 +53,11 @@ remove_action('woocommerce_sidebar', 'woocommerce_get_sidebar', 10);
 add_filter('loop_shop_columns', fn() => 3);
 add_filter('loop_shop_per_page', fn() => 12);
 
-/* ---------- Disabilita commenti su pagine/prodotti ---------- */
-add_filter('comments_open', '__return_false', 20, 2);
+/* ---------- Disabilita commenti ovunque TRANNE recensioni prodotto ---------- */
+add_filter('comments_open', function ($open, $post_id) {
+    // Sui prodotti rispetta lo stato reale (recensioni WooCommerce); altrove chiudi.
+    return get_post_type($post_id) === 'product' ? $open : false;
+}, 20, 2);
 
 /* ---------- Allunga thumb shop ---------- */
 add_action('after_setup_theme', function () {
