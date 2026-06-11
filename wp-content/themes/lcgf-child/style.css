@@ -208,7 +208,9 @@ body { padding-top: var(--header-h); }
 
 /* ---- Menu mobile (hamburger + pannello a scomparsa) ---- */
 .lcgf-header { z-index: 1001; }
-.lcgf-burger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 42px; height: 42px; border: none; background: none; cursor: pointer; padding: 9px; }
+.lcgf-burger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 42px; height: 42px; border: none; background: none; cursor: pointer; padding: 9px; -webkit-tap-highlight-color: transparent; border-radius: 8px; }
+.lcgf-burger:focus { outline: none; }
+.lcgf-burger:focus-visible { outline: 2px solid var(--c-olive); outline-offset: 2px; }
 .lcgf-burger span { display: block; height: 2.5px; width: 100%; background: var(--c-olive-deep); border-radius: 2px; transition: transform .3s ease, opacity .2s ease; }
 .lcgf-burger.is-active span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
 .lcgf-burger.is-active span:nth-child(2) { opacity: 0; }
