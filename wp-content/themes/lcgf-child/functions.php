@@ -64,6 +64,24 @@ add_action('after_setup_theme', function () {
     add_image_size('lcgf-card', 600, 600, true);
 });
 
+/* ---------- Header brandizzato archivi shop/categoria ----------
+   Il titolo WooCommerce di default è disabilitato (woocommerce_show_page_title=false),
+   quindi shop e categorie restavano senza H1. Qui stampiamo un header coerente col tema
+   (eyebrow + H1 con il nome categoria tradotto da Polylang). La descrizione categoria
+   resta gestita dal default woocommerce_taxonomy_archive_description (priorità 10). */
+add_action('woocommerce_archive_description', function () {
+    if (!function_exists('is_shop')) return;
+    if (!(is_shop() || is_product_category() || is_product_tag())) return;
+    $title = is_shop() ? lcgf_t('shop_title') : single_term_title('', false);
+    echo '<header class="lcgf-archive-head">';
+    echo '<span class="eyebrow">' . esc_html(lcgf_t('arch_eyebrow')) . '</span>';
+    echo '<h1>' . esc_html($title) . '</h1>';
+    if (is_shop()) {
+        echo '<p class="lcgf-archive-sub">' . esc_html(lcgf_t('shop_sub')) . '</p>';
+    }
+    echo '</header>';
+}, 4);
+
 /* ---------- Auto-import immagini prodotti se mancanti ---------- */
 add_action('admin_init', function () {
     if (get_option('lcgf_images_imported_v2') === 'done') return;
@@ -915,6 +933,11 @@ add_filter('wpseo_title', function ($title) {
         $name = $map[$l] ?? $map['it'];
         return $name . ' — La Compagnia del Gluten Free';
     }
+    // Categorie/tag prodotto: titolo pulito senza il suffisso "Archivi"
+    if (function_exists('is_product_category') && (is_product_category() || is_product_tag())) {
+        $t = single_term_title('', false);
+        if ($t) return $t . ' — La Compagnia del Gluten Free';
+    }
     return $title;
 });
 
@@ -929,6 +952,15 @@ add_filter('wpseo_metadesc', function ($desc) {
     if (function_exists('is_shop') && is_shop()) {
         return 'Catalogo di prodotti senza glutine e senza lattosio: pane, basi pizza, focacce e dolci '
              . 'artigianali. Laboratorio dedicato, accreditati AIC. Spedizione in tutta Italia.';
+    }
+    // Categorie prodotto: descrizione del termine se presente, altrimenti fallback col nome
+    if (function_exists('is_product_category') && is_product_category()) {
+        $term = get_queried_object();
+        if ($term && !empty($term->description)) {
+            return wp_trim_words(wp_strip_all_tags($term->description), 30, '…');
+        }
+        $nm = $term ? $term->name : '';
+        return trim($nm) . ' senza glutine e senza lattosio: prodotti artigianali del nostro laboratorio dedicato. Accreditati AIC, spedizione in tutta Italia.';
     }
     // Pagine prodotto: usa la descrizione breve/estratto del prodotto, con fallback
     // (Lighthouse segnalava "Document does not have a meta description" sui prodotti).
@@ -1332,6 +1364,10 @@ function lcgf_i18n_strings() {
         'bis_out'      => ['it' => 'Momentaneamente esaurito', 'en' => 'Temporarily out of stock', 'de' => 'Vorübergehend ausverkauft', 'fr' => 'Temporairement épuisé'],
         'bis_text'     => ['it' => 'Lasciaci la tua email: ti avvisiamo appena torna disponibile.', 'en' => 'Leave us your email: we\'ll notify you as soon as it\'s back in stock.', 'de' => 'Hinterlasse uns deine E-Mail: Wir benachrichtigen dich, sobald es wieder verfügbar ist.', 'fr' => 'Laissez-nous votre e-mail : nous vous préviendrons dès son retour en stock.'],
         'bis_btn'      => ['it' => 'Avvisami', 'en' => 'Notify me', 'de' => 'Benachrichtige mich', 'fr' => 'Préviens-moi'],
+        // Header archivio shop/categoria
+        'arch_eyebrow' => ['it' => 'Il nostro forno', 'en' => 'Our bakery', 'de' => 'Unsere Backstube', 'fr' => 'Notre fournil'],
+        'shop_title'   => ['it' => 'Catalogo', 'en' => 'Catalogue', 'de' => 'Katalog', 'fr' => 'Catalogue'],
+        'shop_sub'     => ['it' => 'Tutti i nostri prodotti senza glutine e senza lattosio, sfornati con ingredienti selezionati.', 'en' => 'All our gluten-free and lactose-free products, baked with selected ingredients.', 'de' => 'Alle unsere glutenfreien und laktosefreien Produkte, gebacken mit ausgewählten Zutaten.', 'fr' => 'Tous nos produits sans gluten et sans lactose, cuits avec des ingrédients sélectionnés.'],
         // Pagina ABC dieta senza glutine
         'abc_eyebrow'  => ['it' => 'Guida pratica', 'en' => 'Practical guide', 'de' => 'Praktischer Leitfaden', 'fr' => 'Guide pratique'],
         'abc_h1'       => ['it' => "L'ABC della dieta senza glutine", 'en' => 'The ABC of the gluten-free diet', 'de' => 'Das ABC der glutenfreien Ernährung', 'fr' => "L'ABC du régime sans gluten"],

@@ -821,6 +821,13 @@ body.lcgf-mnav-open { overflow: hidden; }
 }
 .woocommerce-breadcrumb a { color: var(--c-muted) !important; }
 
+/* header archivi shop/categoria */
+.woocommerce-products-header { margin-bottom: 0 !important; }
+.lcgf-archive-head { text-align: center; max-width: 680px; margin: 8px auto 42px; }
+.lcgf-archive-head h1 { color: var(--c-olive-deep) !important; margin: 0; font-size: clamp(1.9rem, 4vw, 2.6rem); }
+.lcgf-archive-head .lcgf-archive-sub { color: var(--c-muted); font-size: 1.05rem; margin: 12px auto 0; max-width: 560px; }
+.term-description { text-align: center; max-width: 680px; margin: -22px auto 42px; color: var(--c-muted); font-size: 1.02rem; }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 880px) {
   .lcgf-hero-grid { grid-template-columns: 1fr; }
