@@ -1375,7 +1375,7 @@ function lcgf_i18n_strings() {
         'bis_btn'      => ['it' => 'Avvisami', 'en' => 'Notify me', 'de' => 'Benachrichtige mich', 'fr' => 'Préviens-moi'],
         // Header archivio shop/categoria
         'arch_eyebrow' => ['it' => 'Il nostro forno', 'en' => 'Our bakery', 'de' => 'Unsere Backstube', 'fr' => 'Notre fournil'],
-        'shop_title'   => ['it' => 'Catalogo', 'en' => 'Catalogue', 'de' => 'Katalog', 'fr' => 'Catalogue'],
+        'shop_title'   => ['it' => 'Catalogo', 'en' => 'Catalog', 'de' => 'Katalog', 'fr' => 'Catalogue'],
         'shop_sub'     => ['it' => 'Tutti i nostri prodotti senza glutine e senza lattosio, sfornati con ingredienti selezionati.', 'en' => 'All our gluten-free and lactose-free products, baked with selected ingredients.', 'de' => 'Alle unsere glutenfreien und laktosefreien Produkte, gebacken mit ausgewählten Zutaten.', 'fr' => 'Tous nos produits sans gluten et sans lactose, cuits avec des ingrédients sélectionnés.'],
         // Pagina ABC dieta senza glutine
         'abc_eyebrow'  => ['it' => 'Guida pratica', 'en' => 'Practical guide', 'de' => 'Praktischer Leitfaden', 'fr' => 'Guide pratique'],
