@@ -941,6 +941,15 @@ add_filter('wpseo_title', function ($title) {
     return $title;
 });
 
+// og:title coerente col title pulito (Yoast non applica wpseo_title all'OpenGraph)
+add_filter('wpseo_opengraph_title', function ($title) {
+    if (function_exists('is_product_category') && (is_product_category() || is_product_tag())) {
+        $t = single_term_title('', false);
+        if ($t) return $t . ' — La Compagnia del Gluten Free';
+    }
+    return $title;
+});
+
 // 2) Meta description ricca di fallback (home + shop) se non impostata in Yoast
 add_filter('wpseo_metadesc', function ($desc) {
     if ($desc) return $desc;
