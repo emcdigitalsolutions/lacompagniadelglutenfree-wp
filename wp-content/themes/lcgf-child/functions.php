@@ -64,6 +64,26 @@ add_action('after_setup_theme', function () {
     add_image_size('lcgf-card', 600, 600, true);
 });
 
+/* ---------- Nascondi la categoria di default ("Senza categoria") dagli elenchi ----------
+   È vuota (count 0) e già filtrata da hide_empty, ma escludiamo difensivamente la
+   categoria di default + le sue traduzioni Polylang da OGNI query di elenco categoria
+   in frontend (nav, widget, blocchi), così non trapela mai. Non tocca le categorie
+   assegnate ai prodotti (breadcrumb/lista prodotto usano wp_get_post_terms, non get_terms). */
+add_filter('get_terms_args', function ($args, $taxonomies) {
+    if (is_admin()) return $args;
+    if (!in_array('product_cat', (array) $taxonomies, true)) return $args;
+    $def = (int) get_option('default_product_cat');
+    if (!$def) return $args;
+    $ids = [$def];
+    if (function_exists('pll_get_term_translations')) {
+        $tr = pll_get_term_translations($def);
+        if (is_array($tr)) $ids = array_merge($ids, array_values($tr));
+    }
+    $existing = isset($args['exclude']) ? (array) $args['exclude'] : [];
+    $args['exclude'] = array_values(array_unique(array_merge($existing, array_map('intval', $ids))));
+    return $args;
+}, 10, 2);
+
 /* ---------- Header brandizzato archivi shop/categoria ----------
    Il titolo WooCommerce di default è disabilitato (woocommerce_show_page_title=false),
    quindi shop e categorie restavano senza H1. Qui stampiamo un header coerente col tema
