@@ -1018,7 +1018,7 @@ add_action('wp_loaded', function () {
  * pizza/focacce/pinse e regime OSS per vendite B2C verso DE/MT). Idempotente.
  */
 add_action('init', function () {
-    if (get_option('lcgf_tax_setup_v2')) return;
+    if (get_option('lcgf_tax_setup_v3')) return;
     if (!class_exists('WC_Tax') || !function_exists('wc_get_products')) return;
 
     update_option('woocommerce_calc_taxes', 'yes');
@@ -1067,7 +1067,10 @@ add_action('init', function () {
     // Assegnazione PROPOSTA: solo il "pane" vero a 4%, tutto il resto a 10%
     $assigned = 0;
     foreach (wc_get_products(['limit' => -1, 'status' => 'publish']) as $p) {
-        $class = preg_match('/\bpane\b/i', $p->get_name()) ? $slug4 : $slug10;
+        $name = $p->get_name();
+        // 4% solo il "pane" vero; i misti (Box Family) restano al 10% (prudenziale)
+        $is_pane = preg_match('/\bpane\b/i', $name) && !preg_match('/\b(box|misto)\b/i', $name);
+        $class = $is_pane ? $slug4 : $slug10;
         $p->set_tax_status('taxable');
         $p->set_tax_class((string) $class);
         $p->save();
@@ -1079,7 +1082,7 @@ add_action('init', function () {
             }
         }
     }
-    update_option('lcgf_tax_setup_v2', current_time('mysql') . " (22/10/4 slug:{$slug10}|{$slug4}, {$assigned} prodotti — PROPOSTA da validare)");
+    update_option('lcgf_tax_setup_v3', current_time('mysql') . " (22/10/4 slug:{$slug10}|{$slug4}, {$assigned} prodotti — PROPOSTA da validare)");
 }, 110);
 
 /**
@@ -1098,7 +1101,7 @@ add_action('init', function () {
     foreach (['' => 'Standard', 'ridotta-10' => 'Ridotta', 'super-ridotta-4' => 'Super ridotta'] as $cls => $lbl) {
         $found = WC_Tax::find_rates(['country' => 'IT', 'tax_class' => $cls]);
         if (empty($found)) { echo "  [{$lbl}] (nessuna)\n"; continue; }
-        foreach ($found as $rt) { echo "  [{$lbl}] {$rt['label']} = " . rtrim(rtrim($rt['rate'], '0'), '.') . "%\n"; }
+        foreach ($found as $rt) { echo "  [{$lbl}] {$rt['label']} = " . rtrim(rtrim(number_format((float) $rt['rate'], 4, '.', ''), '0'), '.') . "%\n"; }
     }
     echo "\n--- PRODOTTI -> ALIQUOTA (proposta, DA VALIDARE) ---\n";
     foreach (wc_get_products(['limit' => -1, 'status' => 'publish', 'orderby' => 'title', 'order' => 'ASC']) as $p) {
