@@ -818,7 +818,7 @@ add_action('init', function () {
  * Idempotente, guardato da option.
  */
 add_action('init', function () {
-    if (get_option('lcgf_legal_update_v2')) return;
+    if (get_option('lcgf_legal_update_v3')) return;
     $map = [
         'condizioni' => 'condizioni.html',
         'recesso'    => 'recesso.html',
@@ -836,7 +836,7 @@ add_action('init', function () {
         wp_update_post(['ID' => $q[0]->ID, 'post_content' => $html]);
         $updated++;
     }
-    update_option('lcgf_legal_update_v2', current_time('mysql') . " ({$updated} pagine)");
+    update_option('lcgf_legal_update_v3', current_time('mysql') . " ({$updated} pagine)");
 }, 106);
 
 /**
@@ -846,7 +846,7 @@ add_action('init', function () {
  * Idempotente, guardato da option.
  */
 add_action('init', function () {
-    if (get_option('lcgf_legal_tr_v1')) return;
+    if (get_option('lcgf_legal_tr_v2')) return;
     $dir = get_stylesheet_directory() . '/legal/';
     // slug della pagina tradotta (Polylang) => file sorgente
     $map = [
@@ -874,7 +874,7 @@ add_action('init', function () {
         wp_update_post(['ID' => $q[0]->ID, 'post_content' => $html]);
         $updated++;
     }
-    update_option('lcgf_legal_tr_v1', current_time('mysql') . " ({$updated}/9 pagine)");
+    update_option('lcgf_legal_tr_v2', current_time('mysql') . " ({$updated}/9 pagine)");
 }, 107);
 
 /**
