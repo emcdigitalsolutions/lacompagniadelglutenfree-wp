@@ -825,6 +825,44 @@ add_action('init', function () {
 }, 106);
 
 /**
+ * Carica le traduzioni UFFICIALI EN/DE/FR delle 3 pagine legali (condizioni,
+ * recesso, spedizioni) aggiornate a giugno 2026, leggendo i file
+ * legal/{slug}.{lang}.html. Sovrascrive le pagine-traduzione Polylang per slug.
+ * Idempotente, guardato da option.
+ */
+add_action('init', function () {
+    if (get_option('lcgf_legal_tr_v1')) return;
+    $dir = get_stylesheet_directory() . '/legal/';
+    // slug della pagina tradotta (Polylang) => file sorgente
+    $map = [
+        // Condizioni Generali di Vendita
+        'terms-of-sale'             => 'condizioni.en.html',
+        'verkaufsbedingungen'       => 'condizioni.de.html',
+        'conditions-de-vente'       => 'condizioni.fr.html',
+        // Diritto di recesso
+        'right-of-withdrawal'       => 'recesso.en.html',
+        'widerrufsrecht'            => 'recesso.de.html',
+        'droit-de-retractation'     => 'recesso.fr.html',
+        // Spedizioni e resi
+        'shipping-and-returns'      => 'spedizioni.en.html',
+        'versand-und-rucksendungen' => 'spedizioni.de.html',
+        'livraisons-et-retours'     => 'spedizioni.fr.html',
+    ];
+    $updated = 0;
+    foreach ($map as $slug => $file) {
+        $q = get_posts(['post_type'=>'page','name'=>$slug,'post_status'=>'publish','numberposts'=>1,'suppress_filters'=>true]);
+        if (!$q) continue;
+        $path = $dir . $file;
+        if (!file_exists($path)) continue;
+        $html = file_get_contents($path);
+        if (!$html) continue;
+        wp_update_post(['ID' => $q[0]->ID, 'post_content' => $html]);
+        $updated++;
+    }
+    update_option('lcgf_legal_tr_v1', current_time('mysql') . " ({$updated}/9 pagine)");
+}, 107);
+
+/**
  * Ripara i collegamenti Polylang delle pagine tradotte. Una run di traduzione
  * precedente aveva creato le pagine EN/DE/FR (slug tradotti) ma le aveva
  * lasciate etichettate "it" e SCOLLEGATE dall'originale, rompendo language
