@@ -736,6 +736,21 @@ add_action('init', function () {
 });
 
 /**
+ * Lettura sola dell'impostazione paesi di vendita/spedizione (read-only, no auth,
+ * nessun dato sensibile). /?lcgf_action=wc_countries_status
+ */
+add_action('init', function () {
+    if (($_GET['lcgf_action'] ?? '') !== 'wc_countries_status') return;
+    header('Content-Type: text/plain; charset=utf-8');
+    echo "lcgf_sell_countries_v1 = " . (get_option('lcgf_sell_countries_v1') ?: '(non settata)') . "\n";
+    echo "allowed_countries     = " . get_option('woocommerce_allowed_countries') . "\n";
+    echo "specific_allowed      = " . implode(',', (array) get_option('woocommerce_specific_allowed_countries')) . "\n";
+    echo "ship_to_countries     = " . get_option('woocommerce_ship_to_countries') . "\n";
+    echo "specific_ship_to      = " . implode(',', (array) get_option('woocommerce_specific_ship_to_countries')) . "\n";
+    exit;
+});
+
+/**
  * Impostazioni account/checkout WooCommerce — applicate UNA volta (guardia option).
  * Abilita registrazione self-service + guest checkout + login/registrazione dal
  * checkout, e rinomina la pagina account in italiano. Pattern affidabile (init).
