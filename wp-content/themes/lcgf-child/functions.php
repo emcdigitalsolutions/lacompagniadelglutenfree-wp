@@ -961,38 +961,50 @@ add_filter('woocommerce_package_rates', function ($rates) {
 }, 100);
 
 /**
- * Endpoint di TEST read-only: calcola le tariffe di spedizione per IT/DE/MT con
- * un carrello sotto e sopra la soglia gratis. /?lcgf_action=ship_test
+ * Endpoint di TEST read-only: calcola le tariffe di spedizione REALI per IT/DE/MT
+ * con un carrello SOTTO e SOPRA la soglia gratis, usando un carrello WooCommerce
+ * reale (free_shipping valuta il subtotale del carrello, non un pacco simulato).
+ * /?lcgf_action=ship_test
  */
-add_action('init', function () {
+add_action('wp_loaded', function () {
     if (($_GET['lcgf_action'] ?? '') !== 'ship_test') return;
-    if (!class_exists('WC_Shipping')) { echo 'WC non pronto'; exit; }
+    if (!function_exists('WC') || is_null(WC()->cart)) { echo 'cart non pronto'; exit; }
     header('Content-Type: text/plain; charset=utf-8');
-    $shipping = new WC_Shipping();
+
+    $ids = wc_get_products(['limit' => 1, 'status' => 'publish', 'return' => 'ids', 'type' => 'simple']);
+    if (empty($ids)) { echo 'nessun prodotto disponibile'; exit; }
+    $pid   = $ids[0];
+    $price = (float) wc_get_product($pid)->get_price();
+    $qty_high = $price > 0 ? (int) ceil(200 / $price) + 1 : 50;
+
     foreach (['IT', 'DE', 'MT'] as $country) {
-        foreach ([50.00, 250.00] as $amount) {
-            $package = [
-                'destination'    => ['country' => $country, 'state' => '', 'postcode' => ''],
-                'contents'       => [],
-                'contents_cost'  => $amount,
-                'applied_coupons'=> [],
-                'user'           => ['ID' => 0],
-            ];
-            $res = $shipping->calculate_shipping_for_package($package);
-            echo "=== {$country} | carrello EUR {$amount} ===\n";
-            if (!empty($res['rates'])) {
-                foreach ($res['rates'] as $rate) {
+        foreach (['sotto soglia' => 1, 'sopra soglia' => $qty_high] as $label => $qty) {
+            WC()->cart->empty_cart();
+            WC()->cart->add_to_cart($pid, $qty);
+            WC()->customer->set_shipping_country($country);
+            WC()->customer->set_shipping_postcode('');
+            WC()->customer->set_billing_country($country);
+            WC()->cart->calculate_shipping();
+            WC()->cart->calculate_totals();
+            $subtotal = (float) WC()->cart->get_subtotal();
+            echo "=== {$country} | {$label} (x{$qty}) | subtotale EUR " . number_format($subtotal, 2) . " ===\n";
+            $any = false;
+            foreach (WC()->shipping()->get_packages() as $package) {
+                foreach ($package['rates'] as $rate) {
                     echo "   - {$rate->get_label()}: EUR " . number_format((float) $rate->get_cost(), 2) . "\n";
+                    $any = true;
                 }
-            } else {
-                echo "   (nessuna tariffa disponibile)\n";
             }
+            if (!$any) echo "   (nessuna tariffa)\n";
         }
     }
+    WC()->cart->empty_cart();
+
     echo "\nGateway attivi:\n";
     foreach (WC()->payment_gateways()->get_available_payment_gateways() as $gw) {
         echo "   - {$gw->get_title()} ({$gw->id})\n";
     }
+    echo "\n(prodotto test: #{$pid}, prezzo EUR " . number_format($price, 2) . ")\n";
     exit;
 });
 
