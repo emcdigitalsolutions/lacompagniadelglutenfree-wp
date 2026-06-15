@@ -863,6 +863,24 @@ add_action('init', function () {
 }, 107);
 
 /**
+ * Limita i paesi di VENDITA e SPEDIZIONE a quelli effettivamente serviti:
+ * Italia, Germania, Malta (confermato dal cliente, 15/6/2026). Chiude il rischio
+ * checkout "vendo a tutto il mondo ma spedisco solo in 3 paesi" e allinea il
+ * negozio alle Condizioni di Vendita. Idempotente, guardato da option.
+ * NB: le tariffe per zona vanno ancora impostate con i costi reali del cliente.
+ */
+add_action('init', function () {
+    if (get_option('lcgf_sell_countries_v1')) return;
+    if (!function_exists('update_option')) return;
+    $countries = ['IT', 'DE', 'MT'];
+    update_option('woocommerce_allowed_countries', 'specific');
+    update_option('woocommerce_specific_allowed_countries', $countries);
+    update_option('woocommerce_ship_to_countries', 'specific');
+    update_option('woocommerce_specific_ship_to_countries', $countries);
+    update_option('lcgf_sell_countries_v1', current_time('mysql') . ' (IT,DE,MT)');
+}, 108);
+
+/**
  * Ripara i collegamenti Polylang delle pagine tradotte. Una run di traduzione
  * precedente aveva creato le pagine EN/DE/FR (slug tradotti) ma le aveva
  * lasciate etichettate "it" e SCOLLEGATE dall'originale, rompendo language
