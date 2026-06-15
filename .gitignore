@@ -35,3 +35,14 @@ imports/raw/
 Preventivo-LCGF-2026-*.pdf
 !Preventivo-LCGF-2026-06.pdf
 Preventivo-LCGF-2026-06.tmp.pdf
+
+# DATI SENSIBILI — MAI sul repo pubblico
+# Notule / documenti fiscali (contengono IBAN e dati personali)
+Notula-*.pdf
+notula*.html
+# Documenti forniti dal cliente (condizioni .docx, ecc.)
+docs/
+*.docx
+# Appunti e materiali di lavoro locali
+appunticall.txt
+images/error.png

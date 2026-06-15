@@ -794,6 +794,37 @@ add_action('init', function () {
 }, 105);
 
 /**
+ * Aggiorna (SOVRASCRIVE) le pagine legali IT condizioni/recesso/spedizioni con il
+ * testo UFFICIALE fornito dal cliente (giugno 2026). A differenza di
+ * lcgf_legal_import_v1 (che riempie solo se la pagina è vuota), qui forziamo
+ * l'aggiornamento perché è il contenuto definitivo.
+ * NB: aggiorna SOLO le pagine IT (slug condizioni/recesso/spedizioni). Le
+ * traduzioni EN/DE/FR (slug diversi) NON vengono toccate e vanno rigenerate a parte.
+ * Idempotente, guardato da option.
+ */
+add_action('init', function () {
+    if (get_option('lcgf_legal_update_v2')) return;
+    $map = [
+        'condizioni' => 'condizioni.html',
+        'recesso'    => 'recesso.html',
+        'spedizioni' => 'spedizioni.html',
+    ];
+    $dir = get_stylesheet_directory() . '/legal/';
+    $updated = 0;
+    foreach ($map as $slug => $file) {
+        $q = get_posts(['post_type'=>'page','name'=>$slug,'post_status'=>'publish','numberposts'=>1,'suppress_filters'=>true]);
+        if (!$q) continue;
+        $path = $dir . $file;
+        if (!file_exists($path)) continue;
+        $html = file_get_contents($path);
+        if (!$html) continue;
+        wp_update_post(['ID' => $q[0]->ID, 'post_content' => $html]);
+        $updated++;
+    }
+    update_option('lcgf_legal_update_v2', current_time('mysql') . " ({$updated} pagine)");
+}, 106);
+
+/**
  * Ripara i collegamenti Polylang delle pagine tradotte. Una run di traduzione
  * precedente aveva creato le pagine EN/DE/FR (slug tradotti) ma le aveva
  * lasciate etichettate "it" e SCOLLEGATE dall'originale, rompendo language
