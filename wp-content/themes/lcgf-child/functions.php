@@ -896,6 +896,107 @@ add_action('init', function () {
 }, 108);
 
 /**
+ * Configura le zone di spedizione IT/DE/MT con tariffe PROVVISORIE (da sostituire
+ * con i costi reali del cliente PRIMA del go-live) + spedizione gratuita >= 200 EUR.
+ * Abilita anche il Contrassegno (COD) per poter testare il flusso d'ordine
+ * end-to-end senza dipendere dalle chiavi Stripe/PayPal. Idempotente.
+ * Per ri-applicare con i costi reali: bumpare il flag a _v2 e aggiornare $zones.
+ */
+add_action('init', function () {
+    if (get_option('lcgf_shipping_test_v1')) return;
+    if (!class_exists('WC_Shipping_Zones') || !class_exists('WC_Shipping_Zone')) return;
+
+    // ⚠️ COSTI PROVVISORI (TEST) — sostituire con i reali prima del go-live
+    $zones = [
+        'Italia'   => ['country' => 'IT', 'cost' => '7.90'],
+        'Germania' => ['country' => 'DE', 'cost' => '14.90'],
+        'Malta'    => ['country' => 'MT', 'cost' => '16.90'],
+    ];
+    $free_threshold = '200';
+
+    // Rimuovi tutte le zone esistenti (le vecchie IT/Sicilia/UE1/UE2 con tariffe inventate)
+    foreach (WC_Shipping_Zones::get_zones() as $z) {
+        (new WC_Shipping_Zone($z['id']))->delete();
+    }
+
+    foreach ($zones as $name => $cfg) {
+        $zone = new WC_Shipping_Zone();
+        $zone->set_zone_name($name);
+        $zone->add_location($cfg['country'], 'country');
+        $zone->save();
+
+        $flat = $zone->add_shipping_method('flat_rate');
+        update_option("woocommerce_flat_rate_{$flat}_settings", [
+            'title'      => 'Spedizione',
+            'tax_status' => 'taxable',
+            'cost'       => $cfg['cost'],
+        ]);
+
+        $free = $zone->add_shipping_method('free_shipping');
+        update_option("woocommerce_free_shipping_{$free}_settings", [
+            'title'            => 'Spedizione gratuita',
+            'requires'         => 'min_amount',
+            'min_amount'       => $free_threshold,
+            'ignore_discounts' => 'no',
+        ]);
+    }
+
+    // Contrassegno attivo per i test del checkout (nessuna chiave esterna richiesta)
+    $cod = get_option('woocommerce_cod_settings', []);
+    $cod['enabled']     = 'yes';
+    $cod['title']       = 'Contrassegno (pagamento alla consegna)';
+    $cod['description'] = 'Paga in contanti al corriere alla consegna.';
+    update_option('woocommerce_cod_settings', $cod);
+
+    update_option('lcgf_shipping_test_v1', current_time('mysql') . ' (IT 7.90 / DE 14.90 / MT 16.90, free>=200, COD on — PROVVISORI)');
+}, 109);
+
+/**
+ * Quando la spedizione gratuita (>= soglia) e disponibile, mostra SOLO quella
+ * nascondendo le tariffe a pagamento dello stesso pacco.
+ */
+add_filter('woocommerce_package_rates', function ($rates) {
+    $free = array_filter($rates, function ($r) { return 'free_shipping' === $r->get_method_id(); });
+    return !empty($free) ? $free : $rates;
+}, 100);
+
+/**
+ * Endpoint di TEST read-only: calcola le tariffe di spedizione per IT/DE/MT con
+ * un carrello sotto e sopra la soglia gratis. /?lcgf_action=ship_test
+ */
+add_action('init', function () {
+    if (($_GET['lcgf_action'] ?? '') !== 'ship_test') return;
+    if (!class_exists('WC_Shipping')) { echo 'WC non pronto'; exit; }
+    header('Content-Type: text/plain; charset=utf-8');
+    $shipping = new WC_Shipping();
+    foreach (['IT', 'DE', 'MT'] as $country) {
+        foreach ([50.00, 250.00] as $amount) {
+            $package = [
+                'destination'    => ['country' => $country, 'state' => '', 'postcode' => ''],
+                'contents'       => [],
+                'contents_cost'  => $amount,
+                'applied_coupons'=> [],
+                'user'           => ['ID' => 0],
+            ];
+            $res = $shipping->calculate_shipping_for_package($package);
+            echo "=== {$country} | carrello EUR {$amount} ===\n";
+            if (!empty($res['rates'])) {
+                foreach ($res['rates'] as $rate) {
+                    echo "   - {$rate->get_label()}: EUR " . number_format((float) $rate->get_cost(), 2) . "\n";
+                }
+            } else {
+                echo "   (nessuna tariffa disponibile)\n";
+            }
+        }
+    }
+    echo "\nGateway attivi:\n";
+    foreach (WC()->payment_gateways()->get_available_payment_gateways() as $gw) {
+        echo "   - {$gw->get_title()} ({$gw->id})\n";
+    }
+    exit;
+});
+
+/**
  * Ripara i collegamenti Polylang delle pagine tradotte. Una run di traduzione
  * precedente aveva creato le pagine EN/DE/FR (slug tradotti) ma le aveva
  * lasciate etichettate "it" e SCOLLEGATE dall'originale, rompendo language
