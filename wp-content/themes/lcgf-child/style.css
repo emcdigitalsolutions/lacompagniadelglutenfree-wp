@@ -888,6 +888,17 @@ body.lcgf-mnav-open { overflow: hidden; }
   align-items: start;
   padding: 36px 0 90px;
 }
+/* WooCommerce inserisce SEMPRE un .woocommerce-notices-wrapper (anche vuoto) come
+   primo figlio di .woocommerce, più eventuali messaggi/avvisi (es. ?password-reset).
+   Senza questa regola diventano celle del grid e sfasano nav + contenuto (nav
+   stretta e contenuto schiacciato). Li forziamo a occupare l'intera riga, così
+   nelle 2 colonne restano SOLO la navigazione e il contenuto. */
+.woocommerce-account.logged-in .woocommerce > *:not(.woocommerce-MyAccount-navigation):not(.woocommerce-MyAccount-content) {
+  grid-column: 1 / -1;
+}
+.woocommerce-account.logged-in .woocommerce > .woocommerce-notices-wrapper:empty {
+  display: none;
+}
 .woocommerce-account .woocommerce-MyAccount-navigation {
   background: var(--c-cream-2);
   border: 1px solid var(--c-line);
