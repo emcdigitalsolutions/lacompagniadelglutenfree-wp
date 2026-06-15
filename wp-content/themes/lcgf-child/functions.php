@@ -1009,6 +1009,91 @@ add_action('wp_loaded', function () {
 });
 
 /**
+ * Configurazione IVA — PROPOSTA da far VALIDARE al commercialista.
+ * Crea le aliquote alimentari italiane 4% (super-ridotta) e 10% (ridotta), più
+ * la 22% standard (per eventuali prodotti non alimentari). Prezzi IVA inclusa,
+ * IVA calcolata sulla sede del negozio (Italia).
+ * Assegnazione PRUDENTE: solo il "pane" propriamente detto al 4%, tutto il resto
+ * al 10%. ⚠️ Da rivedere prodotto per prodotto col commercialista (es. basi
+ * pizza/focacce/pinse e regime OSS per vendite B2C verso DE/MT). Idempotente.
+ */
+add_action('init', function () {
+    if (get_option('lcgf_tax_setup_v1')) return;
+    if (!class_exists('WC_Tax') || !function_exists('wc_get_products')) return;
+
+    update_option('woocommerce_calc_taxes', 'yes');
+    update_option('woocommerce_prices_include_tax', 'yes');
+    update_option('woocommerce_tax_based_on', 'base');         // IVA sulla sede del negozio (IT)
+    update_option('woocommerce_tax_display_shop', 'incl');
+    update_option('woocommerce_tax_display_cart', 'incl');
+    update_option('woocommerce_tax_classes', "Ridotta 10%\nSuper ridotta 4%");
+
+    // Aliquote IT (slug classe derivati da WC: "ridotta-10", "super-ridotta-4")
+    $rates = [
+        ['rate' => '22.0000', 'name' => 'IVA 22%', 'class' => ''],
+        ['rate' => '10.0000', 'name' => 'IVA 10%', 'class' => 'ridotta-10'],
+        ['rate' => '4.0000',  'name' => 'IVA 4%',  'class' => 'super-ridotta-4'],
+    ];
+    foreach ($rates as $r) {
+        WC_Tax::_insert_tax_rate([
+            'tax_rate_country'  => 'IT',
+            'tax_rate_state'    => '',
+            'tax_rate'          => $r['rate'],
+            'tax_rate_name'     => $r['name'],
+            'tax_rate_priority' => 1,
+            'tax_rate_compound' => 0,
+            'tax_rate_shipping' => 1,
+            'tax_rate_order'    => 0,
+            'tax_rate_class'    => $r['class'],
+        ]);
+    }
+
+    // Assegnazione PROPOSTA: solo il "pane" vero a 4%, tutto il resto a 10%
+    $assigned = 0;
+    foreach (wc_get_products(['limit' => -1, 'status' => 'publish']) as $p) {
+        $class = preg_match('/\bpane\b/i', $p->get_name()) ? 'super-ridotta-4' : 'ridotta-10';
+        $p->set_tax_status('taxable');
+        $p->set_tax_class($class);
+        $p->save();
+        $assigned++;
+        if ($p->is_type('variable')) {
+            foreach ($p->get_children() as $cid) {
+                $v = wc_get_product($cid);
+                if ($v) { $v->set_tax_class($class); $v->save(); $assigned++; }
+            }
+        }
+    }
+    update_option('lcgf_tax_setup_v1', current_time('mysql') . " (22/10/4, {$assigned} prodotti — PROPOSTA da validare)");
+}, 110);
+
+/**
+ * Endpoint read-only per validare la config IVA: aliquote + mappa
+ * prodotto -> aliquota. /?lcgf_action=tax_status
+ */
+add_action('init', function () {
+    if (($_GET['lcgf_action'] ?? '') !== 'tax_status') return;
+    if (!class_exists('WC_Tax')) { echo 'WC non pronto'; exit; }
+    header('Content-Type: text/plain; charset=utf-8');
+    echo "calc_taxes=" . get_option('woocommerce_calc_taxes')
+       . " | prezzi_IVA_inclusa=" . get_option('woocommerce_prices_include_tax')
+       . " | IVA_su=" . get_option('woocommerce_tax_based_on') . "\n";
+    echo "classi: Standard | " . str_replace("\n", " | ", (string) get_option('woocommerce_tax_classes')) . "\n\n";
+    echo "--- ALIQUOTE (IT) ---\n";
+    foreach (['' => 'Standard', 'ridotta-10' => 'Ridotta', 'super-ridotta-4' => 'Super ridotta'] as $cls => $lbl) {
+        $found = WC_Tax::find_rates(['country' => 'IT', 'tax_class' => $cls]);
+        if (empty($found)) { echo "  [{$lbl}] (nessuna)\n"; continue; }
+        foreach ($found as $rt) { echo "  [{$lbl}] {$rt['label']} = " . rtrim(rtrim($rt['rate'], '0'), '.') . "%\n"; }
+    }
+    echo "\n--- PRODOTTI -> ALIQUOTA (proposta, DA VALIDARE) ---\n";
+    foreach (wc_get_products(['limit' => -1, 'status' => 'publish', 'orderby' => 'title', 'order' => 'ASC']) as $p) {
+        $cls = $p->get_tax_class();
+        $pct = $cls === 'super-ridotta-4' ? ' 4%' : ($cls === 'ridotta-10' ? '10%' : ($cls === '' ? '22%' : $cls));
+        echo "  {$pct}  {$p->get_name()}\n";
+    }
+    exit;
+});
+
+/**
  * Ripara i collegamenti Polylang delle pagine tradotte. Una run di traduzione
  * precedente aveva creato le pagine EN/DE/FR (slug tradotti) ma le aveva
  * lasciate etichettate "it" e SCOLLEGATE dall'originale, rompendo language
