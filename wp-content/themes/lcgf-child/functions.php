@@ -1018,7 +1018,7 @@ add_action('wp_loaded', function () {
  * pizza/focacce/pinse e regime OSS per vendite B2C verso DE/MT). Idempotente.
  */
 add_action('init', function () {
-    if (get_option('lcgf_tax_setup_v1')) return;
+    if (get_option('lcgf_tax_setup_v2')) return;
     if (!class_exists('WC_Tax') || !function_exists('wc_get_products')) return;
 
     update_option('woocommerce_calc_taxes', 'yes');
@@ -1026,13 +1026,29 @@ add_action('init', function () {
     update_option('woocommerce_tax_based_on', 'base');         // IVA sulla sede del negozio (IT)
     update_option('woocommerce_tax_display_shop', 'incl');
     update_option('woocommerce_tax_display_cart', 'incl');
-    update_option('woocommerce_tax_classes', "Ridotta 10%\nSuper ridotta 4%");
 
-    // Aliquote IT (slug classe derivati da WC: "ridotta-10", "super-ridotta-4")
+    // Crea le classi IVA con l'API ufficiale (registra anche lo slug nella tabella WC)
+    WC_Tax::create_tax_class('Ridotta 10%', 'ridotta-10');
+    WC_Tax::create_tax_class('Super ridotta 4%', 'super-ridotta-4');
+    $slugs  = WC_Tax::get_tax_class_slugs();
+    $slug10 = in_array('ridotta-10', $slugs, true) ? 'ridotta-10' : null;
+    $slug4  = in_array('super-ridotta-4', $slugs, true) ? 'super-ridotta-4' : null;
+    foreach ($slugs as $s) {
+        if (!$slug10 && strpos($s, '10') !== false) $slug10 = $s;
+        if (!$slug4  && strpos($s, '4')  !== false) $slug4  = $s;
+    }
+
+    // Pulisci le aliquote IT esistenti (evita duplicati dal tentativo precedente)
+    global $wpdb;
+    $ids = $wpdb->get_col($wpdb->prepare(
+        "SELECT tax_rate_id FROM {$wpdb->prefix}woocommerce_tax_rates WHERE tax_rate_country = %s", 'IT'
+    ));
+    foreach ($ids as $rid) { WC_Tax::_delete_tax_rate((int) $rid); }
+
     $rates = [
         ['rate' => '22.0000', 'name' => 'IVA 22%', 'class' => ''],
-        ['rate' => '10.0000', 'name' => 'IVA 10%', 'class' => 'ridotta-10'],
-        ['rate' => '4.0000',  'name' => 'IVA 4%',  'class' => 'super-ridotta-4'],
+        ['rate' => '10.0000', 'name' => 'IVA 10%', 'class' => (string) $slug10],
+        ['rate' => '4.0000',  'name' => 'IVA 4%',  'class' => (string) $slug4],
     ];
     foreach ($rates as $r) {
         WC_Tax::_insert_tax_rate([
@@ -1051,19 +1067,19 @@ add_action('init', function () {
     // Assegnazione PROPOSTA: solo il "pane" vero a 4%, tutto il resto a 10%
     $assigned = 0;
     foreach (wc_get_products(['limit' => -1, 'status' => 'publish']) as $p) {
-        $class = preg_match('/\bpane\b/i', $p->get_name()) ? 'super-ridotta-4' : 'ridotta-10';
+        $class = preg_match('/\bpane\b/i', $p->get_name()) ? $slug4 : $slug10;
         $p->set_tax_status('taxable');
-        $p->set_tax_class($class);
+        $p->set_tax_class((string) $class);
         $p->save();
         $assigned++;
         if ($p->is_type('variable')) {
             foreach ($p->get_children() as $cid) {
                 $v = wc_get_product($cid);
-                if ($v) { $v->set_tax_class($class); $v->save(); $assigned++; }
+                if ($v) { $v->set_tax_class((string) $class); $v->save(); $assigned++; }
             }
         }
     }
-    update_option('lcgf_tax_setup_v1', current_time('mysql') . " (22/10/4, {$assigned} prodotti — PROPOSTA da validare)");
+    update_option('lcgf_tax_setup_v2', current_time('mysql') . " (22/10/4 slug:{$slug10}|{$slug4}, {$assigned} prodotti — PROPOSTA da validare)");
 }, 110);
 
 /**
