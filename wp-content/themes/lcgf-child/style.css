@@ -113,7 +113,11 @@ header.site-header { display: none !important; }
 .woocommerce input.button,
 .woocommerce #respond input#submit,
 .woocommerce-page a.button,
-.woocommerce-page button.button {
+.woocommerce-page button.button,
+/* Bottoni cross-sell nel carrello (WooCommerce Blocks/grid): "Scegli" /
+   "Aggiungi al carrello". Usano .wp-block-button__link → blu di default. */
+.wc-block-grid__product-add-to-cart .wp-block-button__link,
+a.wp-block-button__link.add_to_cart_button {
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
@@ -133,7 +137,9 @@ header.site-header { display: none !important; }
 }
 .btn:hover, .lcgf-btn:hover,
 .woocommerce a.button:hover,
-.woocommerce button.button:hover {
+.woocommerce button.button:hover,
+.wc-block-grid__product-add-to-cart .wp-block-button__link:hover,
+a.wp-block-button__link.add_to_cart_button:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 28px rgba(54, 78, 37, .35);
 }
