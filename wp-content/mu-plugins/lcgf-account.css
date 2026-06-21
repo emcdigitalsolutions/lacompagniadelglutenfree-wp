@@ -1,0 +1,38 @@
+/* LCGF account/email fixes — caricato dal mu-plugin con ver=filemtime (cache-safe) */
+
+/* #4/#1 — Nota causale + avviso spam (thank-you page) */
+.lcgf-order-note{background:#f4f7ef;border:1px solid #d8e3c8;border-left:4px solid #6b8e4e;border-radius:12px;padding:18px 20px;margin:0 0 24px;line-height:1.6;color:#3d4a2a}
+.lcgf-order-note p{margin:0 0 8px}
+.lcgf-order-note p:last-child{margin-bottom:0;color:#5e6e44;font-size:.95em}
+.lcgf-order-note .lcgf-on-ico{margin-right:6px}
+
+/* #6 — Stato vuoto ordini con CTA al catalogo */
+.lcgf-no-orders{text-align:center;padding:48px 24px;background:#fbfcf9;border:1px solid #e6ebdd;border-radius:16px;margin:8px 0}
+.lcgf-no-orders__ico{width:64px;height:64px;margin:0 auto 18px;color:#6b8e4e;background:#eef3e4;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.lcgf-no-orders__ico svg{width:32px;height:32px}
+.lcgf-no-orders__title{margin:0 0 8px;font-size:1.3rem;color:#3d4a2a}
+.lcgf-no-orders__text{margin:0 auto 22px;max-width:430px;color:#6a7560}
+.lcgf-no-orders__cta{display:inline-block;background:#6b8e4e;color:#fff;text-decoration:none;padding:13px 30px;border-radius:40px;font-weight:600;transition:background .2s,transform .2s}
+.lcgf-no-orders__cta:hover{background:#5a7a40;transform:translateY(-1px);color:#fff}
+
+/* #7 — Pagina Indirizzi: card coerenti col sito */
+.woocommerce-account .woocommerce-Addresses{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;margin-top:10px}
+.woocommerce-account .woocommerce-Address{background:#fff;border:1px solid #e6ebdd;border-radius:16px;padding:24px;box-shadow:0 2px 10px rgba(60,74,42,.05)}
+.woocommerce-account .woocommerce-Address-title{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid #eef0e8}
+.woocommerce-account .woocommerce-Address-title h2,.woocommerce-account .woocommerce-Address-title h3{margin:0 0 2px!important;font-size:1.25rem!important;line-height:1.25!important;color:#3d4a2a!important;font-weight:700!important}
+.woocommerce-account .woocommerce-Address-title .edit{align-self:flex-start;font-size:.84rem;font-weight:600;color:#6b8e4e;text-decoration:none;border:1px solid #cdd9bb;border-radius:30px;padding:7px 16px;transition:all .2s}
+.woocommerce-account .woocommerce-Address-title .edit:hover{background:#6b8e4e;color:#fff;border-color:#6b8e4e}
+.woocommerce-account .woocommerce-Address address{font-style:normal;line-height:1.7;color:#55604a}
+
+/* form edit-address + account details */
+.woocommerce-account .woocommerce-address-fields .form-row label,.woocommerce-account .woocommerce-EditAccountForm .form-row label{font-weight:600;color:#3d4a2a;margin-bottom:6px;display:block}
+.woocommerce-account form .input-text,.woocommerce-account form select{border:1px solid #d8ddcc;border-radius:10px;padding:11px 14px;width:100%;transition:border-color .2s,box-shadow .2s}
+.woocommerce-account form .input-text:focus,.woocommerce-account form select:focus{border-color:#6b8e4e;box-shadow:0 0 0 3px rgba(107,142,78,.15);outline:none}
+.woocommerce-account .woocommerce-address-fields button,.woocommerce-account .woocommerce-EditAccountForm button{background:#6b8e4e;border:none;border-radius:40px;padding:12px 30px;font-weight:600;color:#fff;cursor:pointer;transition:background .2s}
+.woocommerce-account .woocommerce-address-fields button:hover,.woocommerce-account .woocommerce-EditAccountForm button:hover{background:#5a7a40}
+
+/* #8 — registrazione: nome/cognome affiancati */
+.woocommerce-account .register .form-row-first,.woocommerce form.register .form-row-first{float:left;width:48%}
+.woocommerce-account .register .form-row-last,.woocommerce form.register .form-row-last{float:right;width:48%}
+.woocommerce-account .register .clear,.woocommerce form.register .clear{clear:both}
+@media(max-width:600px){.woocommerce-account .register .form-row-first,.woocommerce-account .register .form-row-last,.woocommerce form.register .form-row-first,.woocommerce form.register .form-row-last{float:none;width:100%}}
