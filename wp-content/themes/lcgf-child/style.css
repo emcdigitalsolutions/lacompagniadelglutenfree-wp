@@ -1181,4 +1181,35 @@ body.lcgf-mnav-open { overflow: hidden; }
   .woocommerce-MyAccount-navigation { grid-column: 1 / 2 !important; }
   .woocommerce-account .woocommerce-MyAccount-content,
   .woocommerce-MyAccount-content { grid-column: 2 / 3 !important; }
+}/* === FIX newsletter homepage: input email schiacciato (~52px) ===
+   Il markup e' form > div(input+button) + label(gdpr) + p(msg), ma il CSS
+   metteva display:flex (riga) sul FORM, affiancando div+label+msg e
+   schiacciando l'input. Impiliamo in colonna e spostiamo la "pillola"
+   (sfondo bianco) sul div interno input+button. */
+.lcgf-newsletter-form {
+  display: block !important;
+  background: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.lcgf-newsletter-form > div {
+  background: var(--c-white);
+  border-radius: var(--r-pill);
+  padding: 6px 6px 6px 22px;
+  box-shadow: var(--sh-2);
+  flex-wrap: nowrap !important;
+  align-items: center;
+}
+.lcgf-newsletter-form input.lcgf-nl-email {
+  flex: 1 1 auto !important;
+  min-width: 0;
+  padding: 12px 4px !important;
+}
+@media (max-width: 480px) {
+  .lcgf-newsletter-form > div { flex-wrap: wrap !important; padding: 14px !important; border-radius: var(--r-lg); }
+  .lcgf-newsletter-form input.lcgf-nl-email { flex: 1 1 100% !important; text-align: center; }
+  .lcgf-newsletter-form button { width: 100%; }
 }
