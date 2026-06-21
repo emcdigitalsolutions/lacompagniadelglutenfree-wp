@@ -1212,4 +1212,28 @@ body.lcgf-mnav-open { overflow: hidden; }
   .lcgf-newsletter-form > div { flex-wrap: wrap !important; padding: 14px !important; border-radius: var(--r-lg); }
   .lcgf-newsletter-form input.lcgf-nl-email { flex: 1 1 100% !important; text-align: center; }
   .lcgf-newsletter-form button { width: 100%; }
+}/* === Bottone submit WPForms (form contatti) -> stile brand come gli altri CTA === */
+.wpforms-container button[type=submit],
+.wpforms-container .wpforms-submit {
+  background: var(--g-cta) !important;
+  background-color: var(--c-olive) !important;
+  color: var(--c-cream) !important;
+  border: 1.5px solid transparent !important;
+  border-radius: var(--r-pill) !important;
+  padding: 14px 34px !important;
+  font-family: var(--f-sans) !important;
+  font-weight: 600 !important;
+  font-size: .95rem !important;
+  letter-spacing: .02em !important;
+  box-shadow: 0 8px 22px rgba(54,78,37,.25) !important;
+  cursor: pointer !important;
+  transition: transform .15s ease, box-shadow .2s ease, background .2s ease !important;
+  width: auto !important;
+  margin-top: 8px !important;
+}
+.wpforms-container button[type=submit]:hover,
+.wpforms-container .wpforms-submit:hover {
+  background: var(--c-olive-deep) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 28px rgba(54,78,37,.35) !important;
 }

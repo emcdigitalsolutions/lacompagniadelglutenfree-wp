@@ -75,7 +75,7 @@
         <li>Gianluca · <a href="tel:+393495658876">+39 349 565 8876</a></li>
         <li>Gaetano · <a href="tel:+393513582074">+39 351 358 2074</a></li>
         <li><a href="https://wa.me/393276999897" target="_blank" rel="noopener">WhatsApp</a></li>
-        <li><a href="mailto:comp.glutenfree@libero.it">comp.glutenfree@libero.it</a></li>
+        <li><a href="mailto:info@lacompagniadelglutenfree.it">info@lacompagniadelglutenfree.it</a></li>
       </ul>
     </div>
   </div>
