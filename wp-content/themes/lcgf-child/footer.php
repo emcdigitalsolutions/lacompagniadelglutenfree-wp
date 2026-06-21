@@ -64,6 +64,14 @@
         <li><a href="<?php echo esc_url(lcgf_page_url('recesso')); ?>"><?php echo lcgf_t('foot_withdrawal'); ?></a></li>
         <li><a href="<?php echo esc_url(lcgf_page_url('privacy')); ?>">Privacy</a></li>
         <li><a href="<?php echo esc_url(lcgf_page_url('cookie')); ?>">Cookie</a></li>
+        <?php
+          $lcgf_cl = function_exists('pll_current_language') ? pll_current_language('slug') : 'it';
+          $lcgf_imp = array('it'=>'Informazioni legali','en'=>'Legal Notice','de'=>'Impressum','fr'=>'Mentions légales');
+          $lcgf_dis = array('it'=>'Disclaimer','en'=>'Disclaimer','de'=>'Haftungsausschluss','fr'=>'Avertissement');
+          if (!isset($lcgf_imp[$lcgf_cl])) $lcgf_cl = 'it';
+        ?>
+        <li><a href="<?php echo esc_url(lcgf_page_url('note-legali')); ?>"><?php echo esc_html($lcgf_imp[$lcgf_cl]); ?></a></li>
+        <li><a href="<?php echo esc_url(lcgf_page_url('dichiarazione-non-responsabilita')); ?>"><?php echo esc_html($lcgf_dis[$lcgf_cl]); ?></a></li>
       </ul>
     </div>
 
