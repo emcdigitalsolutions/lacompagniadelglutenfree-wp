@@ -262,3 +262,42 @@ add_action('init', function () {
 
     update_option('lcgf_pickup_v2', current_time('mysql') . " (shipping class solo-ritiro, {$assigned} prodotti tutte lingue, local_pickup su tutte le zone)");
 }, 110);
+
+/* =======================================================================
+ * #12 — SPEDIZIONE ITALIA A FASCE DI PESO (tariffe Carmelo, 24/6/2026)
+ * Per scatola, in base al peso totale dell'ordine + tara inscatolamento:
+ *   fino a 3 kg = 10,30 € · 3–5 kg = 12,20 € · 5–10 kg = 14,30 € · 10–20 kg = 18,30 €
+ * Tara inscatolamento: +500 g sull'intero ordine. Isole stessa tariffa.
+ * Soglia gratis ≥ 200 € gestita dal free_shipping della zona (+ filtro free prio 100).
+ * Solo destinazione IT: DE/MT restano flat provvisorio finché Carmelo non manda le loro tariffe.
+ * Prio 90 → gira prima del filtro pickup (95) e free (100).
+ * ===================================================================== */
+define('LCGF_BOX_TARE_G', 500); // tara inscatolamento (grammi)
+
+function lcgf_it_weight_rate($grams) {
+    if ($grams <= 3000)  return 10.30;
+    if ($grams <= 5000)  return 12.20;
+    if ($grams <= 10000) return 14.30;
+    return 18.30; // 10–20 kg (e oltre, finché Carmelo non definisce uno scaglione superiore)
+}
+
+add_filter('woocommerce_package_rates', function ($rates, $package) {
+    if (($package['destination']['country'] ?? '') !== 'IT') return $rates;            // solo Italia
+    if (function_exists('lcgf_cart_has_pickup_only') && lcgf_cart_has_pickup_only()) return $rates; // ordine a ritiro: non tocca
+
+    $w = 0.0;
+    foreach ($package['contents'] as $item) {
+        $p = $item['data'] ?? null;
+        if ($p && $p->needs_shipping()) $w += (float) $p->get_weight() * (int) $item['quantity'];
+    }
+    if ($w <= 0) return $rates; // nessun articolo spedibile con peso → lascia invariato
+    $cost = lcgf_it_weight_rate($w + LCGF_BOX_TARE_G);
+
+    foreach ($rates as $r) {
+        if ('flat_rate' === $r->get_method_id()) {
+            $r->set_cost($cost);
+            if (wc_tax_enabled()) $r->set_taxes(WC_Tax::calc_shipping_tax($cost, WC_Tax::get_shipping_tax_rates()));
+        }
+    }
+    return $rates;
+}, 90, 2);
