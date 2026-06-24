@@ -62,6 +62,8 @@ get_header('shop');
           <?php echo $product->get_price_html(); ?>
         </div>
 
+        <?php if (function_exists('lcgf_pickup_badge_html')) echo lcgf_pickup_badge_html($product); ?>
+
         <?php if (!$product->is_in_stock()) : ?>
           <?php echo lcgf_bis_form($product); // esaurito: form "avvisami quando disponibile" ?>
         <?php elseif ($product->is_type('variable')) : ?>
@@ -95,13 +97,18 @@ get_header('shop');
 
         <ul style="list-style:none;padding:0;margin:28px 0 0;border-top:1px solid var(--c-line)">
           <?php
+          $lcgf_is_pickup = function_exists('lcgf_pickup_str') && has_term('solo-ritiro', 'product_shipping_class', $product->get_id());
           $meta_rows = [
               lcgf_t('sp_sku')   => $product->get_sku() ?: '—',
               lcgf_t('sp_avail') => $product->is_in_stock() ? '<span style="color:var(--c-success)">' . lcgf_t('sp_instock') . '</span>' : '<span style="color:var(--c-error)">' . lcgf_t('sp_outstock') . '</span>',
-              lcgf_t('sp_ship')  => lcgf_t('sp_ship_val'),
-              lcgf_t('sp_cert')  => lcgf_t('sp_cert_val'),
-              lcgf_t('sp_lab')   => lcgf_t('sp_lab_val'),
           ];
+          if ($lcgf_is_pickup) {
+              $meta_rows[lcgf_pickup_str('row_label')] = '<strong style="color:#b07d12">' . esc_html(lcgf_pickup_str('row_val')) . '</strong>';
+          } else {
+              $meta_rows[lcgf_t('sp_ship')] = lcgf_t('sp_ship_val');
+          }
+          $meta_rows[lcgf_t('sp_cert')] = lcgf_t('sp_cert_val');
+          $meta_rows[lcgf_t('sp_lab')]  = lcgf_t('sp_lab_val');
           foreach ($meta_rows as $lbl => $val) : ?>
             <li style="padding:12px 0;border-bottom:1px solid var(--c-line);display:flex;gap:12px;font-size:.92rem">
               <span style="color:var(--c-muted);min-width:140px"><?php echo esc_html($lbl); ?></span>
