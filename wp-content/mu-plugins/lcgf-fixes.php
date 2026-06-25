@@ -48,6 +48,9 @@ add_filter('woocommerce_mail_content', function($content){
  * ===================================================================== */
 add_action('woocommerce_email_before_order_table', function($order, $sent_to_admin, $plain_text){
     if ($plain_text || $sent_to_admin || !is_a($order, 'WC_Order')) return;
+    // Solo per ordini con BONIFICO BANCARIO (bacs): per carta/contrassegno/Klarna
+    // non serve nessuna causale di pagamento.
+    if ($order->get_payment_method() !== 'bacs') return;
     $num = $order->get_order_number();
     echo '<div style="background:#f4f7ef;border:1px solid #d8e3c8;border-left:4px solid #6b8e4e;border-radius:8px;padding:14px 16px;margin:0 0 22px;font-size:14px;line-height:1.55;color:#3d4a2a;">'
         . '<strong>Causale di pagamento:</strong> indica come causale <strong>Ordine #' . esc_html($num) . '</strong>'
@@ -63,10 +66,15 @@ add_action('woocommerce_thankyou', function($order_id){
     $order = wc_get_order($order_id);
     if (!$order) return;
     $num = $order->get_order_number();
-    echo '<div class="lcgf-order-note">'
-        . '<p><span class="lcgf-on-ico">&#128179;</span> <strong>Causale di pagamento:</strong> usa come causale <strong>Ordine #' . esc_html($num) . '</strong> '
-        . '(&laquo;' . esc_html(get_bloginfo('name')) . ' &ndash; Ordine #' . esc_html($num) . '&raquo;), per un riscontro immediato del pagamento.</p>'
-        . '<p><span class="lcgf-on-ico">&#9993;</span> Ti abbiamo inviato una <strong>email di conferma</strong>. Se non la trovi nella posta in arrivo, '
+    echo '<div class="lcgf-order-note">';
+    // La causale di pagamento serve SOLO col bonifico bancario (bacs): per
+    // carta/contrassegno/Klarna non c'e' nessun bonifico da intestare.
+    if ($order->get_payment_method() === 'bacs') {
+        echo '<p><span class="lcgf-on-ico">&#128179;</span> <strong>Causale di pagamento:</strong> usa come causale <strong>Ordine #' . esc_html($num) . '</strong> '
+            . '(&laquo;' . esc_html(get_bloginfo('name')) . ' &ndash; Ordine #' . esc_html($num) . '&raquo;), per un riscontro immediato del pagamento.</p>';
+    }
+    // L'avviso email/spam resta sempre, qualunque sia il metodo di pagamento.
+    echo '<p><span class="lcgf-on-ico">&#9993;</span> Ti abbiamo inviato una <strong>email di conferma</strong>. Se non la trovi nella posta in arrivo, '
         . 'controlla nella cartella <strong>Spam / Posta indesiderata</strong> e segna il messaggio come &laquo;Non spam&raquo; '
         . 'per ricevere correttamente i prossimi aggiornamenti.</p>'
         . '</div>';
