@@ -309,3 +309,14 @@ add_filter('woocommerce_package_rates', function ($rates, $package) {
     }
     return $rates;
 }, 90, 2);
+
+/* =======================================================================
+ * #13 — RIMUOVI la tab "Download" da "Il mio account"
+ * Serve solo per i prodotti scaricabili (file digitali): qui si vendono
+ * solo prodotti fisici, quindi e' sempre vuota e inutile -> nascosta.
+ * Reversibile: basta togliere questo filtro.
+ * ===================================================================== */
+add_filter('woocommerce_account_menu_items', function ($items) {
+    unset($items['downloads']);
+    return $items;
+}, 20);
