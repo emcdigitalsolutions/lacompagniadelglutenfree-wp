@@ -1787,6 +1787,13 @@ add_action('template_redirect', function () {
     if (empty($available)) return;
     $current = pll_current_language('slug');
 
+    // Agisci SOLO sulla home della lingua di default (IT alla root "/"). Gli URL di
+    // lingua espliciti (/en/, /de/, /fr/) sono una scelta volontaria del visitatore
+    // (link condiviso, selettore, ricerca) e NON vanno mai reindirizzati: in passato
+    // un accesso diretto a /de/ o /fr/ senza cookie/Accept-Language corrispondente
+    // veniva sbattuto sul fallback /en/. Sulla root resta attivo il rilevamento lingua.
+    if (function_exists('pll_default_language') && $current !== pll_default_language()) return;
+
     $cookie = '';
     if (!empty($_COOKIE['pll_language'])) {
         $cookie = substr(preg_replace('/[^a-z]/', '', strtolower($_COOKIE['pll_language'])), 0, 2);
