@@ -104,16 +104,10 @@
     <p style="font-size:11.5px;opacity:.7;margin-top:4px">La Compagnia del Glutenfree S.r.l.s. · Sede legale: Via Angelo Giovanni Testasecca 7, 92029 Ravanusa (AG) · P.IVA 03088660844 · REA AG-226109</p>
     <a href="https://www.emcdigitalsolutions.it" target="_blank" rel="noopener noreferrer" class="emc-credit">
       <span><?php echo lcgf_t('foot_designed'); ?></span>
-      <svg xmlns="http://www.w3.org/2000/svg" width="70" height="20" viewBox="0 0 200 50">
-        <defs>
+      <svg xmlns="http://www.w3.org/2000/svg" width="60" height="20" viewBox="0 0 120 40"><defs>
           <linearGradient id="emcBars" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7a9a5a"/><stop offset="100%" stop-color="#c9a96e"/></linearGradient>
           <linearGradient id="emcText" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#5a7a3a"/><stop offset="50%" stop-color="#8a9a5a"/><stop offset="100%" stop-color="#c9a96e"/></linearGradient>
-        </defs>
-        <rect x="5" y="10" width="30" height="6" rx="2" fill="url(#emcBars)"/>
-        <rect x="5" y="22" width="20" height="6" rx="2" fill="url(#emcBars)"/>
-        <rect x="5" y="34" width="30" height="6" rx="2" fill="url(#emcBars)"/>
-        <text x="48" y="34" font-family="Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="3" fill="url(#emcText)">EMC</text>
-      </svg>
+        </defs><path d="M4,4 H24 L32,8 L24,12 H4 A4,4 0 0,1 4,4Z" fill="url(#emcBars)"/><path d="M4,15 H20 L28,19 L20,23 H4 A4,4 0 0,1 4,15Z" fill="url(#emcBars)" opacity="0.85"/><path d="M4,26 H24 L32,30 L24,34 H4 A4,4 0 0,1 4,26Z" fill="url(#emcBars)"/><text x="46" y="27" font-family="'Inter','Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="20" font-weight="700" fill="url(#emcText)" letter-spacing="3">EMC</text></svg>
     </a>
   </div>
 </footer>
