@@ -1,0 +1,53 @@
+/* LCGF — Soft launch: badge e avvisi "Disponibile a breve" */
+
+/* Badge sull'immagine prodotto nelle card del catalogo */
+.lcgf-soon-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #3a2e0c;
+  background: linear-gradient(135deg, #e8c56b, #d4a531);
+  box-shadow: 0 4px 12px rgba(160, 120, 20, .28);
+  white-space: nowrap;
+}
+
+/* L'immagine/link della card deve fare da contenitore per il badge assoluto */
+ul.products li.product,
+ul.products li.product a img { position: relative; }
+ul.products li.product { position: relative; }
+
+/* Card "coming soon": bottone reso non-cliccabile visivamente come CTA acquisto */
+ul.products li.product.outofstock .lcgf-soon-badge { display: inline-block; }
+
+/* Testo disponibilità sulla scheda prodotto in tono oro (non rosso esaurito) */
+.stock.lcgf-coming-soon,
+.lcgf-coming-soon {
+  color: #b07d12 !important;
+  font-weight: 600;
+}
+
+/* Avviso "Disponibile a breve" sopra il form avvisami (scheda prodotto) */
+.lcgf-soon-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 8px 0 20px;
+  padding: 16px 18px;
+  border: 1px solid #e6d09a;
+  border-left: 4px solid #d4a531;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fdf8ec, #fbf3dd);
+  color: #5a4713;
+  font-size: .95rem;
+  line-height: 1.55;
+}
+.lcgf-soon-notice strong { color: #8a6410; }
+.lcgf-soon-notice svg { flex: 0 0 auto; margin-top: 2px; color: #c99a2e; }

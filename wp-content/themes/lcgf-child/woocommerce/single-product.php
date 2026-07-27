@@ -65,7 +65,15 @@ get_header('shop');
         <?php if (function_exists('lcgf_pickup_badge_html')) echo lcgf_pickup_badge_html($product); ?>
 
         <?php if (!$product->is_in_stock()) : ?>
-          <?php echo lcgf_bis_form($product); // esaurito: form "avvisami quando disponibile" ?>
+          <?php if (function_exists('lcgf_is_coming_soon') && lcgf_is_coming_soon($product)) : ?>
+            <div class="lcgf-soon-notice">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              <span><strong><?php echo esc_html(lcgf_launch_soon_label()); ?>.</strong> <?php echo esc_html(lcgf_launch_soon_notice()); ?></span>
+            </div>
+            <?php echo lcgf_bis_form($product, true); // in arrivo: form "avvisami" senza intestazione "esaurito" ?>
+          <?php else : ?>
+            <?php echo lcgf_bis_form($product); // esaurito: form "avvisami quando disponibile" ?>
+          <?php endif; ?>
         <?php elseif ($product->is_type('variable')) : ?>
           <?php
           // Prodotto variabile: usa il template standard WooCommerce, che rende i
@@ -100,7 +108,11 @@ get_header('shop');
           $lcgf_is_pickup = function_exists('lcgf_pickup_str') && has_term('solo-ritiro', 'product_shipping_class', $product->get_id());
           $meta_rows = [
               lcgf_t('sp_sku')   => $product->get_sku() ?: '—',
-              lcgf_t('sp_avail') => $product->is_in_stock() ? '<span style="color:var(--c-success)">' . lcgf_t('sp_instock') . '</span>' : '<span style="color:var(--c-error)">' . lcgf_t('sp_outstock') . '</span>',
+              lcgf_t('sp_avail') => $product->is_in_stock()
+                  ? '<span style="color:var(--c-success)">' . lcgf_t('sp_instock') . '</span>'
+                  : ((function_exists('lcgf_is_coming_soon') && lcgf_is_coming_soon($product))
+                      ? '<span style="color:#b07d12;font-weight:600">' . esc_html(lcgf_launch_soon_label()) . '</span>'
+                      : '<span style="color:var(--c-error)">' . lcgf_t('sp_outstock') . '</span>'),
           ];
           if ($lcgf_is_pickup) {
               $meta_rows[lcgf_pickup_str('row_label')] = '<strong style="color:#b07d12">' . esc_html(lcgf_pickup_str('row_val')) . '</strong>';

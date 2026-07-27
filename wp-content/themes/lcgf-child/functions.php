@@ -1504,13 +1504,15 @@ add_action('woocommerce_product_set_stock_status', function ($product_id, $statu
 }, 10, 2);
 
 // Form back-in-stock (usato nel template prodotto quando esaurito)
-function lcgf_bis_form($product) {
+function lcgf_bis_form($product, $soon = false) {
     $pid = (int) $product->get_id();
     $nonce = wp_create_nonce('lcgf_bis');
     $ajax = admin_url('admin-ajax.php');
     ob_start(); ?>
     <div class="lcgf-bis" style="margin:24px 0;max-width:440px">
+      <?php if (!$soon) : ?>
       <p style="font-weight:700;color:var(--c-terracotta);margin-bottom:6px"><?php echo lcgf_t('bis_out'); ?></p>
+      <?php endif; ?>
       <p style="color:var(--c-ink-soft);font-size:.95rem;margin-bottom:12px"><?php echo lcgf_t('bis_text'); ?></p>
       <form class="lcgf-bis-form" onsubmit="return lcgfBis(event,<?php echo $pid; ?>)" style="display:flex;gap:10px;flex-wrap:wrap">
         <input type="email" required placeholder="<?php echo esc_attr(lcgf_t('nl_email')); ?>" class="lcgf-bis-email" style="flex:1;min-width:200px">

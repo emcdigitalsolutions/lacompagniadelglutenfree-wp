@@ -7,7 +7,10 @@ global $product;
 if (empty($product) || !$product->is_visible()) return;
 ?>
 <li <?php wc_product_class('', $product); ?>>
-  <a href="<?php echo esc_url(get_the_permalink()); ?>" style="display:block">
+  <a href="<?php echo esc_url(get_the_permalink()); ?>" style="display:block;position:relative">
+    <?php if (function_exists('lcgf_is_coming_soon') && lcgf_is_coming_soon($product)) : ?>
+      <span class="lcgf-soon-badge"><?php echo esc_html(lcgf_launch_soon_label()); ?></span>
+    <?php endif; ?>
     <?php
     if (has_post_thumbnail()) {
       the_post_thumbnail('woocommerce_thumbnail');
