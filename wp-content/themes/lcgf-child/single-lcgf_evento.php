@@ -196,7 +196,7 @@ while (have_posts()) : the_post();
       if ($cap)          $address['postalCode']      = $cap;
       $address['addressCountry'] = $country;
       $place['address'] = $address;
-      if ($lat && $lng) $place['geo'] = ['@type' => 'GeoCoordinates', 'latitude' => (float) $lat, 'longitude' => (float) $lng];
+      if ($lat && $lng) $place['geo'] = ['@type' => 'GeoCoordinates', 'latitude' => rtrim(rtrim((string) $lat, '0'), '.'), 'longitude' => rtrim(rtrim((string) $lng, '0'), '.')];
       $schema['location'] = $place;
     }
 
