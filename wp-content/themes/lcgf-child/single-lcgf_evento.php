@@ -46,8 +46,8 @@ while (have_posts()) : the_post();
   .lcgf-evento-tag-passato-big{display:inline-block;background:rgba(31,19,6,.85);color:#fff;padding:4px 12px;border-radius:999px;font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;margin-bottom:8px}
   .lcgf-evento-stato-imminente{display:inline-block;background:linear-gradient(135deg,var(--c-wheat),var(--c-wheat-dark));color:var(--c-ink);padding:4px 12px;border-radius:999px;font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:8px}
   .lcgf-evento-tag-novita-big{display:inline-block;background:var(--g-cta);color:var(--c-cream);padding:4px 14px;border-radius:999px;font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:8px}
-  .lcgf-evento-detail-image{aspect-ratio:4/3;border-radius:var(--r-lg);overflow:hidden;background:var(--c-cream-2);box-shadow:var(--sh-2);position:sticky;top:80px}
-  .lcgf-evento-detail-image img{width:100%;height:100%;object-fit:cover;display:block}
+  .lcgf-evento-detail-image{border-radius:var(--r-lg);overflow:hidden;background:var(--c-cream-2);box-shadow:var(--sh-2);position:sticky;top:80px;line-height:0}
+  .lcgf-evento-detail-image img{width:100%;height:auto;display:block}
   .lcgf-evento-info-card{background:var(--c-white);border-radius:var(--r-lg);padding:24px;box-shadow:var(--sh-1);border:1px solid var(--c-line);margin-top:24px}
   .lcgf-evento-info-card h3{font-size:.78rem !important;letter-spacing:2px;text-transform:uppercase;color:var(--c-wheat-dark);margin:0 0 14px;font-weight:700}
   .lcgf-evento-info-row{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--c-line)}
@@ -152,16 +152,72 @@ while (have_posts()) : the_post();
 </section>
 
 <?php
+  // Dati geo/indirizzo aggiuntivi (SEO/GEO/LLM) — impostati dallo script di import, con fallback graceful
+  $lat       = get_post_meta($post_id, '_lcgf_evento_lat', true);
+  $lng       = get_post_meta($post_id, '_lcgf_evento_lng', true);
+  $cap       = get_post_meta($post_id, '_lcgf_evento_cap', true);
+  $country   = get_post_meta($post_id, '_lcgf_evento_nazione', true) ?: 'IT';
+  $organizer = get_post_meta($post_id, '_lcgf_evento_organizer', true);
+  $lang_loc  = function_exists('pll_current_language') ? (pll_current_language('locale') ?: 'it_IT') : 'it_IT';
+  $permalink = get_permalink($post_id);
+  $descr     = wp_strip_all_tags(get_the_excerpt()) ?: wp_strip_all_tags(get_the_content());
+
+  // "Ravanusa (AG)" -> località + regione/provincia
+  $loc_locality = $citta; $loc_region = '';
+  if ($citta && preg_match('/^(.*?)\s*\(([^)]+)\)\s*$/u', $citta, $mm)) {
+    $loc_locality = trim($mm[1]);
+    $loc_region   = trim($mm[2]);
+  }
+
   // Schema.org: Event (se ha data) oppure NewsArticle
   if ($is_event && $start) {
-    $schema = ['@context' => 'https://schema.org', '@type' => 'Event', 'name' => get_the_title(), 'startDate' => $start, 'eventStatus' => 'https://schema.org/EventScheduled', 'description' => wp_strip_all_tags(get_the_excerpt())];
-    if ($end) $schema['endDate'] = $end;
-    if ($img) $schema['image'] = $img;
-    if ($luogo) $schema['location'] = ['@type' => 'Place', 'name' => $luogo, 'address' => trim($indir . ' ' . $citta)];
-    $schema['organizer'] = ['@type' => 'Organization', 'name' => 'La Compagnia del Gluten Free', 'url' => home_url('/')];
+    $start_iso = $start . ($time ? 'T' . substr($time, 0, 5) . ':00' : '');
+    $schema = [
+      '@context' => 'https://schema.org',
+      '@type' => 'Event',
+      'name' => get_the_title(),
+      'startDate' => $start_iso,
+      'eventStatus' => 'https://schema.org/EventScheduled',
+      'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
+      'description' => $descr,
+      'url' => $permalink,
+      'inLanguage' => $lang_loc,
+      'isAccessibleForFree' => true,
+    ];
+    if ($end) $schema['endDate'] = $end . ($time ? 'T' . substr($time, 0, 5) . ':00' : '');
+    if ($img) $schema['image'] = [$img];
+
+    if ($luogo || $citta) {
+      $place = ['@type' => 'Place', 'name' => $luogo ?: $citta];
+      $address = ['@type' => 'PostalAddress'];
+      if ($indir)        $address['streetAddress']   = $indir;
+      if ($loc_locality) $address['addressLocality'] = $loc_locality;
+      if ($loc_region)   $address['addressRegion']   = $loc_region;
+      if ($cap)          $address['postalCode']      = $cap;
+      $address['addressCountry'] = $country;
+      $place['address'] = $address;
+      if ($lat && $lng) $place['geo'] = ['@type' => 'GeoCoordinates', 'latitude' => (float) $lat, 'longitude' => (float) $lng];
+      $schema['location'] = $place;
+    }
+
+    // Offerta (ingresso libero) — utile per rich result e motori generativi
+    $schema['offers'] = [
+      '@type' => 'Offer',
+      'price' => '0',
+      'priceCurrency' => 'EUR',
+      'availability' => 'https://schema.org/InStock',
+      'url' => $permalink,
+      'validFrom' => get_the_date('c'),
+    ];
+
+    // Organizzatore reale dell'evento (se noto) + La Compagnia del Gluten Free come partecipante/espositore
+    if ($organizer) {
+      $schema['organizer'] = ['@type' => 'Organization', 'name' => $organizer];
+    }
+    $schema['performer'] = ['@type' => 'Organization', 'name' => 'La Compagnia del Gluten Free', 'url' => home_url('/')];
   } else {
-    $schema = ['@context' => 'https://schema.org', '@type' => 'NewsArticle', 'headline' => get_the_title(), 'datePublished' => get_the_date('c'), 'dateModified' => get_the_modified_date('c'), 'description' => wp_strip_all_tags(get_the_excerpt()), 'author' => ['@type' => 'Organization', 'name' => 'La Compagnia del Gluten Free'], 'publisher' => ['@type' => 'Organization', 'name' => 'La Compagnia del Gluten Free']];
-    if ($img) $schema['image'] = $img;
+    $schema = ['@context' => 'https://schema.org', '@type' => 'NewsArticle', 'headline' => get_the_title(), 'datePublished' => get_the_date('c'), 'dateModified' => get_the_modified_date('c'), 'description' => $descr, 'inLanguage' => $lang_loc, 'mainEntityOfPage' => $permalink, 'author' => ['@type' => 'Organization', 'name' => 'La Compagnia del Gluten Free'], 'publisher' => ['@type' => 'Organization', 'name' => 'La Compagnia del Gluten Free', 'url' => home_url('/')]];
+    if ($img) $schema['image'] = [$img];
   }
   echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '</script>';
 ?>

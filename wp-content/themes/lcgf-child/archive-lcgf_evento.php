@@ -47,8 +47,9 @@ function lcgf_render_evento_card($post_id, $L, $passato = false) {
   }
   ?>
   <article class="lcgf-evento-card<?php echo $passato ? ' is-passato' : ''; ?>">
-    <a href="<?php echo esc_url($url); ?>" class="lcgf-evento-cover">
+    <a href="<?php echo esc_url($url); ?>" class="lcgf-evento-cover"<?php if ($img) echo ' style="--cover:url(\'' . esc_url($img) . '\')"'; ?>>
       <?php if ($img) : ?>
+        <span class="lcgf-evento-cover-bg" aria-hidden="true"></span>
         <img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr(get_the_title($post_id)); ?>" loading="lazy" />
       <?php else : ?>
         <div class="lcgf-evento-cover-empty"><?php echo $is_news ? '📰' : '📅'; ?></div>
@@ -93,15 +94,16 @@ function lcgf_render_evento_card($post_id, $L, $passato = false) {
   .lcgf-evento-card:hover{transform:translateY(-4px);box-shadow:var(--sh-2)}
   .lcgf-evento-card.is-passato{opacity:.85}
   .lcgf-evento-cover{display:block;position:relative;aspect-ratio:16/10;background:var(--c-cream-2);overflow:hidden}
-  .lcgf-evento-cover img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
+  .lcgf-evento-cover-bg{position:absolute;inset:0;background:var(--cover) center/cover no-repeat;filter:blur(22px) saturate(1.15) brightness(.7);transform:scale(1.25);z-index:0}
+  .lcgf-evento-cover img{position:relative;z-index:1;width:100%;height:100%;object-fit:contain;display:block;transition:transform .6s ease;filter:drop-shadow(0 6px 18px rgba(0,0,0,.28))}
   .lcgf-evento-card:hover .lcgf-evento-cover img{transform:scale(1.04)}
   .lcgf-evento-cover-empty{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:64px;background:linear-gradient(135deg,var(--c-cream-2),var(--c-wheat-light,#F5E6C9))}
-  .lcgf-evento-datebadge{position:absolute;top:14px;left:14px;background:rgba(255,255,255,.96);border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.18);padding:8px 12px;text-align:center;min-width:60px;line-height:1}
+  .lcgf-evento-datebadge{position:absolute;z-index:2;top:14px;left:14px;background:rgba(255,255,255,.96);border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.18);padding:8px 12px;text-align:center;min-width:60px;line-height:1}
   .lcgf-evento-datebadge .d{display:block;font-family:var(--f-display);font-weight:700;color:var(--c-olive-deep);font-size:1.5rem}
   .lcgf-evento-datebadge .m{display:block;font-size:.7rem;font-weight:700;letter-spacing:1.5px;color:var(--c-wheat-dark);margin-top:2px}
   .lcgf-evento-datebadge .y{display:block;font-size:.65rem;color:var(--c-muted);margin-top:1px}
-  .lcgf-evento-tag-novita{position:absolute;top:14px;left:14px;background:var(--g-cta);color:var(--c-cream);padding:5px 13px;border-radius:999px;font-size:.7rem;letter-spacing:1.2px;text-transform:uppercase;font-weight:700}
-  .lcgf-evento-tag-passato{position:absolute;top:14px;right:14px;background:rgba(31,19,6,.85);color:#fff;padding:4px 10px;border-radius:999px;font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600}
+  .lcgf-evento-tag-novita{position:absolute;z-index:2;top:14px;left:14px;background:var(--g-cta);color:var(--c-cream);padding:5px 13px;border-radius:999px;font-size:.7rem;letter-spacing:1.2px;text-transform:uppercase;font-weight:700}
+  .lcgf-evento-tag-passato{position:absolute;z-index:2;top:14px;right:14px;background:rgba(31,19,6,.85);color:#fff;padding:4px 10px;border-radius:999px;font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600}
   .lcgf-evento-body{padding:22px 22px 24px;flex:1;display:flex;flex-direction:column}
   .lcgf-evento-body h3{font-size:1.25rem !important;margin:0 0 12px;line-height:1.25}
   .lcgf-evento-body h3 a{color:var(--c-olive-deep);text-decoration:none}
