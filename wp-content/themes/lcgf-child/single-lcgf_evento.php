@@ -182,9 +182,9 @@ while (have_posts()) : the_post();
       'description' => $descr,
       'url' => $permalink,
       'inLanguage' => $lang_loc,
-      'isAccessibleForFree' => true,
     ];
-    if ($end) $schema['endDate'] = $end . ($time ? 'T' . substr($time, 0, 5) . ':00' : '');
+    // endDate sempre presente (Search Console lo richiede): evento di un giorno -> fine = inizio
+    $schema['endDate'] = ($end ?: $start) . ($time ? 'T' . substr($time, 0, 5) . ':00' : '');
     if ($img) $schema['image'] = [$img];
 
     if ($luogo || $citta) {
@@ -200,20 +200,24 @@ while (have_posts()) : the_post();
       $schema['location'] = $place;
     }
 
-    // Offerta (ingresso libero) — utile per rich result e motori generativi
+    // Offerta: ingresso libero salvo prezzo numerico indicato nel campo "prezzo"
+    $price = ($prezzo && preg_match('/[0-9]/', $prezzo)) ? preg_replace('/[^0-9.]/', '', str_replace(',', '.', $prezzo)) : '0';
+    $schema['isAccessibleForFree'] = ((float) $price == 0);
     $schema['offers'] = [
       '@type' => 'Offer',
-      'price' => '0',
+      'price' => $price,
       'priceCurrency' => 'EUR',
       'availability' => 'https://schema.org/InStock',
-      'url' => $permalink,
+      'url' => $link ?: $permalink,
       'validFrom' => get_the_date('c'),
     ];
+    if ($prezzo) $schema['offers']['description'] = $prezzo;
 
-    // Organizzatore reale dell'evento (se noto) + La Compagnia del Gluten Free come partecipante/espositore
-    if ($organizer) {
-      $schema['organizer'] = ['@type' => 'Organization', 'name' => $organizer];
-    }
+    // Organizzatore reale dell'evento (se noto, con il suo link) altrimenti La Compagnia del Gluten Free;
+    // La Compagnia del Gluten Free resta comunque come partecipante/espositore (performer)
+    $schema['organizer'] = $organizer
+      ? ['@type' => 'Organization', 'name' => $organizer, 'url' => $link ?: $permalink]
+      : ['@type' => 'Organization', 'name' => 'La Compagnia del Gluten Free', 'url' => home_url('/')];
     $schema['performer'] = ['@type' => 'Organization', 'name' => 'La Compagnia del Gluten Free', 'url' => home_url('/')];
   } else {
     $schema = ['@context' => 'https://schema.org', '@type' => 'NewsArticle', 'headline' => get_the_title(), 'datePublished' => get_the_date('c'), 'dateModified' => get_the_modified_date('c'), 'description' => $descr, 'inLanguage' => $lang_loc, 'mainEntityOfPage' => $permalink, 'author' => ['@type' => 'Organization', 'name' => 'La Compagnia del Gluten Free'], 'publisher' => ['@type' => 'Organization', 'name' => 'La Compagnia del Gluten Free', 'url' => home_url('/')]];

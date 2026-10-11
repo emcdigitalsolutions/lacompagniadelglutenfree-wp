@@ -532,68 +532,7 @@ add_action('pre_get_posts', function ($q) {
     }
 });
 
-/* JSON-LD schema.org Event sulla single */
-add_action('wp_head', function () {
-    if (!is_singular('lcgf_evento')) return;
-    $post_id = get_queried_object_id();
-    $title   = get_the_title($post_id);
-    $desc    = wp_strip_all_tags(get_the_excerpt($post_id) ?: get_the_content(null, false, $post_id));
-    $img     = get_the_post_thumbnail_url($post_id, 'large');
-    $url     = get_permalink($post_id);
-
-    $start   = get_post_meta($post_id, '_lcgf_evento_data_inizio', true);
-    $end     = get_post_meta($post_id, '_lcgf_evento_data_fine', true);
-    $time    = get_post_meta($post_id, '_lcgf_evento_ora_inizio', true);
-    $luogo   = get_post_meta($post_id, '_lcgf_evento_luogo', true);
-    $indir   = get_post_meta($post_id, '_lcgf_evento_indirizzo', true);
-    $citta   = get_post_meta($post_id, '_lcgf_evento_citta', true);
-    $prezzo  = get_post_meta($post_id, '_lcgf_evento_prezzo', true);
-
-    if (!$start) return;
-    $start_iso = $start . ($time ? 'T' . $time . ':00' : '');
-    $end_iso   = $end ? ($end . ($time ? 'T' . $time . ':00' : '')) : $start_iso;
-
-    $schema = [
-        '@context'    => 'https://schema.org',
-        '@type'       => 'Event',
-        'name'        => $title,
-        'description' => mb_substr($desc, 0, 600),
-        'startDate'   => $start_iso,
-        'endDate'     => $end_iso,
-        'eventStatus' => 'https://schema.org/EventScheduled',
-        'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
-        'url'         => $url,
-    ];
-    if ($img) $schema['image'] = [$img];
-    if ($luogo) {
-        $schema['location'] = [
-            '@type' => 'Place',
-            'name'  => $luogo,
-            'address' => [
-                '@type'           => 'PostalAddress',
-                'streetAddress'   => $indir,
-                'addressLocality' => $citta,
-                'addressCountry'  => 'IT',
-            ],
-        ];
-    }
-    $schema['organizer'] = [
-        '@type' => 'Organization',
-        'name'  => 'La Compagnia del Gluten Free',
-        'url'   => home_url('/'),
-    ];
-    if ($prezzo) {
-        $schema['offers'] = [
-            '@type' => 'Offer',
-            'price' => preg_match('/[0-9]/', $prezzo) ? preg_replace('/[^0-9.]/', '', $prezzo) : '0',
-            'priceCurrency' => 'EUR',
-            'availability'  => 'https://schema.org/InStock',
-            'url'           => $url,
-            'description'   => $prezzo,
-        ];
-    }
-    echo "\n" . '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
-});
+/* JSON-LD schema.org Event: generato da single-lcgf_evento.php (unico blocco, evita duplicati) */
 
 /* Seed primo evento al boot se nessuno presente */
 add_action('admin_init', function () {
