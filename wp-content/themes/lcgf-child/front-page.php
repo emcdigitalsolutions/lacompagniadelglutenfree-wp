@@ -92,8 +92,19 @@ $logo = get_stylesheet_directory_uri() . '/assets/img/logo.webp';
         $count = $cat->count;
         ?>
         <a href="<?php echo esc_url($url); ?>" class="lcgf-cat-card <?php echo esc_attr($hue); ?>">
-          <div class="lcgf-cat-card-bg"></div>
-          <div class="lcgf-cat-card-emoji"><?php echo $emoji; ?></div>
+          <div class="lcgf-cat-card-bg">
+            <?php
+            $cat_imgs = [];
+            $cat_prods = wc_get_products(['status' => 'publish', 'limit' => 4, 'category' => [$cat->slug], 'orderby' => 'menu_order', 'order' => 'ASC']);
+            foreach ($cat_prods as $cp) {
+              $iid = $cp->get_image_id();
+              if ($iid) $cat_imgs[] = wp_get_attachment_image($iid, 'medium', false, ['alt' => '', 'loading' => 'lazy', 'decoding' => 'async']);
+            }
+            if ($cat_imgs) : ?>
+              <div class="lcgf-cat-collage n<?php echo count($cat_imgs); ?>"><?php foreach ($cat_imgs as $im) echo '<span>' . $im . '</span>'; ?></div>
+            <?php endif; ?>
+          </div>
+          
           <div class="lcgf-cat-card-content">
             <h3><?php echo esc_html($cat->name); ?></h3>
             <p><?php echo (int)$count; ?> <?php echo lcgf_t('products'); ?></p>
