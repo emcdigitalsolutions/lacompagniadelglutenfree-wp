@@ -45,6 +45,7 @@
     }
     $lcgf_nav_items[] = ['url' => get_post_type_archive_link('lcgf_evento'), 'label_html' => lcgf_t('nav_fiere')];
     $lcgf_nav_items[] = ['url' => lcgf_page_url('chi-siamo'), 'label_html' => lcgf_t('nav_chisiamo')];
+    if (function_exists('lcgf_rv_page_url')) $lcgf_nav_items[] = ['url' => lcgf_rv_page_url(), 'label_html' => esc_html(lcgf_rv_s('nav'))];
     $lcgf_nav_items[] = ['url' => lcgf_page_url('contatti'), 'label_html' => lcgf_t('nav_contatti')];
     ?>
     <nav class="lcgf-nav" aria-label="Navigazione principale">
