@@ -210,6 +210,48 @@ add_action('wp_enqueue_scripts', function () {
 }, 20);
 
 /* =========================================================================
+ * Banner "Catalogo rivenditori" su home e pagina Catalogo (/negozio/)
+ * ====================================================================== */
+function lcgf_rv_banner_s($key) {
+    static $B = array(
+        'tag'   => array('it' => 'Per i professionisti', 'en' => 'For professionals', 'de' => 'Für Profis', 'fr' => 'Pour les professionnels'),
+        'title' => array('it' => 'Sei un rivenditore? Scopri il catalogo a cartoni', 'en' => 'Are you a reseller? Discover the carton catalog', 'de' => 'Sie sind Händler? Entdecken Sie den Karton-Katalog', 'fr' => 'Vous êtes revendeur ? Découvrez le catalogue au carton'),
+        'text'  => array('it' => 'Prezzi a scaglioni, più cartoni ordini meno paghi, e spedizione gratuita.', 'en' => 'Tiered prices: the more cartons you order, the less you pay, plus free shipping.', 'de' => 'Staffelpreise: Je mehr Kartons, desto günstiger, dazu kostenloser Versand.', 'fr' => 'Prix dégressifs : plus vous commandez de cartons, moins vous payez, livraison gratuite.'),
+        'cta'   => array('it' => 'Vai al catalogo rivenditori', 'en' => 'Go to the reseller catalog', 'de' => 'Zum Händlerkatalog', 'fr' => 'Voir le catalogue revendeurs'),
+    );
+    $l = lcgf_rv_lang();
+    return isset($B[$key][$l]) ? $B[$key][$l] : $B[$key]['it'];
+}
+
+function lcgf_rv_banner() {
+    if (!function_exists('lcgf_rv_page_url')) return;
+    ?>
+    <section class="lcgf-rvb-wrap">
+      <div class="container">
+        <a class="lcgf-rvb" href="<?php echo esc_url(lcgf_rv_page_url()); ?>">
+          <span class="lcgf-rvb-tag"><?php echo esc_html(lcgf_rv_banner_s('tag')); ?></span>
+          <span class="lcgf-rvb-main">
+            <strong><?php echo esc_html(lcgf_rv_banner_s('title')); ?></strong>
+            <span><?php echo esc_html(lcgf_rv_banner_s('text')); ?></span>
+          </span>
+          <span class="lcgf-rvb-cta"><?php echo esc_html(lcgf_rv_banner_s('cta')); ?> &rarr;</span>
+        </a>
+      </div>
+    </section>
+    <?php
+}
+add_action('lcgf_rv_banner', 'lcgf_rv_banner');
+add_action('woocommerce_before_main_content', function () {
+    if (function_exists('is_shop') && is_shop()) lcgf_rv_banner();
+}, 15);
+
+add_action('wp_enqueue_scripts', function () {
+    if (!(is_front_page() || (function_exists('is_shop') && is_shop()))) return;
+    $f = __DIR__ . '/lcgf-rivenditori/banner.css';
+    if (file_exists($f)) wp_enqueue_style('lcgf-rivenditori-banner', plugins_url('lcgf-rivenditori/banner.css', __FILE__), array(), (string) filemtime($f));
+}, 20);
+
+/* =========================================================================
  * Aggiunta al carrello dalla pagina rivenditori (POST)
  * ====================================================================== */
 add_action('wp_loaded', function () {

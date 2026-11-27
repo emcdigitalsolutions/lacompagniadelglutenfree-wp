@@ -67,6 +67,8 @@ $logo = get_stylesheet_directory_uri() . '/assets/img/logo.webp';
   </div>
 </div>
 
+<?php do_action('lcgf_rv_banner'); ?>
+
 <!-- CATEGORIES -->
 <section class="section">
   <div class="container">

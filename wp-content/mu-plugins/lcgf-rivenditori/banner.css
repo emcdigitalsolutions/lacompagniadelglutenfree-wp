@@ -1,0 +1,10 @@
+/* LCGF — banner Catalogo rivenditori (home + /negozio/) */
+.lcgf-rvb-wrap { padding: 22px 0 6px; }
+.lcgf-rvb { display: flex; align-items: center; gap: 18px 28px; flex-wrap: wrap; padding: 20px 28px; border-radius: var(--r-lg, 18px); background: linear-gradient(135deg, var(--c-olive-deep) 0%, var(--c-olive-dark) 100%); color: #fff !important; text-decoration: none !important; box-shadow: var(--sh-1); border: 1px solid rgba(255,255,255,.12); transition: transform .2s ease, box-shadow .2s ease; }
+.lcgf-rvb:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(54,78,37,.28); }
+.lcgf-rvb-tag { background: linear-gradient(135deg, #e8c56b, #d4a531); color: #3a2e0c; font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; white-space: nowrap; }
+.lcgf-rvb-main { flex: 1 1 280px; display: flex; flex-direction: column; gap: 4px; }
+.lcgf-rvb-main strong { font-size: 1.2rem; line-height: 1.3; color: #fff; }
+.lcgf-rvb-main span { font-size: .93rem; color: rgba(255,255,255,.85); }
+.lcgf-rvb-cta { background: #fff; color: var(--c-olive-deep); font-weight: 700; font-size: .92rem; padding: 11px 20px; border-radius: 999px; white-space: nowrap; }
+@media (max-width: 640px) { .lcgf-rvb { padding: 18px; } .lcgf-rvb-cta { width: 100%; text-align: center; } }
