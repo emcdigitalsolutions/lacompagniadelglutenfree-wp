@@ -175,7 +175,7 @@ $logo = get_stylesheet_directory_uri() . '/assets/img/logo.webp';
         </a>
       </div>
       <div class="lcgf-split-visual">
-        <span class="emoji">🌾</span>
+        <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/story-collage.jpg'); ?>" alt="<?php echo esc_attr(lcgf_t('story_h2')); ?>" width="900" height="1125" loading="lazy" decoding="async" />
       </div>
     </div>
   </div>

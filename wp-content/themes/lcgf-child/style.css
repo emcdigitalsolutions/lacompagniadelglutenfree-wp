@@ -540,6 +540,7 @@ body.lcgf-mnav-open { overflow: hidden; }
   display: grid;
   place-items: center;
 }
+.lcgf-split-visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .lcgf-split-visual .emoji { font-size: 220px; filter: drop-shadow(0 12px 30px rgba(0,0,0,.25)); }
 .lcgf-split-list { list-style: none; padding: 0; margin: 28px 0 0; display: grid; gap: 14px; }
 .lcgf-split-list li { display: flex; gap: 14px; font-size: .98rem; color: var(--c-ink-soft); }
