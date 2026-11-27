@@ -13,7 +13,7 @@
 
 if (!defined('ABSPATH')) exit;
 
-define('LCGF_LAUNCH_VER', '2026-07-27-1');
+define('LCGF_LAUNCH_VER', '2026-11-27-1');
 
 /**
  * Slug (in lingua IT, lingua di default) dei prodotti ATTIVI/acquistabili.
@@ -26,6 +26,15 @@ function lcgf_launch_active_it_slugs() {
         'focaccia-rotonda', // Focaccia Rotonda
         'pane-filoncino',   // Pane Filoncino
         'pane-rosetta',     // Pane Rosetta
+        // 27/11/2026: richiesta cliente, tutto il catalogo acquistabile
+        'grissini',
+        'pan-grattato',
+        'biscotti',
+        'tiramisu',
+        'brioche',
+        'cornetto-vuoto',
+        'crostate',
+        'box-family',
     );
     $opt = get_option('lcgf_launch_active_it_slugs');
     if (is_array($opt) && !empty($opt)) return array_values(array_filter(array_map('sanitize_title', $opt)));
